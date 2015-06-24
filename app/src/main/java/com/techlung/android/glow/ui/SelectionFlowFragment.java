@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import com.orhanobut.logger.Logger;
 import com.techlung.android.glow.R;
 import com.techlung.android.glow.model.GlowData;
 import com.techlung.android.glow.model.Tract;
@@ -21,8 +20,6 @@ import com.techlung.android.glow.utils.ToolBox;
 
 import java.io.File;
 import java.util.ArrayList;
-
-import hugo.weaving.DebugLog;
 
 public class SelectionFlowFragment extends Fragment {
 
@@ -89,8 +86,6 @@ public class SelectionFlowFragment extends Fragment {
     }
 
     private void repositionItems() {
-        Logger.d("repositionItems $s", items.size());
-
         for (int i = 0; i < items.size(); ++i) {
             SelectionFlowItem item = items.get(i);
 
