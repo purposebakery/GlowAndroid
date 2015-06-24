@@ -1,0 +1,4 @@
+email=deutschland@glowonline.org
+phone=+4952514179517
+www=www.de.glowonline.org
+shop=https://glowshop.net

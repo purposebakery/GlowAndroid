@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+    
+    <color name="text">#FFFFFF</color>
+    <color name="text_inverted">#000000</color>
+
+    <color name="pallet_fg">#003462</color>
+    <color name="pallet_passive">#222222</color>
+    <color name="pallet_bg">#888888</color>
+    
+    
+</resources>
