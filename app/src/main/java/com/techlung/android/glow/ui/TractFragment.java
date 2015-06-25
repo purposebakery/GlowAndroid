@@ -1,8 +1,8 @@
 package com.techlung.android.glow.ui;
 
 import com.techlung.android.glow.R;
-import com.techlung.android.glow.dialogs.ContactDialog;
-import com.techlung.android.glow.dialogs.MoreDialog;
+import com.techlung.android.glow.ui.dialogs.ContactDialog;
+import com.techlung.android.glow.ui.dialogs.MoreDialog;
 import com.techlung.android.glow.model.GlowData;
 import com.techlung.android.glow.model.Tract;
 import com.techlung.android.glow.settings.Common;
@@ -109,13 +109,12 @@ public class TractFragment extends Fragment {
         dataToUi();
     }
 
-    public void setPamphlet(Tract p) {
+    public void setTract(Tract p) {
         this.tract = p;
 
         if (getView() != null) {
             dataToUi();
         }
-
     }
 
     private void dataToUi() {

@@ -1,23 +1,23 @@
 package com.techlung.android.glow;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
+import com.nineoldandroids.animation.Animator;
 import com.techlung.android.glow.io.ContentStorageLoader;
 import com.techlung.android.glow.model.Tract;
 import com.techlung.android.glow.settings.Settings;
-import com.techlung.android.glow.adapter.TractPairArrayAdapter;
 import com.techlung.android.glow.ui.SelectionFlowFragment;
 import com.techlung.android.glow.ui.SelectionFlowItem;
-import com.techlung.android.glow.ui.SelectionListFragment;
 import com.techlung.android.glow.ui.TractFragment;
 
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import android.view.View;
 
-public class GlowActivity extends FragmentActivity implements
-		TractPairArrayAdapter.Callback {
-	private Settings settings;
+public class GlowActivity extends FragmentActivity {
+    public static final int TRANSITION_SPEED = 300;
+    private Settings settings;
 
 	//private SelectionListFragment selectionFragment;
 	private SelectionFlowFragment selectionFlowFragment;
@@ -45,14 +45,16 @@ public class GlowActivity extends FragmentActivity implements
 		settings = Settings.getInstance(this);
 		settings.load();
 
-		setContentView(R.layout.glow_main);
-		this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        checkFirstStart();
+        loadContent();
 
-		checkFirstStart();
+        setContentView(R.layout.glow_main);
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-		loadContent();
+		initTractFragment();
+		initSelectionFragment();
 
-		showSelectionPhone();
+		showSelection();
 	}
 
 	protected void onPause() {
@@ -61,28 +63,13 @@ public class GlowActivity extends FragmentActivity implements
 	}
 
 	private void initTractFragment() {
-		FragmentManager fm = getSupportFragmentManager();
-		tractFragment = (TractFragment) fm.findFragmentByTag(TractFragment.TAG);
-		if (tractFragment == null) {
-			tractFragment = new TractFragment();
-		}
+		tractFragment = (TractFragment) getSupportFragmentManager().findFragmentById(R.id.tract);
+        tractFragment.getView().setVisibility(View.GONE);
 	}
 
-    /*
-	private void initSelectionFragment() {
-		FragmentManager fm = getSupportFragmentManager();
-		selectionFragment = (SelectionListFragment) fm.findFragmentByTag(SelectionListFragment.TAG);
-		if (selectionFragment == null) {
-			selectionFragment = new SelectionListFragment();
-		}
-	}*/
-
-    private void initSelectionFlowFragment() {
-        FragmentManager fm = getSupportFragmentManager();
-        selectionFlowFragment = (SelectionFlowFragment) fm.findFragmentByTag(SelectionFlowFragment.TAG);
-        if (selectionFlowFragment == null) {
-            selectionFlowFragment = new SelectionFlowFragment();
-        }
+    private void initSelectionFragment() {
+        selectionFlowFragment = (SelectionFlowFragment) getSupportFragmentManager().findFragmentById(R.id.selection);
+        selectionFlowFragment.getView().setVisibility(View.VISIBLE);
     }
 
 	private void checkFirstStart() {
@@ -104,46 +91,26 @@ public class GlowActivity extends FragmentActivity implements
 		if (currentState == State.SELECTION) {
 			super.onBackPressed();
 		} else if (currentState == State.TRACT) {
-			showSelectionPhone();
+			showSelection();
 		}
 	}
 
-	public void showSelectionPhone() {
-		FragmentManager fm = getSupportFragmentManager();
-		FragmentTransaction ft = fm.beginTransaction();
+	public void showSelection() {
 
-		initSelectionFlowFragment();
-
-		ft.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right,
-				R.anim.slide_in_right, R.anim.slide_out_left);
-
-		ft.replace(R.id.root, selectionFlowFragment, SelectionListFragment.TAG);
-		ft.commit();
-		fm.executePendingTransactions();
+        YoYo.with(Techniques.SlideOutRight).duration(TRANSITION_SPEED).playOn(tractFragment.getView());
+        selectionFlowFragment.getView().setVisibility(View.VISIBLE);
+        YoYo.with(Techniques.SlideInLeft).duration(TRANSITION_SPEED).playOn(selectionFlowFragment.getView());
 
 		this.currentState = State.SELECTION;
 	}
 
-	public void showTractPhone(Tract p) {
-		FragmentManager fm = getSupportFragmentManager();
-		FragmentTransaction ft = fm.beginTransaction();
+    public void showTract(Tract tract) {
+        tractFragment.setTract(tract);
 
-		initTractFragment();
-
-		tractFragment.setPamphlet(p);
-
-		ft.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left,
-				R.anim.slide_in_left, R.anim.slide_out_right);
-
-		ft.replace(R.id.root, tractFragment, TractFragment.TAG);
-		ft.commit();
-
-		this.currentState = State.TRACT;
-	}
-
-	@Override
-	public void onTractSelected(Tract p) {
-		showTractPhone(p);
-	}
+        YoYo.with(Techniques.SlideOutLeft).duration(TRANSITION_SPEED).playOn(selectionFlowFragment.getView());
+        tractFragment.getView().setVisibility(View.VISIBLE);
+        YoYo.with(Techniques.SlideInRight).duration(TRANSITION_SPEED).playOn(tractFragment.getView());
+        this.currentState = State.TRACT;
+    }
 
 }

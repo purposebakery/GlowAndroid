@@ -1,4 +1,4 @@
-package com.techlung.android.glow.dialogs;
+package com.techlung.android.glow.ui.dialogs;
 
 import com.techlung.android.glow.R;
 import com.techlung.android.glow.model.Contact;

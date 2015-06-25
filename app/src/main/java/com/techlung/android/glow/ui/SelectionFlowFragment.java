@@ -1,5 +1,6 @@
 package com.techlung.android.glow.ui;
 
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,9 +11,14 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
+import com.techlung.android.glow.GlowActivity;
 import com.techlung.android.glow.R;
 import com.techlung.android.glow.model.GlowData;
 import com.techlung.android.glow.model.Tract;
@@ -24,8 +30,11 @@ import java.util.ArrayList;
 public class SelectionFlowFragment extends Fragment {
 
     public static final String TAG = SelectionFlowFragment.class.getName();
+    public static final int TOUCH_MOVEMENT_THRESHOLD_DP = 10;
+    public static final int TRACT_TOUCH_ANIMATION_LENGTH = 100;
 
     ArrayList<SelectionFlowItem> items = new ArrayList<SelectionFlowItem>();
+    ArrayList<SelectionFlowItem> clickedItems = new ArrayList<SelectionFlowItem>();
 
     private float scrollPosition = 0;
 
@@ -34,6 +43,8 @@ public class SelectionFlowFragment extends Fragment {
 
     private int screenWidthPx;
     private int screenHeightPx;
+
+    RelativeLayout rootView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -58,26 +69,26 @@ public class SelectionFlowFragment extends Fragment {
         screenHeightPx = ToolBox.getScreenHeightPx(getActivity());
 
         tractWidthPx = (int) (screenWidthPx * 0.5f);
-        tractHeightPx = (int) (screenWidthPx * 1.5f);
+        tractHeightPx = (int) (tractWidthPx * 1.5f);
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        RelativeLayout rootView = (RelativeLayout) inflater.inflate(R.layout.selection_flow_fragment, container, false);
+        rootView = (RelativeLayout) inflater.inflate(R.layout.selection_flow_fragment, container, false);
 
         rootView.setOnTouchListener(new MyOnTouchListener());
 
         for (SelectionFlowItem item : items) {
-            View itemView = inflater.inflate(R.layout.selection_flow_item, rootView, false);
-            ImageView image = (ImageView) itemView.findViewById(R.id.image);
-            image.getLayoutParams().height = tractHeightPx;
-            image.getLayoutParams().width = tractWidthPx;
-            image.setImageURI(Uri.fromFile(new File(item.tract.getCoverPath())));
-            //image.setImageDrawable(item.tract.getCover());
+            item.view = inflater.inflate(R.layout.selection_flow_item, rootView, false);
+            item.image = (ImageView) item.view.findViewById(R.id.image);
+            item.overlay = item.view.findViewById(R.id.overlay);
+            item.image.getLayoutParams().height = tractHeightPx;
+            item.image.getLayoutParams().width = tractWidthPx;
+            item.image.setImageURI(Uri.fromFile(new File(item.tract.getCoverPath())));
+            //item.image.setImageDrawable(item.tract.getCover());
 
-            item.view = itemView;
-            rootView.addView(itemView);
+            rootView.addView(item.view);
         }
 
         repositionItems();
@@ -96,46 +107,122 @@ public class SelectionFlowFragment extends Fragment {
             item.view.setX(item.x);
             item.view.setY(item.y);
             item.view.setScaleX(item.scale);
+            item.view.setScaleY(item.scale);
         }
     }
 
     public class MyOnTouchListener implements View.OnTouchListener {
+        private float totalMovement = 0;
 
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             int action = MotionEventCompat.getActionMasked(event);
+            float difference;
 
-            switch(action) {
-                case (MotionEvent.ACTION_DOWN) :
-                    Log.d(TAG,"Action was DOWN");
+            switch (action) {
+                case (MotionEvent.ACTION_DOWN):
+                    onTouchDownPosition(event.getX(), event.getY());
+                    totalMovement = 0;
+                    Log.d(TAG, "Action was DOWN");
                     return true;
-                case (MotionEvent.ACTION_MOVE) :
+                case (MotionEvent.ACTION_MOVE):
                     if (event.getHistorySize() == 0) {
                         return true;
                     }
 
-                    float y = event.getY();
-                    float yOld = event.getHistoricalY(0);
-
-                    float difference = y - yOld;
-                    scrollPosition += (difference / tractHeightPx);
+                    difference = getYDifference(event);
+                    totalMovement += Math.abs(difference);
+                    addMovementDifferenceToScrollPosition(difference);
 
                     repositionItems();
-                    Log.d(TAG,"Action was MOVE");
+                    Log.d(TAG, "Action was MOVE");
                     return true;
-                case (MotionEvent.ACTION_UP) :
+                case (MotionEvent.ACTION_UP):
+                    hideTouchOverlays();
+
+                    if (totalMovement < ToolBox.convertDpToPixel(TOUCH_MOVEMENT_THRESHOLD_DP, getActivity())) {
+                        onTouchUpPosition(event.getX(), event.getY());
+                    }
+
+                    if (event.getHistorySize() == 0) {
+                        return true;
+                    }
+
+                    difference = getYDifference(event);
+                    addMovementDifferenceToScrollPositionContiuousDecrease(difference);
+
                     Log.d(TAG, "Action was UP");
                     return true;
-                case (MotionEvent.ACTION_CANCEL) :
-                    Log.d(TAG,"Action was CANCEL");
+                case (MotionEvent.ACTION_CANCEL):
+                    Log.d(TAG, "Action was CANCEL");
                     return true;
-                case (MotionEvent.ACTION_OUTSIDE) :
-                    Log.d(TAG,"Movement occurred outside bounds " +
+                case (MotionEvent.ACTION_OUTSIDE):
+                    Log.d(TAG, "Movement occurred outside bounds " +
                             "of current screen element");
                     return true;
-                default :
+                default:
                     return true;
             }
+        }
+    }
+
+    private void hideTouchOverlays() {
+        for (final SelectionFlowItem item : clickedItems) {
+            YoYo.with(Techniques.FadeOut).duration(TRACT_TOUCH_ANIMATION_LENGTH).playOn(item.overlay);
+        }
+        clickedItems.clear();
+
+    }
+
+    private void onTouchDownPosition(float x, float y) {
+        for (final SelectionFlowItem item : items) {
+            if (inViewInBounds(item.view, (int) x, (int) y)) {
+                item.overlay.setVisibility(View.VISIBLE);
+
+                YoYo.with(Techniques.FadeIn).duration(TRACT_TOUCH_ANIMATION_LENGTH).playOn(item.overlay);
+                clickedItems.add(item);
+            }
+        }
+    }
+
+    private void onTouchUpPosition(float x, float y) {
+        for (SelectionFlowItem item : items) {
+            if (inViewInBounds(item.view, (int) x, (int) y)) {
+                GlowActivity.getInstance().showTract(item.tract);
+            }
+        }
+    }
+
+    Rect outRect = new Rect();
+    int[] location = new int[2];
+
+    private boolean inViewInBounds(View view, int x, int y) {
+        view.getDrawingRect(outRect);
+        view.getLocationOnScreen(location);
+        outRect.offset(location[0], location[1]);
+        return outRect.contains(x, y);
+    }
+
+    private float getYDifference(MotionEvent event) {
+        float y = event.getY();
+        float yOld = event.getHistoricalY(0);
+
+        float difference = y - yOld;
+        return difference;
+    }
+
+    private void addMovementDifferenceToScrollPosition(float difference) {
+        scrollPosition += (difference / tractHeightPx);
+    }
+
+    private void addMovementDifferenceToScrollPositionContiuousDecrease(final float difference) {
+        if (difference < 0.1) {
+            return;
+        } else {
+            addMovementDifferenceToScrollPosition(difference);
+            addMovementDifferenceToScrollPositionContiuousDecrease(difference * 0.9f);
+            repositionItems();
+            //rootView.invalidate();
         }
     }
 
