@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 	android:id="@+id/root">
+
+    <fragment
+        android:id="@+id/selection"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:name="com.techlung.android.glow.ui.SelectionFlowFragment"
+        tools:layout="@layout/selection_flow_fragment">
+    </fragment>
+
+    <fragment
+        android:id="@+id/tract"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:name="com.techlung.android.glow.ui.TractFragment"
+        tools:layout="@layout/tract_fragment">
+    </fragment>
 </RelativeLayout>
