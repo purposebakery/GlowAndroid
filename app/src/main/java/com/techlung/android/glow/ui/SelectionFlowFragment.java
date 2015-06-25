@@ -3,6 +3,7 @@ package com.techlung.android.glow.ui;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MotionEventCompat;
@@ -11,8 +12,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -44,6 +43,9 @@ public class SelectionFlowFragment extends Fragment {
     private int screenWidthPx;
     private int screenHeightPx;
 
+    private float tractStartingPoint;
+    private float currentMovementDifferenceId = 0;
+
     RelativeLayout rootView;
 
     @Override
@@ -68,8 +70,10 @@ public class SelectionFlowFragment extends Fragment {
         screenWidthPx = ToolBox.getScreenWidthPx(getActivity());
         screenHeightPx = ToolBox.getScreenHeightPx(getActivity());
 
-        tractWidthPx = (int) (screenWidthPx * 0.5f);
+        tractWidthPx = (int) (screenWidthPx * 0.7f);
         tractHeightPx = (int) (tractWidthPx * 1.5f);
+
+        tractStartingPoint =  screenHeightPx / 2 - tractHeightPx / 2;
     }
 
     @Nullable
@@ -113,6 +117,7 @@ public class SelectionFlowFragment extends Fragment {
 
     public class MyOnTouchListener implements View.OnTouchListener {
         private float totalMovement = 0;
+        private float lastMovement = 0;
 
         @Override
         public boolean onTouch(View v, MotionEvent event) {
@@ -131,11 +136,19 @@ public class SelectionFlowFragment extends Fragment {
                     }
 
                     difference = getYDifference(event);
+                    lastMovement = difference;
                     totalMovement += Math.abs(difference);
-                    addMovementDifferenceToScrollPosition(difference);
+
+
+                    //addMovementDifferenceToScrollPosition(difference);
+                    addMovementDifferenceToScrollPositionContiuousDecrease(difference, false);
+                    //addMovementDifferenceOvershotCounterMovement();
+
+                    //addMovementDifferenceToScrollPosition(difference);
+
 
                     repositionItems();
-                    Log.d(TAG, "Action was MOVE");
+                    //Log.d(TAG, "Action was MOVE");
                     return true;
                 case (MotionEvent.ACTION_UP):
                     hideTouchOverlays();
@@ -144,12 +157,9 @@ public class SelectionFlowFragment extends Fragment {
                         onTouchUpPosition(event.getX(), event.getY());
                     }
 
-                    if (event.getHistorySize() == 0) {
-                        return true;
-                    }
+                    addMovementDifferenceToScrollPositionContiuousDecrease(lastMovement, true);
 
-                    difference = getYDifference(event);
-                    addMovementDifferenceToScrollPositionContiuousDecrease(difference);
+                   // addMovementDifferenceOvershotCounterMovement();
 
                     Log.d(TAG, "Action was UP");
                     return true;
@@ -211,19 +221,114 @@ public class SelectionFlowFragment extends Fragment {
         return difference;
     }
 
-    private void addMovementDifferenceToScrollPosition(float difference) {
-        scrollPosition += (difference / tractHeightPx);
+    private boolean addMovementDifferenceToScrollPosition(float difference) {
+        float lastScrollPosition = scrollPosition;
+        scrollPosition -= difference / tractHeightPx;
+        Log.d(TAG, "Scrollposition: " + scrollPosition);
+        return scrollPosition == lastScrollPosition;
     }
 
-    private void addMovementDifferenceToScrollPositionContiuousDecrease(final float difference) {
-        if (difference < 0.1) {
+    /*
+    private void addMovementDifferenceOvershotCounterMovement() {
+        if (scrollPosition < 0) {
+            addMovementDifferenceToScrollPosition(scrollPosition * tractHeightPx * 0.05f);
+
+            repositionItems();
+            rootView.invalidate();
+
+            Handler handler = new Handler();
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    addMovementDifferenceOvershotCounterMovement();
+                }
+            });
+        } else if (scrollPosition > items.size() - 1) {
+            addMovementDifferenceToScrollPosition((scrollPosition - items.size()) * tractHeightPx * 0.05f);
+
+            repositionItems();
+            rootView.invalidate();
+
+            Handler handler = new Handler();
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    addMovementDifferenceOvershotCounterMovement();
+                }
+            });
+        }
+    }*/
+
+
+    private void addMovementDifferenceToScrollPositionContiuousDecrease(final float difference, boolean continuous) {
+        ++currentMovementDifferenceId;
+        addMovementDifferenceToScrollPositionContiuousDecrease(difference, currentMovementDifferenceId, continuous);
+    }
+    private void addMovementDifferenceToScrollPositionContiuousDecrease(final float difference, final float id, final boolean continuous) {
+        if (!GlowActivity.getInstance().isRunning()) {
+            return;
+        }
+
+        if (currentMovementDifferenceId > id ) {
+            return;
+        }
+
+        if (Math.abs(difference) < 1) {
             return;
         } else {
+            /*
+            for (int i = 0; i < items.size(); ++i) {
+                attractScrollDepedingOnDistance(i);
+            }*/
             addMovementDifferenceToScrollPosition(difference);
-            addMovementDifferenceToScrollPositionContiuousDecrease(difference * 0.9f);
+
+            if (continuous) {
+                if (scrollPosition < 0) {
+                    addMovementDifferenceToScrollPosition(scrollPosition * tractHeightPx * 0.1f - 1);
+                } else if (scrollPosition > items.size() - 1) {
+                    addMovementDifferenceToScrollPosition((scrollPosition - (items.size() - 1 )) * tractHeightPx * 0.1f + 1);
+                }
+
+                Handler handler = new Handler();
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        addMovementDifferenceToScrollPositionContiuousDecrease(difference * 0.95f, id, continuous);
+                    }
+                });
+            }
+
             repositionItems();
-            //rootView.invalidate();
+            rootView.invalidate();
         }
+    }
+
+    private void attractScrollDepedingOnDistance(int position) {
+        float difference = (scrollPosition - position) * items.size();
+
+        if (difference == 0) {
+            return;
+        }
+
+        addMovementDifferenceToScrollPosition((tractHeightPx / difference) * 0.001f);
+    }
+
+    private boolean isVeryCloseToScrollPosition() {
+        return Math.abs(scrollPosition % 1) < 0.01f;
+    }
+
+    private int getNearestPosition() {
+        int scrollPositionRounded = Math.round(scrollPosition);
+        if (scrollPositionRounded < 0) {
+            scrollPositionRounded = 0;
+        } else if (scrollPositionRounded > items.size() - 1) {
+            scrollPositionRounded = items.size() - 1;
+        }
+        return scrollPositionRounded;
+    }
+
+    private boolean isScrollOutideBounds() {
+        return scrollPosition < 0 || scrollPosition > items.size() - 1;
     }
 
     private float getXForItemPosition(int itemPosition) {
@@ -231,7 +336,7 @@ public class SelectionFlowFragment extends Fragment {
     }
 
     private float getYForItemPosition(int itemPosition) {
-        return ((itemPosition * tractHeightPx) + scrollPosition * tractHeightPx);
+        return ((itemPosition * tractHeightPx) - scrollPosition * tractHeightPx + tractStartingPoint);
     }
 
     private float getScaleForPosition(float x, float y) {

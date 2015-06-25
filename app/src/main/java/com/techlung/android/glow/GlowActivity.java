@@ -28,6 +28,7 @@ public class GlowActivity extends FragmentActivity {
 	}
 
 	public State currentState;
+    private boolean isRunning;
 
 	private static GlowActivity instance;
 
@@ -57,12 +58,25 @@ public class GlowActivity extends FragmentActivity {
 		showSelection();
 	}
 
-	protected void onPause() {
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        settings.save();
+
+    }
+
+    protected void onPause() {
 		super.onPause();
-		settings.save();
+        isRunning = false;
 	}
 
-	private void initTractFragment() {
+    @Override
+    protected void onResume() {
+        super.onResume();
+        isRunning = true;
+    }
+
+    private void initTractFragment() {
 		tractFragment = (TractFragment) getSupportFragmentManager().findFragmentById(R.id.tract);
         tractFragment.getView().setVisibility(View.GONE);
 	}
@@ -113,4 +127,8 @@ public class GlowActivity extends FragmentActivity {
         this.currentState = State.TRACT;
     }
 
+
+    public boolean isRunning() {
+        return isRunning;
+    }
 }
