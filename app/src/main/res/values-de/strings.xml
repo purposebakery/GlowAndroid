@@ -54,7 +54,8 @@
     <string name="newsletter_mail_message">ich habe Interesse am GLOW Newsletter. Bitte meldet mich dafür an. Vielen Dank! </string>
     <string name="newsletter_mail_bye">Mit besten Grüßen</string>
     
-    <string name="share_text">Ich habe folgendes christliches material gefunden. Eventuell interessiert es dich auch: </string>
+    <string name="share_app_text">Ich habe folgende christliche Android App gefunden. Eventuell interessiert es dich auch: </string>
+    <string name="share_tract_text">Ich habe folgendes christliches material gefunden. Eventuell interessiert es dich auch: </string>
     
     
     

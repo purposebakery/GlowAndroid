@@ -4,16 +4,23 @@ import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.nineoldandroids.animation.Animator;
 import com.techlung.android.glow.io.ContentStorageLoader;
+import com.techlung.android.glow.model.Contact;
+import com.techlung.android.glow.model.GlowData;
 import com.techlung.android.glow.model.Tract;
 import com.techlung.android.glow.settings.Settings;
 import com.techlung.android.glow.ui.SelectionFlowFragment;
 import com.techlung.android.glow.ui.SelectionFlowItem;
 import com.techlung.android.glow.ui.TractFragment;
+import com.techlung.android.glow.ui.dialogs.ContactDialog;
+import com.techlung.android.glow.ui.dialogs.MoreDialog;
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 public class GlowActivity extends FragmentActivity {
     public static final int TRANSITION_SPEED = 300;
@@ -54,6 +61,7 @@ public class GlowActivity extends FragmentActivity {
 
 		initTractFragment();
 		initSelectionFragment();
+		initMenu();
 
 		showSelection();
 	}
@@ -85,6 +93,60 @@ public class GlowActivity extends FragmentActivity {
         selectionFlowFragment = (SelectionFlowFragment) getSupportFragmentManager().findFragmentById(R.id.selection);
         selectionFlowFragment.getView().setVisibility(View.VISIBLE);
     }
+
+	private void initMenu() {
+
+		View back = findViewById(R.id.header_logo);
+		if (back != null) {
+			back.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					onBackPressed();
+				}
+			});
+		}
+
+		findViewById(R.id.more_container).setOnClickListener(
+				new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						MoreDialog.show(GlowActivity.this);
+					}
+				});
+
+		findViewById(R.id.share_container).setOnClickListener(
+				new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						share();
+					}
+				});
+
+		findViewById(R.id.contact_container).setOnClickListener(
+				new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						ContactDialog.show(GlowActivity.this);
+					}
+				});
+	}
+
+	private void share() {
+		Intent sendIntent = new Intent();
+		sendIntent.setAction(Intent.ACTION_SEND);
+		sendIntent.putExtra(Intent.EXTRA_TEXT, getShareText());
+		sendIntent.setType("text/plain");
+		startActivity(sendIntent);
+	}
+
+	private String getShareText(){
+		if (currentState == State.SELECTION) {
+			return getResources().getString(R.string.share_app_text) + " " + GlowData.getInstance().getContact().getAppUrl();
+		} else if (currentState == State.TRACT) {
+			return getResources().getString(R.string.share_tract_text) + " " + tractFragment.getTract().getUrl();
+		}
+		return null;
+	}
 
 	private void checkFirstStart() {
 		if (settings.isFirstStart()) {

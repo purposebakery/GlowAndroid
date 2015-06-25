@@ -20,6 +20,7 @@ public class Common {
 	public static final String CONTACT_PHONE = "phone";
 	public static final String CONTACT_WWW = "www";
 	public static final String CONTACT_SHOP = "shop";
+	public static final String CONTACT_APP_URL = "appurl";
 	
 	public static final int VERSION = 5;
 	

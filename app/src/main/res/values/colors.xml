@@ -10,6 +10,8 @@
     <color name="pallet_fg">#003462</color>
     <color name="pallet_passive">#222222</color>
     <color name="pallet_bg">#888888</color>
-    
-    
+
+    <color name="button_pressed_true">#44FFFFFF</color>
+    <color name="button_pressed_false">#00FFFFFF</color>
+
 </resources>

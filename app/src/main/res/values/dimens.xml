@@ -2,7 +2,7 @@
 <resources>
 
     <!-- COMMON -->
-    <dimen name="button_default_small">25dp</dimen>
+    <dimen name="button_default_small">50dp</dimen>
     <dimen name="button_default">40dp</dimen>
 
 </resources>

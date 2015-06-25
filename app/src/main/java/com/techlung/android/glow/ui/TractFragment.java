@@ -38,7 +38,6 @@ public class TractFragment extends Fragment {
 
     TextView contentView;
     TextView additionalView;
-    LinearLayout contact;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -58,47 +57,10 @@ public class TractFragment extends Fragment {
         }
 
         View v = inflater.inflate(R.layout.tract_fragment, container, false);
-
         contentView = (TextView) v
                 .findViewById(R.id.activity_glow_pamphlet_list_content);
         additionalView = (TextView) v
                 .findViewById(R.id.activity_glow_pamphlet_list_additional);
-        contact = (LinearLayout) v
-                .findViewById(R.id.activity_glow_pamphlet_contact_elements);
-
-        View back = v.findViewById(R.id.header_logo);
-        if (back != null) {
-            back.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    getActivity().onBackPressed();
-                }
-            });
-        }
-
-        v.findViewById(R.id.more_container).setOnClickListener(
-                new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        MoreDialog.show(getActivity());
-                    }
-                });
-
-        v.findViewById(R.id.share_container).setOnClickListener(
-                new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        share();
-                    }
-                });
-
-        v.findViewById(R.id.contact_container).setOnClickListener(
-                new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        ContactDialog.show(getActivity());
-                    }
-                });
 
         return v;
     }
@@ -115,6 +77,10 @@ public class TractFragment extends Fragment {
         if (getView() != null) {
             dataToUi();
         }
+    }
+
+    public Tract getTract() {
+        return this.tract;
     }
 
     private void dataToUi() {
@@ -151,14 +117,7 @@ public class TractFragment extends Fragment {
 
     }
 
-    private void share() {
-        Intent sendIntent = new Intent();
-        sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, getActivity().getResources()
-                .getString(R.string.share_text) + " " + tract.getUrl());
-        sendIntent.setType("text/plain");
-        startActivity(sendIntent);
-    }
+
 
     public class ImageGetter implements Html.ImageGetter {
 

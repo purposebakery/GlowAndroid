@@ -41,6 +41,7 @@ public class GlowData {
 		contact.setWww(pr.readParameterString(Common.CONTACT_WWW));
 		contact.setPhone(pr.readParameterString(Common.CONTACT_PHONE));
 		contact.setShop(pr.readParameterString(Common.CONTACT_SHOP));
+		contact.setAppUrl(pr.readParameterString(Common.CONTACT_APP_URL));
 	}
 	
 	

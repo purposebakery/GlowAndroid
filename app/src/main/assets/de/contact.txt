@@ -2,3 +2,4 @@ email=deutschland@glowonline.org
 phone=+4952514179517
 www=www.de.glowonline.org
 shop=https://glowshop.net
+appurl=https://play.google.com/store/apps/details?id=com.techlung.android.glow

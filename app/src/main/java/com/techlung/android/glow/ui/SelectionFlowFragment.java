@@ -21,6 +21,7 @@ import com.techlung.android.glow.GlowActivity;
 import com.techlung.android.glow.R;
 import com.techlung.android.glow.model.GlowData;
 import com.techlung.android.glow.model.Tract;
+import com.techlung.android.glow.utils.Gauss;
 import com.techlung.android.glow.utils.ToolBox;
 
 import java.io.File;
@@ -31,6 +32,9 @@ public class SelectionFlowFragment extends Fragment {
     public static final String TAG = SelectionFlowFragment.class.getName();
     public static final int TOUCH_MOVEMENT_THRESHOLD_DP = 10;
     public static final int TRACT_TOUCH_ANIMATION_LENGTH = 100;
+
+    private static final double GAUSS_SCALE = 1;
+    private Gauss gauss;
 
     ArrayList<SelectionFlowItem> items = new ArrayList<SelectionFlowItem>();
     ArrayList<SelectionFlowItem> clickedItems = new ArrayList<SelectionFlowItem>();
@@ -54,6 +58,8 @@ public class SelectionFlowFragment extends Fragment {
 
         initMeasures();
 
+        gauss = new Gauss(screenHeightPx, GAUSS_SCALE);
+
         int counter = 0;
         for (Tract tract : GlowData.getInstance().getPamphlets()) {
             SelectionFlowItem item = new SelectionFlowItem();
@@ -68,7 +74,7 @@ public class SelectionFlowFragment extends Fragment {
 
     private void initMeasures() {
         screenWidthPx = ToolBox.getScreenWidthPx(getActivity());
-        screenHeightPx = ToolBox.getScreenHeightPx(getActivity());
+        screenHeightPx = ToolBox.getScreenHeightPx(getActivity()) - ToolBox.convertDpToPixel(60, getActivity());
 
         tractWidthPx = (int) (screenWidthPx * 0.7f);
         tractHeightPx = (int) (tractWidthPx * 1.5f);
@@ -340,6 +346,9 @@ public class SelectionFlowFragment extends Fragment {
     }
 
     private float getScaleForPosition(float x, float y) {
+        double scale = gauss.gaussForScreenY((int) y + tractHeightPx / 2) + 0.6;
+
+        /*
         float xCenter = x + tractWidthPx / 2;
         float yCenter = y + tractHeightPx / 2;
 
@@ -351,7 +360,9 @@ public class SelectionFlowFragment extends Fragment {
         float scale = 1 - relativeDistanceToCenter;
         if (scale < 0) {
             scale = 0;
-        }
-        return scale;
+        }*/
+        return (float) scale;
     }
+
+
 }

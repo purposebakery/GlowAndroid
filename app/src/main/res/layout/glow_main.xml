@@ -5,10 +5,19 @@
     android:layout_height="match_parent"
 	android:id="@+id/root">
 
+    <include
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        layout="@layout/glow_menu"
+        android:background="@color/black" />
+
     <fragment
         android:id="@+id/selection"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/header"
         android:name="com.techlung.android.glow.ui.SelectionFlowFragment"
         tools:layout="@layout/selection_flow_fragment">
     </fragment>
@@ -17,6 +26,7 @@
         android:id="@+id/tract"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/header"
         android:name="com.techlung.android.glow.ui.TractFragment"
         tools:layout="@layout/tract_fragment">
     </fragment>

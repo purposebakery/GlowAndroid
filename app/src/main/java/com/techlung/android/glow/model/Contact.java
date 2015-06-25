@@ -6,12 +6,14 @@ public class Contact {
 	private String phone = "";
 	private String www = "";
 	private String shop = "";
+	private String appUrl = "";
 	
 	public void clear() {
 		email = "";
 		phone = "";
 		www = "";
 		shop = "";
+		appUrl = "";
 	}
 
 	public String getEmail() {
@@ -45,10 +47,16 @@ public class Contact {
 	public void setShop(String shop) {
 		this.shop = shop;
 	}
-	
 
+	public String getAppUrl() {
+		return appUrl;
+	}
+
+	public void setAppUrl(String appUrl) {
+		this.appUrl = appUrl;
+	}
 	
-	/*
+/*
 	public void fillLayout(LinearLayout contact, Activity a) {
 		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		params.setMargins(10, 10, 10, 10);
