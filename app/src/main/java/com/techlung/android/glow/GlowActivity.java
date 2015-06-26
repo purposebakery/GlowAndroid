@@ -2,14 +2,11 @@ package com.techlung.android.glow;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
-import com.nineoldandroids.animation.Animator;
 import com.techlung.android.glow.io.ContentStorageLoader;
-import com.techlung.android.glow.model.Contact;
 import com.techlung.android.glow.model.GlowData;
 import com.techlung.android.glow.model.Tract;
 import com.techlung.android.glow.settings.Settings;
 import com.techlung.android.glow.ui.SelectionFlowFragment;
-import com.techlung.android.glow.ui.SelectionFlowItem;
 import com.techlung.android.glow.ui.TractFragment;
 import com.techlung.android.glow.ui.dialogs.ContactDialog;
 import com.techlung.android.glow.ui.dialogs.MoreDialog;
@@ -19,8 +16,6 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 public class GlowActivity extends FragmentActivity {
     public static final int TRANSITION_SPEED = 300;
@@ -36,6 +31,8 @@ public class GlowActivity extends FragmentActivity {
 
 	public State currentState;
     private boolean isRunning;
+
+	View headerBackArrow;
 
 	private static GlowActivity instance;
 
@@ -96,15 +93,19 @@ public class GlowActivity extends FragmentActivity {
 
 	private void initMenu() {
 
-		View back = findViewById(R.id.header_logo);
-		if (back != null) {
-			back.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
+		View.OnClickListener headerBackOnClickListener = new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (currentState == State.TRACT) {
 					onBackPressed();
 				}
-			});
-		}
+			}
+		};
+
+		View logo = findViewById(R.id.header_logo);
+		logo.setOnClickListener(headerBackOnClickListener);
+		headerBackArrow = findViewById(R.id.header_back_arrow);
+		headerBackArrow.setOnClickListener(headerBackOnClickListener);
 
 		findViewById(R.id.more_container).setOnClickListener(
 				new View.OnClickListener() {
@@ -129,6 +130,7 @@ public class GlowActivity extends FragmentActivity {
 						ContactDialog.show(GlowActivity.this);
 					}
 				});
+
 	}
 
 	private void share() {
@@ -177,17 +179,28 @@ public class GlowActivity extends FragmentActivity {
         selectionFlowFragment.getView().setVisibility(View.VISIBLE);
         YoYo.with(Techniques.SlideInLeft).duration(TRANSITION_SPEED).playOn(selectionFlowFragment.getView());
 
-		this.currentState = State.SELECTION;
+		changeState(State.SELECTION);
 	}
 
     public void showTract(Tract tract) {
         tractFragment.setTract(tract);
 
         YoYo.with(Techniques.SlideOutLeft).duration(TRANSITION_SPEED).playOn(selectionFlowFragment.getView());
-        tractFragment.getView().setVisibility(View.VISIBLE);
+		tractFragment.getView().setVisibility(View.VISIBLE);
         YoYo.with(Techniques.SlideInRight).duration(TRANSITION_SPEED).playOn(tractFragment.getView());
-        this.currentState = State.TRACT;
+
+		changeState(State.TRACT);
     }
+
+	private void changeState(State state) {
+		this.currentState = state;
+
+		if (state == State.TRACT) {
+			headerBackArrow.setVisibility(View.VISIBLE);
+		} else {
+			headerBackArrow.setVisibility(View.INVISIBLE);
+		}
+	}
 
 
     public boolean isRunning() {

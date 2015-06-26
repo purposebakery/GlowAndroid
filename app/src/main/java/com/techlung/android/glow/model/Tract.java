@@ -10,6 +10,7 @@ import com.techlung.android.glow.io.ParameterReader;
 import com.techlung.android.glow.settings.Common;
 
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 
 public class Tract {
 	private String id;
@@ -166,5 +167,9 @@ public class Tract {
 
 	public void setCoverPath(String coverPath) {
 		this.coverPath = coverPath;
+	}
+
+	public Uri getCoverPathUri() {
+		return Uri.fromFile(new File(getCoverPath()));
 	}
 }

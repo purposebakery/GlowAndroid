@@ -24,7 +24,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 public class TractFragment extends Fragment {
@@ -38,6 +40,11 @@ public class TractFragment extends Fragment {
 
     TextView contentView;
     TextView additionalView;
+
+    ImageView image;
+    TextView title;
+
+    ScrollView scrollView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,10 +64,13 @@ public class TractFragment extends Fragment {
         }
 
         View v = inflater.inflate(R.layout.tract_fragment, container, false);
-        contentView = (TextView) v
-                .findViewById(R.id.activity_glow_pamphlet_list_content);
-        additionalView = (TextView) v
-                .findViewById(R.id.activity_glow_pamphlet_list_additional);
+
+        scrollView = (ScrollView) v.findViewById(R.id.activity_glow_pamphlet_table);
+
+        contentView = (TextView) v.findViewById(R.id.activity_glow_pamphlet_list_content);
+        additionalView = (TextView) v.findViewById(R.id.activity_glow_pamphlet_list_additional);
+        image = (ImageView) v.findViewById(R.id.activity_glow_pamphlet_list_image);
+        title = (TextView) v.findViewById(R.id.activity_glow_pamphlet_list_title);
 
         return v;
     }
@@ -93,28 +103,24 @@ public class TractFragment extends Fragment {
         additionalView.setText("");
         System.gc();
 
+        image.setImageURI(tract.getCoverPathUri());
+        title.setText(tract.getTitle());
+
         String content = tract.getHtmlContent();
         if (content == null) {
             content = "";
         }
-        if (!Common.isXLargeScreen(getActivity())) {
-            content = "<br>" + content;
-        }
         contentView.setText(Html.fromHtml(content, new ImageGetter(), null));
         contentView.setMovementMethod(LinkMovementMethod.getInstance());
-        contentView.setPadding(10, 10, 10, 10);
-        contentView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
 
         String additional = tract.getHtmlAdditional();// readRawTextFile(this,
         if (additional == null) {
             additional = ""; // R.raw.glow_f01_v01);
         }
-        additionalView.setText(Html.fromHtml(additional, new ImageGetter(),
-                null));
+        additionalView.setText(Html.fromHtml(additional, new ImageGetter(), null));
         additionalView.setMovementMethod(LinkMovementMethod.getInstance());
-        additionalView.setPadding(10, 10, 10, 10);
-        additionalView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
 
+        scrollView.scrollTo(0,0);
     }
 
 

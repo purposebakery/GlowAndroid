@@ -95,7 +95,7 @@ public class SelectionFlowFragment extends Fragment {
             item.overlay = item.view.findViewById(R.id.overlay);
             item.image.getLayoutParams().height = tractHeightPx;
             item.image.getLayoutParams().width = tractWidthPx;
-            item.image.setImageURI(Uri.fromFile(new File(item.tract.getCoverPath())));
+            item.image.setImageURI(item.tract.getCoverPathUri());
             //item.image.setImageDrawable(item.tract.getCover());
 
             rootView.addView(item.view);
@@ -279,7 +279,7 @@ public class SelectionFlowFragment extends Fragment {
             return;
         }
 
-        if (Math.abs(difference) < 1) {
+        if (Math.abs(difference) < 1 && !isScrollOutideBounds()) {
             return;
         } else {
             /*
@@ -346,7 +346,7 @@ public class SelectionFlowFragment extends Fragment {
     }
 
     private float getScaleForPosition(float x, float y) {
-        double scale = gauss.gaussForScreenY((int) y + tractHeightPx / 2) + 0.6;
+        double scale = gauss.gaussForScreenY((int) y + tractHeightPx / 2) * 1.5f + 0.4;
 
         /*
         float xCenter = x + tractWidthPx / 2;
