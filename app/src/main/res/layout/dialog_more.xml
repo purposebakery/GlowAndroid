@@ -12,7 +12,8 @@
         android:background="@android:color/transparent"
         android:gravity="center"
         android:text="@string/dialog_button"
-        android:textColor="@color/text" />
+        android:textStyle="bold"
+        android:textColor="@color/text_inverted" />
 
     <TextView
         android:id="@+id/title"
@@ -22,7 +23,7 @@
         android:background="@android:color/transparent"
         android:gravity="center"
         android:text="@string/more_dialog_title"
-        android:textColor="@color/text"
+        android:textColor="@color/text_inverted"
         android:textSize="16dp"
         android:textStyle="bold" />
 
@@ -63,7 +64,7 @@
             <ImageView
                 android:layout_width="@dimen/button_default"
                 android:layout_height="@dimen/button_default"
-                android:src="@drawable/icon_shopping_white" />
+                android:src="@drawable/icon_shopping_black" />
 
             <TextView
                 android:layout_width="fill_parent"
@@ -85,7 +86,7 @@
             <ImageView
                 android:layout_width="@dimen/button_default"
                 android:layout_height="@dimen/button_default"
-                android:src="@drawable/icon_mail_white" />
+                android:src="@drawable/icon_mail_black" />
 
             <TextView
                 android:layout_width="fill_parent"

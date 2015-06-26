@@ -13,12 +13,22 @@
         layout="@layout/glow_menu"
         android:background="@color/black" />
 
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/main_pager"
+        android:layout_below="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </android.support.v4.view.ViewPager>
+
+    <!--
     <fragment
         android:id="@+id/selection"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/header"
-        android:name="com.techlung.android.glow.ui.SelectionFlowFragment"
+        android:name="com.techlung.android.glow.ui.SelectionViewController"
         tools:layout="@layout/selection_flow_fragment">
     </fragment>
 
@@ -27,7 +37,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/header"
-        android:name="com.techlung.android.glow.ui.TractFragment"
+        android:name="com.techlung.android.glow.ui.TractViewController"
         tools:layout="@layout/tract_fragment">
-    </fragment>
+    </fragment>-->
 </RelativeLayout>

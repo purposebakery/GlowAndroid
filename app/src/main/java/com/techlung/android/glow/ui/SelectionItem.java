@@ -5,7 +5,7 @@ import android.widget.ImageView;
 
 import com.techlung.android.glow.model.Tract;
 
-public class SelectionFlowItem {
+public class SelectionItem {
     public Tract tract;
     public float x;
     public float y;

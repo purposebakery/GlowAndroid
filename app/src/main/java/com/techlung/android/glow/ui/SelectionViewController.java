@@ -1,7 +1,7 @@
 package com.techlung.android.glow.ui;
 
+import android.app.Activity;
 import android.graphics.Rect;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -24,20 +24,19 @@ import com.techlung.android.glow.model.Tract;
 import com.techlung.android.glow.utils.Gauss;
 import com.techlung.android.glow.utils.ToolBox;
 
-import java.io.File;
 import java.util.ArrayList;
 
-public class SelectionFlowFragment extends Fragment {
+public class SelectionViewController {
 
-    public static final String TAG = SelectionFlowFragment.class.getName();
+    public static final String TAG = SelectionViewController.class.getName();
     public static final int TOUCH_MOVEMENT_THRESHOLD_DP = 10;
     public static final int TRACT_TOUCH_ANIMATION_LENGTH = 100;
 
     private static final double GAUSS_SCALE = 1;
     private Gauss gauss;
 
-    ArrayList<SelectionFlowItem> items = new ArrayList<SelectionFlowItem>();
-    ArrayList<SelectionFlowItem> clickedItems = new ArrayList<SelectionFlowItem>();
+    ArrayList<SelectionItem> items = new ArrayList<SelectionItem>();
+    ArrayList<SelectionItem> clickedItems = new ArrayList<SelectionItem>();
 
     private float scrollPosition = 0;
 
@@ -50,19 +49,18 @@ public class SelectionFlowFragment extends Fragment {
     private float tractStartingPoint;
     private float currentMovementDifferenceId = 0;
 
-    RelativeLayout rootView;
+    private Activity activity;
+    private View view;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
+    public SelectionViewController(ViewGroup container) {
+        activity = GlowActivity.getInstance();
         initMeasures();
 
         gauss = new Gauss(screenHeightPx, GAUSS_SCALE);
 
         int counter = 0;
         for (Tract tract : GlowData.getInstance().getPamphlets()) {
-            SelectionFlowItem item = new SelectionFlowItem();
+            SelectionItem item = new SelectionItem();
             item.tract = tract;
             item.x = getXForItemPosition(counter);
             item.y = getYForItemPosition(counter);
@@ -70,11 +68,19 @@ public class SelectionFlowFragment extends Fragment {
 
             items.add(item);
         }
+
+        view = createView(LayoutInflater.from(activity), container);
+
+        repositionItems();
+    }
+
+    public View getView() {
+        return view;
     }
 
     private void initMeasures() {
-        screenWidthPx = ToolBox.getScreenWidthPx(getActivity());
-        screenHeightPx = ToolBox.getScreenHeightPx(getActivity()) - ToolBox.convertDpToPixel(60, getActivity());
+        screenWidthPx = ToolBox.getScreenWidthPx(activity);
+        screenHeightPx = ToolBox.getScreenHeightPx(activity) - ToolBox.convertDpToPixel(60, activity);
 
         tractWidthPx = (int) (screenWidthPx * 0.7f);
         tractHeightPx = (int) (tractWidthPx * 1.5f);
@@ -82,14 +88,12 @@ public class SelectionFlowFragment extends Fragment {
         tractStartingPoint =  screenHeightPx / 2 - tractHeightPx / 2;
     }
 
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = (RelativeLayout) inflater.inflate(R.layout.selection_flow_fragment, container, false);
+    private View createView(LayoutInflater inflater, ViewGroup container) {
+        RelativeLayout rootView = (RelativeLayout) inflater.inflate(R.layout.selection_flow_fragment, container, false);
 
         rootView.setOnTouchListener(new MyOnTouchListener());
 
-        for (SelectionFlowItem item : items) {
+        for (SelectionItem item : items) {
             item.view = inflater.inflate(R.layout.selection_flow_item, rootView, false);
             item.image = (ImageView) item.view.findViewById(R.id.image);
             item.overlay = item.view.findViewById(R.id.overlay);
@@ -101,14 +105,12 @@ public class SelectionFlowFragment extends Fragment {
             rootView.addView(item.view);
         }
 
-        repositionItems();
-
         return rootView;
     }
 
     private void repositionItems() {
         for (int i = 0; i < items.size(); ++i) {
-            SelectionFlowItem item = items.get(i);
+            SelectionItem item = items.get(i);
 
             item.x = getXForItemPosition(i);
             item.y = getYForItemPosition(i);
@@ -119,6 +121,7 @@ public class SelectionFlowFragment extends Fragment {
             item.view.setScaleX(item.scale);
             item.view.setScaleY(item.scale);
         }
+        view.invalidate();
     }
 
     public class MyOnTouchListener implements View.OnTouchListener {
@@ -159,7 +162,7 @@ public class SelectionFlowFragment extends Fragment {
                 case (MotionEvent.ACTION_UP):
                     hideTouchOverlays();
 
-                    if (totalMovement < ToolBox.convertDpToPixel(TOUCH_MOVEMENT_THRESHOLD_DP, getActivity())) {
+                    if (totalMovement < ToolBox.convertDpToPixel(TOUCH_MOVEMENT_THRESHOLD_DP, activity)) {
                         onTouchUpPosition(event.getX(), event.getY());
                     }
 
@@ -183,7 +186,7 @@ public class SelectionFlowFragment extends Fragment {
     }
 
     private void hideTouchOverlays() {
-        for (final SelectionFlowItem item : clickedItems) {
+        for (final SelectionItem item : clickedItems) {
             YoYo.with(Techniques.FadeOut).duration(TRACT_TOUCH_ANIMATION_LENGTH).playOn(item.overlay);
         }
         clickedItems.clear();
@@ -191,7 +194,7 @@ public class SelectionFlowFragment extends Fragment {
     }
 
     private void onTouchDownPosition(float x, float y) {
-        for (final SelectionFlowItem item : items) {
+        for (final SelectionItem item : items) {
             if (inViewInBounds(item.view, (int) x, (int) y)) {
                 item.overlay.setVisibility(View.VISIBLE);
 
@@ -202,7 +205,7 @@ public class SelectionFlowFragment extends Fragment {
     }
 
     private void onTouchUpPosition(float x, float y) {
-        for (SelectionFlowItem item : items) {
+        for (SelectionItem item : items) {
             if (inViewInBounds(item.view, (int) x, (int) y)) {
                 GlowActivity.getInstance().showTract(item.tract);
             }
@@ -305,7 +308,6 @@ public class SelectionFlowFragment extends Fragment {
             }
 
             repositionItems();
-            rootView.invalidate();
         }
     }
 

@@ -1,39 +1,30 @@
 package com.techlung.android.glow.ui;
 
+import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
+import android.util.DisplayMetrics;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.ScrollView;
+import android.widget.TextView;
+
+import com.techlung.android.glow.GlowActivity;
 import com.techlung.android.glow.R;
-import com.techlung.android.glow.ui.dialogs.ContactDialog;
-import com.techlung.android.glow.ui.dialogs.MoreDialog;
-import com.techlung.android.glow.model.GlowData;
 import com.techlung.android.glow.model.Tract;
 import com.techlung.android.glow.settings.Common;
 import com.techlung.android.glow.settings.Settings;
 import com.techlung.android.glow.utils.ToolBox;
 
-import android.os.Bundle;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.support.v4.app.Fragment;
-import android.text.Html;
-import android.text.method.LinkMovementMethod;
-import android.util.DisplayMetrics;
-import android.util.TypedValue;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
-import android.widget.TextView;
+public class TractViewController {
 
-public class TractFragment extends Fragment {
-
-    public static final String TAG = TractFragment.class.getName();
-
-    private static final String STATE_TRACT_ID = "STATE_TRACT_ID";
+    public static final String TAG = TractViewController.class.getName();
 
     Tract tract;
     Settings s;
@@ -46,47 +37,37 @@ public class TractFragment extends Fragment {
 
     ScrollView scrollView;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    Activity activity;
 
-        s = Settings.getInstance(getActivity());
+    View view;
 
+    public TractViewController(ViewGroup container) {
+        activity = GlowActivity.getInstance();
+        s = Settings.getInstance(activity);
+        view = createView(LayoutInflater.from(activity), container);
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
-        if (savedInstanceState != null) {
-            String tractId = savedInstanceState.getString(STATE_TRACT_ID);
-            tract = GlowData.getInstance().getTract(tractId);
-        }
-
-        View v = inflater.inflate(R.layout.tract_fragment, container, false);
-
-        scrollView = (ScrollView) v.findViewById(R.id.activity_glow_pamphlet_table);
-
-        contentView = (TextView) v.findViewById(R.id.activity_glow_pamphlet_list_content);
-        additionalView = (TextView) v.findViewById(R.id.activity_glow_pamphlet_list_additional);
-        image = (ImageView) v.findViewById(R.id.activity_glow_pamphlet_list_image);
-        title = (TextView) v.findViewById(R.id.activity_glow_pamphlet_list_title);
-
-        return v;
+    public View getView() {
+        return view;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        dataToUi();
+    private View createView(LayoutInflater inflater, ViewGroup container) {
+
+        view = inflater.inflate(R.layout.tract_fragment, container, false);
+
+        scrollView = (ScrollView) view.findViewById(R.id.activity_glow_pamphlet_table);
+
+        contentView = (TextView) view.findViewById(R.id.activity_glow_pamphlet_list_content);
+        additionalView = (TextView) view.findViewById(R.id.activity_glow_pamphlet_list_additional);
+        image = (ImageView) view.findViewById(R.id.activity_glow_pamphlet_list_image);
+        title = (TextView) view.findViewById(R.id.activity_glow_pamphlet_list_title);
+
+        return view;
     }
 
     public void setTract(Tract p) {
         this.tract = p;
-
-        if (getView() != null) {
-            dataToUi();
-        }
+        dataToUi();
     }
 
     public Tract getTract() {
@@ -120,9 +101,8 @@ public class TractFragment extends Fragment {
         additionalView.setText(Html.fromHtml(additional, new ImageGetter(), null));
         additionalView.setMovementMethod(LinkMovementMethod.getInstance());
 
-        scrollView.scrollTo(0,0);
+        scrollView.scrollTo(0, 0);
     }
-
 
 
     public class ImageGetter implements Html.ImageGetter {
@@ -135,22 +115,23 @@ public class TractFragment extends Fragment {
 
         float factor = 0.0f;
 
+        @Override
         public Drawable getDrawable(String source) {
 
             try {
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 Bitmap bitmap = BitmapFactory.decodeFile(
                         tract.getImagePath(source), options);
-                Drawable d = new BitmapDrawable(getResources(), bitmap);
+                Drawable d = new BitmapDrawable(activity.getResources(), bitmap);
                 DisplayMetrics metrics = new DisplayMetrics();
-                getActivity().getWindowManager().getDefaultDisplay()
+                activity.getWindowManager().getDefaultDisplay()
                         .getMetrics(metrics);
 
                 height = metrics.heightPixels;
                 width = metrics.widthPixels;
 
-                if (Common.isXLargeScreen(getActivity())) {
-                    width -= ToolBox.convertDpToPixel(300, getActivity());
+                if (Common.isXLargeScreen(activity)) {
+                    width -= ToolBox.convertDpToPixel(300, activity);
                 }
 
                 height *= 0.7;
@@ -174,12 +155,6 @@ public class TractFragment extends Fragment {
             }
             return null;
 
-        }
-    }
-
-    public void onSaveInstanceState(Bundle inState) {
-        if (tract != null) {
-            inState.putString(STATE_TRACT_ID, tract.getId());
         }
     }
 }
