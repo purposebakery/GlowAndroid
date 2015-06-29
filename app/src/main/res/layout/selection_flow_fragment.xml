@@ -1,8 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/flow_root"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/pallet_passive_selection" >
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/flow_scroll"
+        android:layout_width="@dimen/selection_scroll_width"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:background="@color/pallet_passive_selection">
+
+    </RelativeLayout>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/flow_root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_toLeftOf="@id/flow_scroll"
+        android:background="@color/pallet_passive_selection" >
+
+    </RelativeLayout>
 
 </RelativeLayout>

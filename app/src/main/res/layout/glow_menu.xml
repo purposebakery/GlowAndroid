@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:elevation="4dp"
     android:background="@color/pallet_fg">
 
     <RelativeLayout
@@ -60,12 +61,13 @@
 
     <ImageView
         android:id="@+id/header_back_arrow"
-        android:layout_width="16dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="4dp"
         android:layout_alignParentLeft="true"
-        android:src="@android:drawable/ic_menu_revert"/>
+        android:src="@drawable/ic_launcher"/>
 
     <ImageView
         android:id="@+id/header_logo"
@@ -77,13 +79,5 @@
         android:layout_toRightOf="@+id/header_back_arrow"
         android:layout_toLeftOf="@id/contact_container"
         android:src="@drawable/glow_logo_horizontal_small" />
-
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_below="@id/header"
-        android:layout_alignParentBottom="true"
-        android:background="@color/black" />
 
 </RelativeLayout>

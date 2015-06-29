@@ -2,7 +2,9 @@
 <resources>
 
     <!-- COMMON -->
-    <dimen name="button_default_small">50dp</dimen>
+    <dimen name="button_default_small">45dp</dimen>
     <dimen name="button_default">40dp</dimen>
+
+    <dimen name="selection_scroll_width">30dp</dimen>
 
 </resources>

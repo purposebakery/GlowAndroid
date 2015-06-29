@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.techlung.android.glow.GlowActivity;
 import com.techlung.android.glow.R;
+import com.techlung.android.glow.model.GlowData;
 import com.techlung.android.glow.model.Tract;
 import com.techlung.android.glow.settings.Common;
 import com.techlung.android.glow.settings.Settings;
@@ -45,6 +46,7 @@ public class TractViewController {
         activity = GlowActivity.getInstance();
         s = Settings.getInstance(activity);
         view = createView(LayoutInflater.from(activity), container);
+        setTract(GlowData.getInstance().getPamphlets().get(0));
     }
 
     public View getView() {

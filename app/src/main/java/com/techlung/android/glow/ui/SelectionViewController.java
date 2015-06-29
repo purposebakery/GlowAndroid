@@ -2,10 +2,7 @@ package com.techlung.android.glow.ui;
 
 import android.app.Activity;
 import android.graphics.Rect;
-import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.MotionEventCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,9 +30,12 @@ public class SelectionViewController {
     public static final int TRACT_TOUCH_ANIMATION_LENGTH = 100;
 
     private static final double GAUSS_SCALE = 1;
+    private static final double GAUSS_SCROLL_SCALE = 0.4f;
     private Gauss gauss;
+    private Gauss gaussScroll;
 
     ArrayList<SelectionItem> items = new ArrayList<SelectionItem>();
+    ArrayList<SelectionItem> scrollItems = new ArrayList<SelectionItem>();
     ArrayList<SelectionItem> clickedItems = new ArrayList<SelectionItem>();
 
     private float scrollPosition = 0;
@@ -43,8 +43,13 @@ public class SelectionViewController {
     private int tractWidthPx;
     private int tractHeightPx;
 
+    private int scrollTractWidthPx;
+    private int scrollTractHeightPx;
+
     private int screenWidthPx;
     private int screenHeightPx;
+
+    int tractCount = 0;
 
     private float tractStartingPoint;
     private float currentMovementDifferenceId = 0;
@@ -52,11 +57,15 @@ public class SelectionViewController {
     private Activity activity;
     private View view;
 
+    private RelativeLayout rootView;
+    private RelativeLayout scrollView;
+
     public SelectionViewController(ViewGroup container) {
         activity = GlowActivity.getInstance();
         initMeasures();
 
         gauss = new Gauss(screenHeightPx, GAUSS_SCALE);
+        gaussScroll = new Gauss(screenHeightPx, GAUSS_SCROLL_SCALE);
 
         int counter = 0;
         for (Tract tract : GlowData.getInstance().getPamphlets()) {
@@ -69,9 +78,21 @@ public class SelectionViewController {
             items.add(item);
         }
 
+        counter = 0;
+        for (Tract tract : GlowData.getInstance().getPamphlets()) {
+            SelectionItem item = new SelectionItem();
+            item.tract = tract;
+            item.x = getXForScrollItemPosition(counter);
+            item.y = getYForScrollItemPosition(counter);
+            ++counter;
+
+            scrollItems.add(item);
+        }
+
         view = createView(LayoutInflater.from(activity), container);
 
         repositionItems();
+        repositionScrollItems();
     }
 
     public View getView() {
@@ -79,19 +100,26 @@ public class SelectionViewController {
     }
 
     private void initMeasures() {
+
+        tractCount = GlowData.getInstance().getPamphlets().size();
+
         screenWidthPx = ToolBox.getScreenWidthPx(activity);
-        screenHeightPx = ToolBox.getScreenHeightPx(activity) - ToolBox.convertDpToPixel(60, activity);
+        screenHeightPx = ToolBox.getScreenHeightPx(activity) - ToolBox.convertDpToPixel(60, activity); // minus menu height
 
         tractWidthPx = (int) (screenWidthPx * 0.7f);
         tractHeightPx = (int) (tractWidthPx * 1.5f);
 
-        tractStartingPoint =  screenHeightPx / 2 - tractHeightPx / 2;
+        scrollTractWidthPx = ToolBox.convertDpToPixel(30, activity);
+        scrollTractHeightPx = (int) (scrollTractWidthPx * 1.5f);
+
+        tractStartingPoint = screenHeightPx / 2 - tractHeightPx / 2;
     }
 
     private View createView(LayoutInflater inflater, ViewGroup container) {
-        RelativeLayout rootView = (RelativeLayout) inflater.inflate(R.layout.selection_flow_fragment, container, false);
+        View view = inflater.inflate(R.layout.selection_flow_fragment, container, false);
 
-        rootView.setOnTouchListener(new MyOnTouchListener());
+        rootView = (RelativeLayout) view.findViewById(R.id.flow_root);
+        rootView.setOnTouchListener(new ItemOnTouchListener());
 
         for (SelectionItem item : items) {
             item.view = inflater.inflate(R.layout.selection_flow_item, rootView, false);
@@ -100,16 +128,29 @@ public class SelectionViewController {
             item.image.getLayoutParams().height = tractHeightPx;
             item.image.getLayoutParams().width = tractWidthPx;
             item.image.setImageURI(item.tract.getCoverPathUri());
-            //item.image.setImageDrawable(item.tract.getCover());
 
             rootView.addView(item.view);
         }
 
-        return rootView;
+        scrollView = (RelativeLayout) view.findViewById(R.id.flow_scroll);
+        scrollView.setOnTouchListener(new ScrollItemOnTouchListener());
+
+        for (SelectionItem scrollItem : scrollItems) {
+            scrollItem.view = inflater.inflate(R.layout.selection_flow_item, scrollView, false);
+            scrollItem.image = (ImageView) scrollItem.view.findViewById(R.id.image);
+            scrollItem.overlay = scrollItem.view.findViewById(R.id.overlay);
+            scrollItem.image.getLayoutParams().height = scrollTractHeightPx;
+            scrollItem.image.getLayoutParams().width = scrollTractWidthPx;
+            scrollItem.image.setImageURI(scrollItem.tract.getCoverPathUri());
+
+            scrollView.addView(scrollItem.view);
+        }
+
+        return view;
     }
 
     private void repositionItems() {
-        for (int i = 0; i < items.size(); ++i) {
+        for (int i = 0; i < tractCount; ++i) {
             SelectionItem item = items.get(i);
 
             item.x = getXForItemPosition(i);
@@ -121,10 +162,26 @@ public class SelectionViewController {
             item.view.setScaleX(item.scale);
             item.view.setScaleY(item.scale);
         }
-        view.invalidate();
+        rootView.invalidate();
     }
 
-    public class MyOnTouchListener implements View.OnTouchListener {
+    private void repositionScrollItems() {
+        for (int i = 0; i < tractCount; ++i) {
+            SelectionItem item = scrollItems.get(i);
+
+            item.x = getXForScrollItemPosition(i);
+            item.y = getYForScrollItemPosition(i);
+            item.scale = getScrollScaleForPosition(items.get(i).x, items.get(i).y);
+
+            item.view.setX(item.x);
+            item.view.setY(item.y);
+            item.view.setScaleX(item.scale);
+            item.view.setScaleY(item.scale);
+        }
+        scrollView.invalidate();
+    }
+
+    public class ItemOnTouchListener implements View.OnTouchListener {
         private float totalMovement = 0;
         private float lastMovement = 0;
 
@@ -148,16 +205,9 @@ public class SelectionViewController {
                     lastMovement = difference;
                     totalMovement += Math.abs(difference);
 
-
-                    //addMovementDifferenceToScrollPosition(difference);
                     addMovementDifferenceToScrollPositionContiuousDecrease(difference, false);
-                    //addMovementDifferenceOvershotCounterMovement();
-
-                    //addMovementDifferenceToScrollPosition(difference);
-
 
                     repositionItems();
-                    //Log.d(TAG, "Action was MOVE");
                     return true;
                 case (MotionEvent.ACTION_UP):
                     hideTouchOverlays();
@@ -167,8 +217,6 @@ public class SelectionViewController {
                     }
 
                     addMovementDifferenceToScrollPositionContiuousDecrease(lastMovement, true);
-
-                   // addMovementDifferenceOvershotCounterMovement();
 
                     Log.d(TAG, "Action was UP");
                     return true;
@@ -182,6 +230,60 @@ public class SelectionViewController {
                 default:
                     return true;
             }
+        }
+    }
+
+    public class ScrollItemOnTouchListener implements View.OnTouchListener {
+
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            int action = MotionEventCompat.getActionMasked(event);
+            float difference;
+
+            switch (action) {
+                case (MotionEvent.ACTION_DOWN):
+                case (MotionEvent.ACTION_MOVE):
+                    float y = event.getY();
+
+                    float newScrollPosition = ((y) / screenHeightPx) * tractCount - 0.5f;
+                    if (newScrollPosition < 0) {
+                        newScrollPosition = 0;
+                    } else if (newScrollPosition > tractCount -1) {
+                        newScrollPosition = tractCount - 1;
+                    }
+                    moveScrollPosition(newScrollPosition, ++currentMovementDifferenceId);
+
+                    return true;
+                default:
+                    return true;
+            }
+        }
+    }
+
+    private void moveScrollPosition(final float newScrollPosition, final float id) {
+        if (!GlowActivity.getInstance().isRunning()) {
+            return;
+        }
+
+        if (currentMovementDifferenceId > id) {
+            return;
+        }
+
+        if (Math.abs(scrollPosition - newScrollPosition) < 0.01) {
+            return;
+        } else {
+            addMovementDifferenceToScrollPosition((scrollPosition - newScrollPosition) * tractHeightPx * 0.05f);
+
+            Handler handler = new Handler();
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    moveScrollPosition(newScrollPosition, id);
+                }
+            });
+
+            repositionItems();
+            repositionScrollItems();
         }
     }
 
@@ -237,65 +339,30 @@ public class SelectionViewController {
         return scrollPosition == lastScrollPosition;
     }
 
-    /*
-    private void addMovementDifferenceOvershotCounterMovement() {
-        if (scrollPosition < 0) {
-            addMovementDifferenceToScrollPosition(scrollPosition * tractHeightPx * 0.05f);
-
-            repositionItems();
-            rootView.invalidate();
-
-            Handler handler = new Handler();
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    addMovementDifferenceOvershotCounterMovement();
-                }
-            });
-        } else if (scrollPosition > items.size() - 1) {
-            addMovementDifferenceToScrollPosition((scrollPosition - items.size()) * tractHeightPx * 0.05f);
-
-            repositionItems();
-            rootView.invalidate();
-
-            Handler handler = new Handler();
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    addMovementDifferenceOvershotCounterMovement();
-                }
-            });
-        }
-    }*/
-
-
     private void addMovementDifferenceToScrollPositionContiuousDecrease(final float difference, boolean continuous) {
         ++currentMovementDifferenceId;
         addMovementDifferenceToScrollPositionContiuousDecrease(difference, currentMovementDifferenceId, continuous);
     }
+
     private void addMovementDifferenceToScrollPositionContiuousDecrease(final float difference, final float id, final boolean continuous) {
         if (!GlowActivity.getInstance().isRunning()) {
             return;
         }
 
-        if (currentMovementDifferenceId > id ) {
+        if (currentMovementDifferenceId > id) {
             return;
         }
 
         if (Math.abs(difference) < 1 && !isScrollOutideBounds()) {
             return;
         } else {
-            /*
-            for (int i = 0; i < items.size(); ++i) {
-                attractScrollDepedingOnDistance(i);
-            }*/
             addMovementDifferenceToScrollPosition(difference);
 
             if (continuous) {
                 if (scrollPosition < 0) {
                     addMovementDifferenceToScrollPosition(scrollPosition * tractHeightPx * 0.1f - 1);
-                } else if (scrollPosition > items.size() - 1) {
-                    addMovementDifferenceToScrollPosition((scrollPosition - (items.size() - 1 )) * tractHeightPx * 0.1f + 1);
+                } else if (scrollPosition > tractCount - 1) {
+                    addMovementDifferenceToScrollPosition((scrollPosition - (tractCount - 1)) * tractHeightPx * 0.1f + 1);
                 }
 
                 Handler handler = new Handler();
@@ -308,11 +375,12 @@ public class SelectionViewController {
             }
 
             repositionItems();
+            repositionScrollItems();
         }
     }
 
     private void attractScrollDepedingOnDistance(int position) {
-        float difference = (scrollPosition - position) * items.size();
+        float difference = (scrollPosition - position) * tractCount;
 
         if (difference == 0) {
             return;
@@ -329,18 +397,18 @@ public class SelectionViewController {
         int scrollPositionRounded = Math.round(scrollPosition);
         if (scrollPositionRounded < 0) {
             scrollPositionRounded = 0;
-        } else if (scrollPositionRounded > items.size() - 1) {
-            scrollPositionRounded = items.size() - 1;
+        } else if (scrollPositionRounded > tractCount - 1) {
+            scrollPositionRounded = tractCount - 1;
         }
         return scrollPositionRounded;
     }
 
     private boolean isScrollOutideBounds() {
-        return scrollPosition < 0 || scrollPosition > items.size() - 1;
+        return scrollPosition < 0 || scrollPosition > tractCount - 1;
     }
 
     private float getXForItemPosition(int itemPosition) {
-        return ((screenWidthPx / 2) - (tractWidthPx / 2));
+        return ((screenWidthPx / 2) - (tractWidthPx / 2)) - (scrollTractWidthPx / 2);
     }
 
     private float getYForItemPosition(int itemPosition) {
@@ -350,19 +418,21 @@ public class SelectionViewController {
     private float getScaleForPosition(float x, float y) {
         double scale = gauss.gaussForScreenY((int) y + tractHeightPx / 2) * 1.5f + 0.4;
 
-        /*
-        float xCenter = x + tractWidthPx / 2;
-        float yCenter = y + tractHeightPx / 2;
+        return (float) scale;
+    }
 
-        float xCenterAbsolute = screenWidthPx / 2;
-        float yCenterAbsolute = screenHeightPx / 2;
+    // Scrolling
+    private float getXForScrollItemPosition(int itemPosition) {
+        return 0;
+    }
 
-        // 0 center, 1 border, > 1 outside
-        float relativeDistanceToCenter = Math.abs(yCenter - yCenterAbsolute) / (screenHeightPx / 2);
-        float scale = 1 - relativeDistanceToCenter;
-        if (scale < 0) {
-            scale = 0;
-        }*/
+    private float getYForScrollItemPosition(int itemPosition) {
+        return ((float) screenHeightPx / tractCount) * itemPosition;
+    }
+
+    private float getScrollScaleForPosition(float x, float y) {
+        double scale = gaussScroll.gaussForScreenY((int) y + tractHeightPx / 2) * 1.5f + 0.4;
+
         return (float) scale;
     }
 
