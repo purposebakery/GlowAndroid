@@ -22,6 +22,8 @@ import com.techlung.android.glow.ui.dialogs.MoreDialog;
 
 public class GlowActivity extends FragmentActivity {
     public static final int TRANSITION_SPEED = 300;
+    public static final boolean DEBUG = true;
+
     private Settings settings;
 
     private SelectionViewController selectionFlowFragment;

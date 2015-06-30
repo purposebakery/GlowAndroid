@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
@@ -53,12 +54,14 @@ public class SelectionViewController {
 
     private float tractStartingPoint;
     private float currentMovementDifferenceId = 0;
+    private float currentMovementSpeed = 0;
 
     private Activity activity;
     private View view;
 
     private RelativeLayout rootView;
     private RelativeLayout scrollView;
+    private TextView debug;
 
     public SelectionViewController(ViewGroup container) {
         activity = GlowActivity.getInstance();
@@ -121,10 +124,13 @@ public class SelectionViewController {
         rootView = (RelativeLayout) view.findViewById(R.id.flow_root);
         rootView.setOnTouchListener(new ItemOnTouchListener());
 
+        debug = (TextView) view.findViewById(R.id.debug);
+
         for (SelectionItem item : items) {
             item.view = inflater.inflate(R.layout.selection_flow_item, rootView, false);
             item.image = (ImageView) item.view.findViewById(R.id.image);
             item.overlay = item.view.findViewById(R.id.overlay);
+            item.debug = (TextView) item.view.findViewById(R.id.debug);
             item.image.getLayoutParams().height = tractHeightPx;
             item.image.getLayoutParams().width = tractWidthPx;
             item.image.setImageURI(item.tract.getCoverPathUri());
@@ -162,7 +168,26 @@ public class SelectionViewController {
             item.view.setScaleX(item.scale);
             item.view.setScaleY(item.scale);
         }
+        printDebugInfo();
         rootView.invalidate();
+    }
+
+    private void printDebugInfo() {
+        if (GlowActivity.DEBUG) {
+            for (int i = 0; i < tractCount; ++i) {
+                SelectionItem item = items.get(i);
+
+                String debugString = "";
+                debugString += item.x + ", " + item.y + "\n";
+                debugString += item.scale;
+                item.debug.setText(debugString);
+            }
+
+            String debugString2 = "";
+            debugString2 += "scrollposition: " + scrollPosition + "\n";
+            debugString2 += "speed: " + currentMovementSpeed + "\n";
+            debug.setText(debugString2);
+        }
     }
 
     private void repositionScrollItems() {
@@ -262,14 +287,17 @@ public class SelectionViewController {
 
     private void moveScrollPosition(final float newScrollPosition, final float id) {
         if (!GlowActivity.getInstance().isRunning()) {
+            currentMovementSpeed = 0;
             return;
         }
 
         if (currentMovementDifferenceId > id) {
+            currentMovementSpeed = 0;
             return;
         }
 
         if (Math.abs(scrollPosition - newScrollPosition) < 0.01) {
+            currentMovementSpeed = 0;
             return;
         } else {
             addMovementDifferenceToScrollPosition((scrollPosition - newScrollPosition) * tractHeightPx * 0.05f);
@@ -333,9 +361,9 @@ public class SelectionViewController {
     }
 
     private boolean addMovementDifferenceToScrollPosition(float difference) {
+        currentMovementSpeed = difference / tractHeightPx;
         float lastScrollPosition = scrollPosition;
-        scrollPosition -= difference / tractHeightPx;
-        Log.d(TAG, "Scrollposition: " + scrollPosition);
+        scrollPosition -= currentMovementSpeed;
         return scrollPosition == lastScrollPosition;
     }
 
@@ -346,14 +374,17 @@ public class SelectionViewController {
 
     private void addMovementDifferenceToScrollPositionContiuousDecrease(final float difference, final float id, final boolean continuous) {
         if (!GlowActivity.getInstance().isRunning()) {
+            currentMovementSpeed = 0;
             return;
         }
 
         if (currentMovementDifferenceId > id) {
+            currentMovementSpeed = 0;
             return;
         }
 
         if (Math.abs(difference) < 1 && !isScrollOutideBounds()) {
+            currentMovementSpeed = 0;
             return;
         } else {
             addMovementDifferenceToScrollPosition(difference);
@@ -378,6 +409,7 @@ public class SelectionViewController {
             repositionScrollItems();
         }
     }
+
 
     private void attractScrollDepedingOnDistance(int position) {
         float difference = (scrollPosition - position) * tractCount;
