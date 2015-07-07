@@ -1,83 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:elevation="4dp"
     android:background="@color/pallet_fg">
 
-    <RelativeLayout
-        android:id="@+id/more_container"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:gravity="center_horizontal"
-        android:background="@drawable/button_background">
-
-        <ImageView
-            android:id="@+id/more_icon"
-            android:layout_width="@dimen/button_default_small"
-            android:layout_height="@dimen/button_default_small"
-            android:padding="8dp"
-            android:layout_centerHorizontal="true"
-            android:src="@drawable/icon_more_white" />
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/share_container"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toLeftOf="@id/more_container"
-        android:gravity="center_horizontal"
-        android:background="@drawable/button_background" >
-
-        <ImageView
-            android:id="@+id/share_icon"
-            android:layout_width="@dimen/button_default_small"
-            android:layout_height="@dimen/button_default_small"
-            android:padding="8dp"
-            android:layout_centerHorizontal="true"
-            android:src="@drawable/icon_share_white" />
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/contact_container"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toLeftOf="@id/share_container"
-        android:gravity="center_horizontal"
-        android:background="@drawable/button_background" >
-
-        <ImageView
-            android:id="@+id/contact_icon"
-            android:layout_width="@dimen/button_default_small"
-            android:layout_height="@dimen/button_default_small"
-            android:padding="8dp"
-            android:layout_centerHorizontal="true"
-            android:src="@drawable/icon_comments_white" />
-
-    </RelativeLayout>
 
     <ImageView
-        android:id="@+id/header_back_arrow"
-        android:layout_width="15dp"
-        android:layout_height="15dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
-        android:layout_marginRight="4dp"
-        android:layout_alignParentLeft="true"
-        android:src="@drawable/ic_launcher"/>
+        android:id="@+id/drawer_toggle"
+        android:layout_width="@dimen/button_default_small"
+        android:layout_height="@dimen/button_default_small"
+        android:padding="6dp"
+        android:layout_centerVertical="true"
+        android:src="@drawable/icon_menu_black"/>
 
     <ImageView
         android:id="@+id/header_logo"
-        android:layout_width="wrap_content"
+        android:layout_width="120dp"
         android:layout_height="40dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:scaleType="fitStart"
-        android:layout_toRightOf="@+id/header_back_arrow"
-        android:layout_toLeftOf="@id/contact_container"
-        android:src="@drawable/glow_logo_horizontal_small" />
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:layout_centerVertical="true"
+        android:scaleType="centerInside"
+        android:layout_toRightOf="@+id/drawer_toggle"
+        android:src="@drawable/glow_logo_horizontal_small_black" />
+
+
+    <ImageView
+        android:id="@+id/info"
+        android:layout_width="@dimen/button_default_tiny"
+        android:layout_height="@dimen/button_default_tiny"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="12dp"
+        android:src="@drawable/icon_information" />
 
 </RelativeLayout>

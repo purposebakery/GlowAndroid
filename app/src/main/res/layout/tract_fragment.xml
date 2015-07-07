@@ -21,14 +21,17 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:background="#33FFFFFF"
-                android:elevation="6dp"
-                android:padding="16dp">
+                android:padding="10dp">
 
                 <ImageView
                     android:id="@+id/activity_glow_pamphlet_list_image"
                     android:layout_width="60dp"
                     android:layout_height="90dp"
-                    android:src="@drawable/ic_launcher"/>
+                    android:src="@drawable/ic_launcher"
+                    android:background="@color/white"
+                    android:elevation="6dp"
+                    android:layout_margin="6dp"
+                    android:scaleType="centerCrop"/>
 
                 <TextView
                     android:id="@+id/activity_glow_pamphlet_list_title"

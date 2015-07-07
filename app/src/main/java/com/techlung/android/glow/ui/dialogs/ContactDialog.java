@@ -110,7 +110,7 @@ public class ContactDialog {
 				Intent callIntent = new Intent(Intent.ACTION_CALL);
 				callIntent.setData(Uri.parse("tel:+" + this.number.trim()));
 				a.startActivity(callIntent);
-				
+
 			}
 		}
 
@@ -133,7 +133,7 @@ public class ContactDialog {
 				a.startActivity(Intent.createChooser(emailIntent, a.getResources().getString(R.string.contact_email_chooserTitle)));
 			}
 		}
-		
+
 		public static class WwwButtonListener implements OnClickListener {
 			private String url;
 			private Activity a;

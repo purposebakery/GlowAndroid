@@ -23,6 +23,7 @@ import com.techlung.android.glow.utils.Gauss;
 import com.techlung.android.glow.utils.ToolBox;
 
 import java.util.ArrayList;
+import java.util.Stack;
 
 public class SelectionViewController {
 
@@ -32,12 +33,18 @@ public class SelectionViewController {
 
     private static final double GAUSS_SCALE = 1;
     private static final double GAUSS_SCROLL_SCALE = 0.4f;
+    public static final int TRACT_ELEVATION_DP = 15;
+    public static final int SCROLL_ELEVATION_DP = 8;
+    public static final int SCROLL_WIDTH_DP = 30;
+    public static final int MENU_HEIGHT_DP = 60;
+    public static final int START_POINT_Y_CHANGE = 20;
     private Gauss gauss;
     private Gauss gaussScroll;
 
     ArrayList<SelectionItem> items = new ArrayList<SelectionItem>();
     ArrayList<SelectionItem> scrollItems = new ArrayList<SelectionItem>();
     ArrayList<SelectionItem> clickedItems = new ArrayList<SelectionItem>();
+    Stack<Float> lastMovementSpeeds = new Stack<Float>();
 
     private float scrollPosition = 0;
 
@@ -107,15 +114,15 @@ public class SelectionViewController {
         tractCount = GlowData.getInstance().getPamphlets().size();
 
         screenWidthPx = ToolBox.getScreenWidthPx(activity);
-        screenHeightPx = ToolBox.getScreenHeightPx(activity) - ToolBox.convertDpToPixel(60, activity); // minus menu height
+        screenHeightPx = ToolBox.getScreenHeightPx(activity) - ToolBox.convertDpToPixel(MENU_HEIGHT_DP, activity); // minus menu height
 
         tractWidthPx = (int) (screenWidthPx * 0.7f);
         tractHeightPx = (int) (tractWidthPx * 1.5f);
 
-        scrollTractWidthPx = ToolBox.convertDpToPixel(30, activity);
+        scrollTractWidthPx = ToolBox.convertDpToPixel(SCROLL_WIDTH_DP, activity);
         scrollTractHeightPx = (int) (scrollTractWidthPx * 1.5f);
 
-        tractStartingPoint = screenHeightPx / 2 - tractHeightPx / 2;
+        tractStartingPoint = screenHeightPx / 2 - tractHeightPx / 2 - ToolBox.convertDpToPixel(START_POINT_Y_CHANGE, activity);;
     }
 
     private View createView(LayoutInflater inflater, ViewGroup container) {
@@ -128,6 +135,11 @@ public class SelectionViewController {
 
         for (SelectionItem item : items) {
             item.view = inflater.inflate(R.layout.selection_flow_item, rootView, false);
+            if (android.os.Build.VERSION.SDK_INT >= 21){
+                item.view.setElevation(0);
+            }
+            item.view.getLayoutParams().width = RelativeLayout.LayoutParams.WRAP_CONTENT;
+            item.view.getLayoutParams().height = RelativeLayout.LayoutParams.WRAP_CONTENT;
             item.image = (ImageView) item.view.findViewById(R.id.image);
             item.overlay = item.view.findViewById(R.id.overlay);
             item.debug = (TextView) item.view.findViewById(R.id.debug);
@@ -167,6 +179,9 @@ public class SelectionViewController {
             item.view.setY(item.y);
             item.view.setScaleX(item.scale);
             item.view.setScaleY(item.scale);
+            if (android.os.Build.VERSION.SDK_INT >= 21) {
+                item.view.setElevation(item.scale * ToolBox.convertDpToPixel(TRACT_ELEVATION_DP, GlowActivity.getInstance()) + 4);
+            }
         }
         printDebugInfo();
         rootView.invalidate();
@@ -186,6 +201,7 @@ public class SelectionViewController {
             String debugString2 = "";
             debugString2 += "scrollposition: " + scrollPosition + "\n";
             debugString2 += "speed: " + currentMovementSpeed + "\n";
+            debugString2 += "10 last speeds: " + getLastMovementSpeedsSum() + "";
             debug.setText(debugString2);
         }
     }
@@ -202,6 +218,9 @@ public class SelectionViewController {
             item.view.setY(item.y);
             item.view.setScaleX(item.scale);
             item.view.setScaleY(item.scale);
+            if (android.os.Build.VERSION.SDK_INT >= 21) {
+                item.view.setElevation(item.scale * ToolBox.convertDpToPixel(SCROLL_ELEVATION_DP, GlowActivity.getInstance()) + 4);
+            }
         }
         scrollView.invalidate();
     }
@@ -360,11 +379,13 @@ public class SelectionViewController {
         return difference;
     }
 
-    private boolean addMovementDifferenceToScrollPosition(float difference) {
+    private void addMovementDifferenceToScrollPosition(float difference) {
+        lastMovementSpeeds.push(currentMovementSpeed);
+        if (lastMovementSpeeds.size() > 10) {
+            lastMovementSpeeds.pop();
+        }
         currentMovementSpeed = difference / tractHeightPx;
-        float lastScrollPosition = scrollPosition;
         scrollPosition -= currentMovementSpeed;
-        return scrollPosition == lastScrollPosition;
     }
 
     private void addMovementDifferenceToScrollPositionContiuousDecrease(final float difference, boolean continuous) {
@@ -388,6 +409,7 @@ public class SelectionViewController {
             return;
         } else {
             addMovementDifferenceToScrollPosition(difference);
+            attractToNeighbours();
 
             if (continuous) {
                 if (scrollPosition < 0) {
@@ -407,6 +429,39 @@ public class SelectionViewController {
 
             repositionItems();
             repositionScrollItems();
+        }
+    }
+
+    private void attractToNeighbours() {
+        int nHigh = (int) Math.ceil(scrollPosition);
+        int nLow = (int) Math.floor(scrollPosition);
+        float differenceToPosition = 0;
+
+        if (positionInRange(nLow)) {
+            differenceToPosition = nLow - scrollPosition;
+            addMovementDifferenceToScrollPosition(differenceToPosition);
+        }
+
+        if (positionInRange(nHigh)) {
+            differenceToPosition = nHigh - scrollPosition;
+            addMovementDifferenceToScrollPosition(differenceToPosition);
+        }
+
+    }
+
+    private float getLastMovementSpeedsSum() {
+        float value = 0;
+        for (Float speed : lastMovementSpeeds) {
+            value += speed;
+        }
+        return value;
+    }
+
+    private boolean positionInRange(int position) {
+        if (position < 0 || position > tractCount - 1) {
+            return false;
+        } else {
+            return true;
         }
     }
 

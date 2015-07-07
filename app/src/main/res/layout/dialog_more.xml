@@ -9,8 +9,9 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
-        android:background="@android:color/transparent"
+        android:background="@color/pallet_fg"
         android:gravity="center"
+        android:elevation="4dp"
         android:text="@string/dialog_button"
         android:textStyle="bold"
         android:textColor="@color/text_inverted" />
@@ -20,33 +21,20 @@
         android:layout_width="fill_parent"
         android:layout_height="50dp"
         android:layout_alignParentTop="true"
-        android:background="@android:color/transparent"
+        android:background="@color/pallet_fg"
         android:gravity="center"
         android:text="@string/more_dialog_title"
         android:textColor="@color/text_inverted"
+        android:elevation="4dp"
         android:textSize="16dp"
         android:textStyle="bold" />
 
-    <View
-        android:id="@+id/line1"
-        android:layout_width="fill_parent"
-        android:layout_height="1dp"
-        android:layout_below="@id/title"
-        android:background="@android:color/black" />
-
-    
-    <View
-        android:id="@+id/line2"
-        android:layout_width="fill_parent"
-        android:layout_height="1dp"
-        android:layout_above="@id/button"
-        android:background="@android:color/black" />
     
    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_above="@id/line2"
-        android:layout_below="@id/line1"
+        android:layout_above="@id/button"
+        android:layout_below="@id/title"
         android:orientation="vertical"
         android:paddingBottom="10dp"
         android:paddingLeft="20dp"
@@ -64,7 +52,7 @@
             <ImageView
                 android:layout_width="@dimen/button_default"
                 android:layout_height="@dimen/button_default"
-                android:src="@drawable/icon_shopping_black" />
+                android:src="@drawable/icon_shopping_white" />
 
             <TextView
                 android:layout_width="fill_parent"
@@ -86,7 +74,7 @@
             <ImageView
                 android:layout_width="@dimen/button_default"
                 android:layout_height="@dimen/button_default"
-                android:src="@drawable/icon_mail_black" />
+                android:src="@drawable/icon_mail_white" />
 
             <TextView
                 android:layout_width="fill_parent"

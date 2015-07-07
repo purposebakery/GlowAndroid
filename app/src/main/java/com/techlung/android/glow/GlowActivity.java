@@ -2,29 +2,42 @@ package com.techlung.android.glow;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.nineoldandroids.animation.Animator;
 import com.techlung.android.glow.io.ContentStorageLoader;
+import com.techlung.android.glow.model.Contact;
 import com.techlung.android.glow.model.GlowData;
 import com.techlung.android.glow.model.Tract;
 import com.techlung.android.glow.settings.Settings;
 import com.techlung.android.glow.ui.SelectionViewController;
 import com.techlung.android.glow.ui.TractViewController;
-import com.techlung.android.glow.ui.dialogs.ContactDialog;
-import com.techlung.android.glow.ui.dialogs.MoreDialog;
 
 public class GlowActivity extends FragmentActivity {
     public static final int TRANSITION_SPEED = 300;
-    public static final boolean DEBUG = true;
+    public static final boolean DEBUG = false;
 
     private Settings settings;
+    private DrawerLayout mDrawerLayout;
+    //private ActionBarDrawerToggle mDrawerToggle;
 
     private SelectionViewController selectionFlowFragment;
     private TractViewController tractFragment;
@@ -38,7 +51,7 @@ public class GlowActivity extends FragmentActivity {
     public State currentState;
     private boolean isRunning;
 
-    private View headerBackArrow;
+    private View shareButton;
 
     private static GlowActivity instance;
 
@@ -64,8 +77,64 @@ public class GlowActivity extends FragmentActivity {
 
         initViewPager();
         initMenu();
+        initShareButton();
+        initDrawer();
 
         changeState(State.SELECTION);
+
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        /*
+        mDrawerToggle = new ActionBarDrawerToggle(
+                this,
+                mDrawerLayout,
+                R.drawable.ic_launcher,
+                R.string.drawer_open,
+                R.string.drawer_close
+        ) {
+
+            public void onDrawerClosed(View view) {
+                super.onDrawerClosed(view);
+            }
+
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+            }
+        };*/
+
+        // Set the drawer toggle as the DrawerListener
+        mDrawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+            }
+        });
+
+        findViewById(R.id.drawer_toggle).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDrawerLayout.openDrawer(Gravity.LEFT);
+            }
+        });
+//        getActionBar().setDisplayHomeAsUpEnabled(true);
+//        getActionBar().setHomeButtonEnabled(true);
+
+
+
     }
 
     @Override
@@ -84,6 +153,51 @@ public class GlowActivity extends FragmentActivity {
     protected void onResume() {
         super.onResume();
         isRunning = true;
+    }
+
+    private void initDrawer() {
+        Contact contact = GlowData.getInstance().getContact();
+
+        final String phone = contact.getPhone();
+        final String mail = contact.getEmail();
+        final String www = !contact.getWww().startsWith("http") ? "http://" + contact.getWww() : contact.getWww();
+
+        TextView phoneView = (TextView) findViewById(R.id.contact_phone);
+        phoneView.setText(phone);
+        View phoneContainer = findViewById(R.id.contact_phone_container);
+        phoneContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                callIntent.setData(Uri.parse("tel:+" + phone.trim()));
+                startActivity(callIntent);
+            }
+        });
+
+        TextView mailView = (TextView) findViewById(R.id.contact_mail);
+        mailView.setText(mail);
+        View mailContainer = findViewById(R.id.contact_mail_container);
+        mailContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", mail, null));
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.contact_email_subject));
+                startActivity(Intent.createChooser(emailIntent, getString(R.string.contact_email_chooserTitle)));
+            }
+        });
+
+        TextView wwwView = (TextView) findViewById(R.id.contact_www);
+        wwwView.setText(www);
+        View wwwContainer = findViewById(R.id.contact_www_container);
+        wwwContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(www));
+                startActivity(i);
+            }
+        });
+
     }
 
     private void initViewPager() {
@@ -145,7 +259,6 @@ public class GlowActivity extends FragmentActivity {
     }
 
     private void initMenu() {
-
         View.OnClickListener headerBackOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -157,33 +270,17 @@ public class GlowActivity extends FragmentActivity {
 
         View logo = findViewById(R.id.header_logo);
         logo.setOnClickListener(headerBackOnClickListener);
-        headerBackArrow = findViewById(R.id.header_back_arrow);
-        headerBackArrow.setOnClickListener(headerBackOnClickListener);
+    }
 
-        findViewById(R.id.more_container).setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        MoreDialog.show(GlowActivity.this);
-                    }
-                });
-
-        findViewById(R.id.share_container).setOnClickListener(
+    private void initShareButton() {
+        shareButton = findViewById(R.id.share_button);
+        shareButton.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         share();
                     }
                 });
-
-        findViewById(R.id.contact_container).setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        ContactDialog.show(GlowActivity.this);
-                    }
-                });
-
     }
 
     private void share() {
@@ -242,11 +339,28 @@ public class GlowActivity extends FragmentActivity {
         this.currentState = state;
 
         if (state == State.TRACT) {
-            headerBackArrow.setVisibility(View.VISIBLE);
-            YoYo.with(Techniques.SlideInLeft).duration(TRANSITION_SPEED).playOn(headerBackArrow);
+            fadeInAndOutShare();
         } else {
-            YoYo.with(Techniques.SlideOutLeft).duration(TRANSITION_SPEED).playOn(headerBackArrow);
+            fadeInAndOutShare();
         }
+    }
+
+    private void fadeInAndOutShare() {
+        YoYo.with(Techniques.TakingOff).duration(TRANSITION_SPEED).withListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+            }
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                YoYo.with(Techniques.Landing).duration(TRANSITION_SPEED).playOn(shareButton);
+            }
+            @Override
+            public void onAnimationCancel(Animator animation) {
+            }
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+            }
+        }).playOn(shareButton);
     }
 
 
