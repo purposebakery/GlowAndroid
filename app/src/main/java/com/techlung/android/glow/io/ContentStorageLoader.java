@@ -236,6 +236,13 @@ public class ContentStorageLoader {
 					GlowData.getInstance().loadContact(contactFile);
 				}
 
+				// Load Info
+				File infoFile = new File(dataDir.getAbsolutePath() + "/" + Common.FILE_INFO);
+				if (infoFile != null && infoFile.exists() && infoFile.isFile()) {
+					GlowData.getInstance().loadInfo(infoFile);
+
+				}
+
 			} else {
 				noData = true;
 			}

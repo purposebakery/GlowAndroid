@@ -46,8 +46,8 @@
     <string name="contact_dialog_title">Kontakt</string>
         
     <string name="more_dialog_title">Mehr</string>
-    <string name="more_dialog_shop">Shop</string>
-    <string name="more_dialog_newsletter">Newsletter</string>
+    <string name="more_dialog_shop">Shop besuchen</string>
+    <string name="more_dialog_newsletter">Newsletter anfordern</string>
     
     <string name="newsletter_mail_subject">GLOW Newsletter Anfrage</string>
     <string name="newsletter_mail_hello">Liebes GLOW Team,</string>
@@ -59,6 +59,9 @@
 
     <string name="drawer_open">Navigation öffnen</string>
     <string name="drawer_close">Navigation schließen</string>
-    
+
+    <string name="info_title">GLOW für Android</string>
+    <string name="info_button_positive">Danke</string>
+
     
 </resources>

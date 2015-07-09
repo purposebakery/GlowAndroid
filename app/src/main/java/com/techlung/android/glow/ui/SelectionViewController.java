@@ -334,7 +334,7 @@ public class SelectionViewController {
         }
     }
 
-    private void hideTouchOverlays() {
+    public void hideTouchOverlays() {
         for (final SelectionItem item : clickedItems) {
             YoYo.with(Techniques.FadeOut).duration(TRACT_TOUCH_ANIMATION_LENGTH).playOn(item.overlay);
         }
@@ -344,7 +344,7 @@ public class SelectionViewController {
 
     private void onTouchDownPosition(float x, float y) {
         for (final SelectionItem item : items) {
-            if (inViewInBounds(item.view, (int) x, (int) y)) {
+            if (inViewInBounds(item, (int) x, (int) y)) {
                 item.overlay.setVisibility(View.VISIBLE);
 
                 YoYo.with(Techniques.FadeIn).duration(TRACT_TOUCH_ANIMATION_LENGTH).playOn(item.overlay);
@@ -355,7 +355,7 @@ public class SelectionViewController {
 
     private void onTouchUpPosition(float x, float y) {
         for (SelectionItem item : items) {
-            if (inViewInBounds(item.view, (int) x, (int) y)) {
+            if (inViewInBounds(item, (int) x, (int) y)) {
                 GlowActivity.getInstance().showTract(item.tract);
             }
         }
@@ -364,11 +364,18 @@ public class SelectionViewController {
     Rect outRect = new Rect();
     int[] location = new int[2];
 
-    private boolean inViewInBounds(View view, int x, int y) {
-        view.getDrawingRect(outRect);
-        view.getLocationOnScreen(location);
-        outRect.offset(location[0], location[1]);
-        return outRect.contains(x, y);
+    private boolean inViewInBounds(SelectionItem item, int x, int y) {
+        float tractWidth = (tractWidthPx * item.scale);
+        float tractHeight = (tractHeightPx * item.scale);
+        float itemStartX = item.x + (tractWidthPx - tractWidth) / 2;
+        float itemStartY = item.y + (tractHeightPx - tractHeight) / 2;
+
+        if (x > itemStartX && x < itemStartX + tractWidth &&
+                y > itemStartY && y < itemStartY + tractHeight) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private float getYDifference(MotionEvent event) {

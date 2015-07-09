@@ -7,16 +7,20 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -30,13 +34,18 @@ import com.techlung.android.glow.model.Tract;
 import com.techlung.android.glow.settings.Settings;
 import com.techlung.android.glow.ui.SelectionViewController;
 import com.techlung.android.glow.ui.TractViewController;
+import com.techlung.android.glow.utils.DialogHelper;
+import com.techlung.android.glow.utils.Mailer;
 
-public class GlowActivity extends FragmentActivity {
+public class GlowActivity extends AppCompatActivity {
     public static final int TRANSITION_SPEED = 300;
     public static final boolean DEBUG = false;
 
     private Settings settings;
     private DrawerLayout mDrawerLayout;
+    private View drawerToggle;
+    private View header;
+    private NavigationView mNavigationView;
     //private ActionBarDrawerToggle mDrawerToggle;
 
     private SelectionViewController selectionFlowFragment;
@@ -83,6 +92,33 @@ public class GlowActivity extends FragmentActivity {
         changeState(State.SELECTION);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                //float drawerWidth = getResources().getDimension(R.dimen.drawer_width);
+                //float scale = (drawerWidth - slideOffset) / drawerWidth;
+                drawerToggle.setScaleX(1 - slideOffset);
+                drawerToggle.setScaleY(1 - slideOffset);
+                drawerToggle.setRotation(slideOffset * 180);
+
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                //YoYo.with(Techniques.TakingOff).duration(TRANSITION_SPEED).playOn(drawerToggle);
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                //YoYo.with(Techniques.Landing).duration(TRANSITION_SPEED).playOn(drawerToggle);
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+            }
+        });
+        //mNavigationView = (NavigationView) findViewById(R.id.navigation);
         /*
         mDrawerToggle = new ActionBarDrawerToggle(
                 this,
@@ -101,30 +137,56 @@ public class GlowActivity extends FragmentActivity {
             }
         };*/
 
+        /*
         // Set the drawer toggle as the DrawerListener
-        mDrawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
+        mDrawerLayout.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public void onDrawerSlide(View drawerView, float slideOffset) {
+            public boolean onNavigationItemSelected(MenuItem menuItem) {
+                mDrawerLayout.closeDrawers();
+                menuItem.setChecked(true);
 
+                Contact contact = GlowData.getInstance().getContact();
+
+                final String phone = contact.getPhone();
+                final String mail = contact.getEmail();
+                final String www = contact.getWww();
+                final String shop = contact.getShop();
+
+                switch (menuItem.getItemId()) {
+
+                    case R.id.nav_phone:
+
+                        Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                        callIntent.setData(Uri.parse("tel:+" + phone.trim()));
+                        startActivity(callIntent);
+                        break;
+                    case R.id.nav_mail:
+                        Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", mail, null));
+                        emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.contact_email_subject));
+                        startActivity(Intent.createChooser(emailIntent, getString(R.string.contact_email_chooserTitle)));
+                        break;
+                    case R.id.nav_www:
+                        Intent wwwIntent = new Intent(Intent.ACTION_VIEW);
+                        wwwIntent.setData(Uri.parse(!www.startsWith("http") ? "http://" + www : www));
+                        startActivity(wwwIntent);
+                        break;
+                    case R.id.nav_shop:
+                        Intent shopIntent = new Intent(Intent.ACTION_VIEW);
+                        shopIntent.setData(Uri.parse(!shop.startsWith("http") ? "http://" + shop : shop));
+                        startActivity(shopIntent);
+                        break;
+                    case R.id.naw_newsletter:
+                        Mailer.sendNewsletterRequest(GlowActivity.this);
+                        break;
+
+
+                }
+                return true;
             }
+        });*/
 
-            @Override
-            public void onDrawerOpened(View drawerView) {
-
-            }
-
-            @Override
-            public void onDrawerClosed(View drawerView) {
-
-            }
-
-            @Override
-            public void onDrawerStateChanged(int newState) {
-
-            }
-        });
-
-        findViewById(R.id.drawer_toggle).setOnClickListener(new View.OnClickListener() {
+        drawerToggle = findViewById(R.id.drawer_toggle);
+        drawerToggle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mDrawerLayout.openDrawer(Gravity.LEFT);
@@ -156,14 +218,16 @@ public class GlowActivity extends FragmentActivity {
     }
 
     private void initDrawer() {
+
         Contact contact = GlowData.getInstance().getContact();
 
         final String phone = contact.getPhone();
         final String mail = contact.getEmail();
-        final String www = !contact.getWww().startsWith("http") ? "http://" + contact.getWww() : contact.getWww();
+        final String www = contact.getWww();
+        final String shop = contact.getShop();
 
-        TextView phoneView = (TextView) findViewById(R.id.contact_phone);
-        phoneView.setText(phone);
+        //TextView phoneView = (TextView) findViewById(R.id.contact_phone);
+        //phoneView.setText(phone);
         View phoneContainer = findViewById(R.id.contact_phone_container);
         phoneContainer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -174,8 +238,8 @@ public class GlowActivity extends FragmentActivity {
             }
         });
 
-        TextView mailView = (TextView) findViewById(R.id.contact_mail);
-        mailView.setText(mail);
+        //TextView mailView = (TextView) findViewById(R.id.contact_mail);
+        //mailView.setText(mail);
         View mailContainer = findViewById(R.id.contact_mail_container);
         mailContainer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -186,17 +250,41 @@ public class GlowActivity extends FragmentActivity {
             }
         });
 
-        TextView wwwView = (TextView) findViewById(R.id.contact_www);
-        wwwView.setText(www);
+        //TextView wwwView = (TextView) findViewById(R.id.contact_www);
+        //wwwView.setText(www);
         View wwwContainer = findViewById(R.id.contact_www_container);
         wwwContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse(www));
+                i.setData(Uri.parse(!www.startsWith("http") ? "http://" + www : www));
                 startActivity(i);
             }
         });
+
+        findViewById(R.id.more_shop_container).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(!shop.startsWith("http") ? "http://" + shop : shop));
+                startActivity(i);
+            }
+        });
+
+        findViewById(R.id.more_newsletter_container).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Mailer.sendNewsletterRequest(GlowActivity.this);
+            }
+        });
+
+        findViewById(R.id.glow_info).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogHelper.showInfoAlert(GlowActivity.this);
+            }
+        });
+
 
     }
 
@@ -259,6 +347,8 @@ public class GlowActivity extends FragmentActivity {
     }
 
     private void initMenu() {
+        header = findViewById(R.id.header);
+
         View.OnClickListener headerBackOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -270,6 +360,14 @@ public class GlowActivity extends FragmentActivity {
 
         View logo = findViewById(R.id.header_logo);
         logo.setOnClickListener(headerBackOnClickListener);
+
+        View close = findViewById(R.id.close);
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private void initShareButton() {
@@ -278,6 +376,7 @@ public class GlowActivity extends FragmentActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        YoYo.with(Techniques.Pulse).duration(TRANSITION_SPEED).playOn(shareButton);
                         share();
                     }
                 });
@@ -340,10 +439,21 @@ public class GlowActivity extends FragmentActivity {
 
         if (state == State.TRACT) {
             fadeInAndOutShare();
+            moveOutHeader();
         } else {
             fadeInAndOutShare();
+            moveInHeader();
         }
     }
+
+    private void moveOutHeader() {
+//        YoYo.with(Techniques.SlideOutUp).duration(TRANSITION_SPEED).playOn(header);
+    }
+
+    private void moveInHeader() {
+//        YoYo.with(Techniques.SlideInUp).duration(TRANSITION_SPEED).playOn(header);
+    }
+
 
     private void fadeInAndOutShare() {
         YoYo.with(Techniques.TakingOff).duration(TRANSITION_SPEED).withListener(new Animator.AnimatorListener() {

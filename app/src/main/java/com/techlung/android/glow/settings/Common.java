@@ -9,6 +9,7 @@ public class Common {
 	
 	public static final String FILE_META = "meta.txt"; // default
 	public static final String FILE_CONTACT = "contact.txt"; // default
+	public static final String FILE_INFO = "info.html"; // default
 	public static final String FILE_CONTENT = "content.html"; // default
 	public static final String FILE_ADDITIONAL = "additional.html"; // default
 	public static final String FILE_COVER = "cover.jpg"; // default

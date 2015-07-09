@@ -3,36 +3,42 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:elevation="4dp"
-    android:background="@color/pallet_fg">
+    android:background="@color/pallet_main">
 
 
-    <ImageView
+    <ImageButton
         android:id="@+id/drawer_toggle"
         android:layout_width="@dimen/button_default_small"
         android:layout_height="@dimen/button_default_small"
-        android:padding="6dp"
+        android:padding="9dp"
         android:layout_centerVertical="true"
-        android:src="@drawable/icon_menu_black"/>
+        android:src="@drawable/icon_menu2_black"
+        android:scaleType="centerInside"
+        android:background="@drawable/button_background"/>
 
     <ImageView
         android:id="@+id/header_logo"
-        android:layout_width="120dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp"
-        android:layout_centerVertical="true"
+        android:layout_width="100dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_centerInParent="true"
         android:scaleType="centerInside"
         android:layout_toRightOf="@+id/drawer_toggle"
         android:src="@drawable/glow_logo_horizontal_small_black" />
 
 
-    <ImageView
-        android:id="@+id/info"
-        android:layout_width="@dimen/button_default_tiny"
-        android:layout_height="@dimen/button_default_tiny"
+    <ImageButton
+        android:id="@+id/close"
+        android:layout_width="@dimen/button_default_small"
+        android:layout_height="@dimen/button_default_small"
+        android:padding="12dp"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="12dp"
-        android:src="@drawable/icon_information" />
+        android:src="@drawable/icon_close_black"
+        android:scaleType="centerInside"
+        android:background="@drawable/button_background"
+        android:visibility="gone"/>
 
 </RelativeLayout>

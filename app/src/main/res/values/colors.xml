@@ -9,7 +9,7 @@
 
     <!--<color name="pallet_fg">#003462</color>8e1537-->
     <color name="pallet_acent">#ffc107</color>
-    <color name="pallet_fg">#9e9e9e</color>
+    <color name="pallet_main">#e0e0e0</color>
     <color name="pallet_passive">#333333</color>
     <color name="pallet_passive_selection">#333333</color>
     <color name="pallet_bg">#888888</color>
