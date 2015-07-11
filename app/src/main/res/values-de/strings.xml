@@ -54,8 +54,8 @@
     <string name="newsletter_mail_message">ich habe Interesse am GLOW Newsletter. Bitte meldet mich dafür an. Vielen Dank! </string>
     <string name="newsletter_mail_bye">Mit besten Grüßen</string>
     
-    <string name="share_app_text">Ich habe folgende christliche Android App gefunden. Eventuell interessiert es dich auch: </string>
-    <string name="share_tract_text">Ich habe folgendes christliches material gefunden. Eventuell interessiert es dich auch: </string>
+    <string name="share_app_text">Ich habe diese christliche Android App gefunden. Eventuell interessiert es dich auch: </string>
+    <string name="share_tract_text">Ich habe folgenden interessanten Flyer gefunden. Eventuell interessiert es dich auch: </string>
 
     <string name="drawer_open">Navigation öffnen</string>
     <string name="drawer_close">Navigation schließen</string>
@@ -63,5 +63,14 @@
     <string name="info_title">GLOW für Android</string>
     <string name="info_button_positive">Danke</string>
 
-    
+    <string name="alert_loading">Laden...</string>
+    <string name="alert_Ok">OK</string>
+    <string name="alert_No">Nein</string>
+
+    <string name="exceptionlogs_title">Ups...</string>
+    <string name="exceptionlogs_message">Diese App ist das letzte mal scheinbar abgestürzt. Schickst du uns den Fehler per Mail? Das wäre eine sehr große Hilfe!</string>
+    <string name="exceptionlogs_mail_reciepient">deutschland@glowonline.org</string>
+    <string name="exceptionlogs_mail_subject">GLOW Android - Error Logs</string>
+
+
 </resources>

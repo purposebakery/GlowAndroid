@@ -16,6 +16,7 @@ public class DialogHelper {
 
     public static void showProgressDialog() {
         progressDialog = new ProgressDialog(GlowActivity.getInstance());
+        progressDialog.setMessage(GlowActivity.getInstance().getString(R.string.alert_loading));
         progressDialog.setCancelable(false);
         progressDialog.show();
     }
@@ -41,14 +42,33 @@ public class DialogHelper {
     public static void showInfoAlert(Context context) {
         AlertDialog.Builder builder = new  AlertDialog.Builder(context);
         builder.setMessage(Html.fromHtml(GlowData.getInstance().getInfo()));
-        //TextView text = new TextView(context);
-        //text.setText(Html.fromHtml(GlowData.getInstance().getInfo()));
-        //builder.setView(text);
         builder.setTitle(R.string.info_title);
         builder.setPositiveButton(R.string.info_button_positive, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
+            }
+        });
+        builder.show();
+    }
+
+    public static void showErrorAlert(Context context, final String exceptionLogs) {
+        AlertDialog.Builder builder = new  AlertDialog.Builder(context);
+        builder.setMessage(R.string.exceptionlogs_message);
+        builder.setTitle(R.string.exceptionlogs_title);
+        builder.setPositiveButton(R.string.alert_Ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                Mailer.sendErrorLog(GlowActivity.getInstance(), exceptionLogs);
+                GlowActivity.getInstance().recreate();
+            }
+        });
+        builder.setNegativeButton(R.string.alert_No, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                GlowActivity.getInstance().recreate();
             }
         });
         builder.show();

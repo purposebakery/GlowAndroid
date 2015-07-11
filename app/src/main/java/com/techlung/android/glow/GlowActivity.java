@@ -28,6 +28,7 @@ import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.nineoldandroids.animation.Animator;
 import com.techlung.android.glow.io.ContentStorageLoader;
+import com.techlung.android.glow.logging.ExceptionLogger;
 import com.techlung.android.glow.model.Contact;
 import com.techlung.android.glow.model.GlowData;
 import com.techlung.android.glow.model.Tract;
@@ -44,9 +45,7 @@ public class GlowActivity extends AppCompatActivity {
     private Settings settings;
     private DrawerLayout mDrawerLayout;
     private View drawerToggle;
-    private View header;
-    private NavigationView mNavigationView;
-    //private ActionBarDrawerToggle mDrawerToggle;
+    private ExceptionLogger logger;
 
     private SelectionViewController selectionFlowFragment;
     private TractViewController tractFragment;
@@ -57,7 +56,7 @@ public class GlowActivity extends AppCompatActivity {
         SELECTION, TRACT
     }
 
-    public State currentState;
+    public State currentState = State.SELECTION;
     private boolean isRunning;
 
     private View shareButton;
@@ -74,14 +73,21 @@ public class GlowActivity extends AppCompatActivity {
 
         instance = this;
 
+        logger = new ExceptionLogger(this);
+        Thread.setDefaultUncaughtExceptionHandler(logger);
+        String exceptionLogs = logger.getExceptionLogs();
+        if (exceptionLogs != null) {
+            handlePastExceptions(exceptionLogs);
+            return;
+        }
+
         // Init Settings
         settings = Settings.getInstance(this);
-        settings.load();
 
         setContentView(R.layout.glow_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        changeState(State.SELECTION);
+        //changeState(State.SELECTION);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
@@ -130,12 +136,12 @@ public class GlowActivity extends AppCompatActivity {
                 initDrawer();
             }
         });
+
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        settings.save();
+    private void handlePastExceptions(String exceptionLogs) {
+        DialogHelper.showErrorAlert(this, exceptionLogs);
+        logger.deleteExceptionLogs();
     }
 
     protected void onPause() {
@@ -279,8 +285,6 @@ public class GlowActivity extends AppCompatActivity {
     }
 
     private void initMenu() {
-        header = findViewById(R.id.header);
-
         View.OnClickListener headerBackOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -376,15 +380,15 @@ public class GlowActivity extends AppCompatActivity {
     private void changeState(State state) {
         this.currentState = state;
 
-        try {
+        //try {
             if (state == State.TRACT) {
                 fadeInAndOutShare();
             } else {
                 fadeInAndOutShare();
             }
-        } catch (Exception e) {
+        /*} catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
     private void fadeInAndOutShare() {
@@ -404,7 +408,6 @@ public class GlowActivity extends AppCompatActivity {
             }
         }).playOn(shareButton);
     }
-
 
     public boolean isRunning() {
         return isRunning;

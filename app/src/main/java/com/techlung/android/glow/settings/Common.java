@@ -22,8 +22,6 @@ public class Common {
 	public static final String CONTACT_WWW = "www";
 	public static final String CONTACT_SHOP = "shop";
 	public static final String CONTACT_APP_URL = "appurl";
-
-	public static final int VERSION = 7;
 	
 	public static boolean isXLargeScreen(Context context) {
 		return (context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE;

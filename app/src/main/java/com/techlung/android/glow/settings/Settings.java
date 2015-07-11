@@ -2,11 +2,16 @@ package com.techlung.android.glow.settings;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.util.Log;
+
+import com.techlung.android.glow.GlowActivity;
 
 public class Settings {
 
 	private Activity a;
+	private int versionCode;
 
 	private Settings(Activity a) {
 		if (a == null) {
@@ -21,6 +26,13 @@ public class Settings {
 		if (instance == null) {
 			instance = new Settings(a);
 		}
+
+		try {
+			PackageInfo pInfo = GlowActivity.getInstance().getPackageManager().getPackageInfo(GlowActivity.getInstance().getPackageName(), 0);
+			instance.versionCode = pInfo.versionCode;
+		} catch (PackageManager.NameNotFoundException e) {
+			e.printStackTrace();
+		}
 		
 		return instance;
 	}
@@ -31,20 +43,20 @@ public class Settings {
 
 	
 	private static final String VERSION_KEY = "VERSION_KEY";
-	private int version = 0;
+	private int versionProductive = 0;
 	
 	// ----- //
 	// Logic //
 	// ----- //
 	
 	// State Saving and Loading
-	public void save() {
+	private void save() {
 		SharedPreferences settings = a.getSharedPreferences(Common.STATE_SHARED_PREFS, 0);
 		SharedPreferences.Editor editor = settings.edit();
 		
 		editor.clear();
 
-		editor.putInt(VERSION_KEY, version);
+		editor.putInt(VERSION_KEY, versionProductive);
 		
 		editor.apply();
 		
@@ -53,25 +65,27 @@ public class Settings {
 	}
 
 	
-	public void load() {
+	private void load() {
 		SharedPreferences settings = a.getSharedPreferences(Common.STATE_SHARED_PREFS, 0);
 
-		version = settings.getInt(VERSION_KEY, 0);
+		versionProductive = settings.getInt(VERSION_KEY, 0);
 		
 		Log.d("Glow", "Loaded Settings");
 
 	}
 
 	public boolean isFirstStart() {
-		return version < Common.VERSION;
+		load();
+		return versionProductive < versionCode;
 	}
 	
 	public void setFirstStart(boolean firstStart) {
 		if (firstStart) {
-			version = 0;
+			versionProductive = 0;
 		} else {
-			version = Common.VERSION; 
+			versionProductive = versionCode;
 		}
+		save();
 	}
 
 	

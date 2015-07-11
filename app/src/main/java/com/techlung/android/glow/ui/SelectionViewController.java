@@ -36,7 +36,7 @@ public class SelectionViewController {
     public static final int TRACT_ELEVATION_DP = 15;
     public static final int SCROLL_ELEVATION_DP = 8;
     public static final int SCROLL_WIDTH_DP = 30;
-    public static final int MENU_HEIGHT_DP = 60;
+    public static final int MENU_HEIGHT_DP = 50;
     public static final int START_POINT_Y_CHANGE = 20;
     private Gauss gauss;
     private Gauss gaussScroll;
@@ -521,7 +521,7 @@ public class SelectionViewController {
     }
 
     private float getYForScrollItemPosition(int itemPosition) {
-        return ((float) screenHeightPx / tractCount) * itemPosition;
+        return ((float) screenHeightPx / (tractCount + 1f)) * itemPosition;
     }
 
     private float getScrollScaleForPosition(float x, float y) {
