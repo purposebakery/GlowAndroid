@@ -7,12 +7,12 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Arrays;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import android.app.Activity;
 import android.content.res.AssetManager;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import com.techlung.android.glow.model.GlowData;
@@ -33,15 +33,48 @@ public class ContentStorageLoader {
 		this.dataFilePath = this.dataDir + "de.zip";
 	}
 	
-	public void unpackAsset() {
+	public void unpackAsset(final OnGlowDataLoadedListener listener) {
 		DialogHelper.showProgressDialog();
 
-		copyAssetToIntenal();
-		unzip();
+		AsyncTask<Void, Void, Void> unzipTask = new AsyncTask<Void, Void, Void>(){
 
-		DialogHelper.hideProgressDialog();
+			@Override
+			protected Void doInBackground(Void... params) {
+
+				clearDirectory(a.getExternalFilesDir(null));
+				copyAssetToIntenal();
+				unzip();
+
+				return null;
+			}
+
+			@Override
+			protected void onPostExecute(Void aVoid) {
+				super.onPostExecute(aVoid);
+
+				listener.onGlowDataLoaded();
+
+				DialogHelper.hideProgressDialog();
+			}
+		};
+		unzipTask.execute();
+
 	}
-	
+
+	private boolean clearDirectory(File dir) {
+		boolean success = true;
+
+		if (dir.exists()) {
+			for (File file : dir.listFiles()) {
+				if (file.isDirectory()) {
+					clearDirectory(file);
+				}
+				success &= file.delete();
+			}
+		}
+		return success;
+	}
+
 	private void copyAssetToIntenal() {
 		String filename = "de.zip";
 		AssetManager assetManager = a.getResources().getAssets();
@@ -173,7 +206,6 @@ public class ContentStorageLoader {
 	}
 
 	public void load() {
-        DialogHelper.showProgressDialog();
 		// validate
 		boolean noData = false;
 
@@ -251,11 +283,13 @@ public class ContentStorageLoader {
 			GlowData.getInstance().clear();
 		}
 
-        DialogHelper.hideProgressDialog();
-
 		/*
 		if (noData) {
 			UiThreadMessenger.sendMessage("No Data on Phone...");//Toast.makeText(a, "", Toast.LENGTH_LONG).show();
 		}*/
 	}
+
+    public interface OnGlowDataLoadedListener {
+        void onGlowDataLoaded();
+    }
 }

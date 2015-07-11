@@ -17,7 +17,7 @@ public class Tract {
 	private String title;
 	private String url;
 
-	private Drawable cover;
+	//private Drawable cover;
 	private String coverPath;
 	private String htmlContent;
 	private String htmlAdditional;
@@ -47,10 +47,11 @@ public class Tract {
 		setUrl(pr.readParameterString(Common.META_URL));
 	}
 
+	/*
 	public void loadCover(File f) {
 		Drawable cover = Drawable.createFromPath(f.getAbsolutePath());
 		setCover(cover);
-	}
+	}*/
 
 	public void loadHtmlContent(File f) {
 		
@@ -129,13 +130,14 @@ public class Tract {
 		this.htmlContent = htmlContent;
 	}
 
+	/*
 	public Drawable getCover() {
 		return cover;
 	}
 
 	public void setCover(Drawable cover) {
 		this.cover = cover;
-	}
+	}*/
 
 	public String getHtmlAdditional() {
 		return htmlAdditional;

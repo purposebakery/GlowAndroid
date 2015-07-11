@@ -78,16 +78,8 @@ public class GlowActivity extends AppCompatActivity {
         settings = Settings.getInstance(this);
         settings.load();
 
-        checkFirstStart();
-        loadContent();
-
         setContentView(R.layout.glow_main);
-        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
-        initViewPager();
-        initMenu();
-        initShareButton();
-        initDrawer();
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         changeState(State.SELECTION);
 
@@ -118,72 +110,6 @@ public class GlowActivity extends AppCompatActivity {
 
             }
         });
-        //mNavigationView = (NavigationView) findViewById(R.id.navigation);
-        /*
-        mDrawerToggle = new ActionBarDrawerToggle(
-                this,
-                mDrawerLayout,
-                R.drawable.ic_launcher,
-                R.string.drawer_open,
-                R.string.drawer_close
-        ) {
-
-            public void onDrawerClosed(View view) {
-                super.onDrawerClosed(view);
-            }
-
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-            }
-        };*/
-
-        /*
-        // Set the drawer toggle as the DrawerListener
-        mDrawerLayout.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(MenuItem menuItem) {
-                mDrawerLayout.closeDrawers();
-                menuItem.setChecked(true);
-
-                Contact contact = GlowData.getInstance().getContact();
-
-                final String phone = contact.getPhone();
-                final String mail = contact.getEmail();
-                final String www = contact.getWww();
-                final String shop = contact.getShop();
-
-                switch (menuItem.getItemId()) {
-
-                    case R.id.nav_phone:
-
-                        Intent callIntent = new Intent(Intent.ACTION_DIAL);
-                        callIntent.setData(Uri.parse("tel:+" + phone.trim()));
-                        startActivity(callIntent);
-                        break;
-                    case R.id.nav_mail:
-                        Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", mail, null));
-                        emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.contact_email_subject));
-                        startActivity(Intent.createChooser(emailIntent, getString(R.string.contact_email_chooserTitle)));
-                        break;
-                    case R.id.nav_www:
-                        Intent wwwIntent = new Intent(Intent.ACTION_VIEW);
-                        wwwIntent.setData(Uri.parse(!www.startsWith("http") ? "http://" + www : www));
-                        startActivity(wwwIntent);
-                        break;
-                    case R.id.nav_shop:
-                        Intent shopIntent = new Intent(Intent.ACTION_VIEW);
-                        shopIntent.setData(Uri.parse(!shop.startsWith("http") ? "http://" + shop : shop));
-                        startActivity(shopIntent);
-                        break;
-                    case R.id.naw_newsletter:
-                        Mailer.sendNewsletterRequest(GlowActivity.this);
-                        break;
-
-
-                }
-                return true;
-            }
-        });*/
 
         drawerToggle = findViewById(R.id.drawer_toggle);
         drawerToggle.setOnClickListener(new View.OnClickListener() {
@@ -192,18 +118,24 @@ public class GlowActivity extends AppCompatActivity {
                 mDrawerLayout.openDrawer(Gravity.LEFT);
             }
         });
-//        getActionBar().setDisplayHomeAsUpEnabled(true);
-//        getActionBar().setHomeButtonEnabled(true);
 
+        checkFirstStart(new ContentStorageLoader.OnGlowDataLoadedListener() {
+            @Override
+            public void onGlowDataLoaded() {
+                loadContent();
 
-
+                initViewPager();
+                initMenu();
+                initShareButton();
+                initDrawer();
+            }
+        });
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         settings.save();
-
     }
 
     protected void onPause() {
@@ -399,11 +331,18 @@ public class GlowActivity extends AppCompatActivity {
         return null;
     }
 
-    private void checkFirstStart() {
+    private void checkFirstStart(final ContentStorageLoader.OnGlowDataLoadedListener listener) {
         if (settings.isFirstStart()) {
             ContentStorageLoader csl = new ContentStorageLoader(this);
-            csl.unpackAsset();
-            settings.setFirstStart(false);
+            csl.unpackAsset(new ContentStorageLoader.OnGlowDataLoadedListener() {
+                @Override
+                public void onGlowDataLoaded() {
+                    settings.setFirstStart(false);
+                    listener.onGlowDataLoaded();
+                }
+            });
+        } else {
+            listener.onGlowDataLoaded();
         }
     }
 
@@ -437,23 +376,16 @@ public class GlowActivity extends AppCompatActivity {
     private void changeState(State state) {
         this.currentState = state;
 
-        if (state == State.TRACT) {
-            fadeInAndOutShare();
-            moveOutHeader();
-        } else {
-            fadeInAndOutShare();
-            moveInHeader();
+        try {
+            if (state == State.TRACT) {
+                fadeInAndOutShare();
+            } else {
+                fadeInAndOutShare();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
-
-    private void moveOutHeader() {
-//        YoYo.with(Techniques.SlideOutUp).duration(TRANSITION_SPEED).playOn(header);
-    }
-
-    private void moveInHeader() {
-//        YoYo.with(Techniques.SlideInUp).duration(TRANSITION_SPEED).playOn(header);
-    }
-
 
     private void fadeInAndOutShare() {
         YoYo.with(Techniques.TakingOff).duration(TRANSITION_SPEED).withListener(new Animator.AnimatorListener() {
@@ -477,4 +409,7 @@ public class GlowActivity extends AppCompatActivity {
     public boolean isRunning() {
         return isRunning;
     }
+
+
+
 }
