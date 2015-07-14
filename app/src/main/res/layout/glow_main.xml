@@ -38,7 +38,12 @@
             android:elevation="16dp"
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
-            android:background="@drawable/share_button">
+            android:background="@drawable/share_button_background">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/circle_acent"/>
 
             <ImageView
                 android:layout_width="20dp"
@@ -86,7 +91,7 @@
 
                 <include
                     android:id="@+id/drawer_contact"
-                    layout="@layout/drawer_contact2"
+                    layout="@layout/drawer_contact"
                     android:layout_below="@id/drawer_logo"
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
@@ -106,23 +111,25 @@
                     layout="@layout/drawer_more"
                     android:layout_below="@id/separator"
                     android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="8dp"/>
+                    android:layout_width="match_parent"/>
             </RelativeLayout>
         </ScrollView>
 
-
-        <ImageView
+        <RelativeLayout
             android:id="@+id/glow_info"
-            android:layout_width="@dimen/button_default_tiny"
-            android:layout_height="@dimen/button_default_tiny"
-            android:layout_centerVertical="true"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentBottom="true"
-            android:layout_margin="18dp"
-            android:src="@drawable/icon_information" />
+            android:layout_margin="8dp"
+            android:background="@drawable/info_button_background">
+            <ImageView
+                android:layout_width="@dimen/button_default_tiny"
+                android:layout_height="@dimen/button_default_tiny"
+                android:layout_centerInParent="true"
+                android:src="@drawable/icon_information" />
+
+        </RelativeLayout>
     </RelativeLayout>
 
 </android.support.v4.widget.DrawerLayout>

@@ -12,9 +12,9 @@
         android:layout_height="@dimen/button_default_small"
         android:padding="9dp"
         android:layout_centerVertical="true"
-        android:src="@drawable/icon_menu2_black"
+        android:src="@drawable/icon_menu_black"
         android:scaleType="centerInside"
-        android:background="@drawable/button_background"/>
+        android:background="@drawable/share_button_background"/>
 
     <ImageView
         android:id="@+id/header_logo"
@@ -38,7 +38,7 @@
         android:layout_alignParentRight="true"
         android:src="@drawable/icon_close_black"
         android:scaleType="centerInside"
-        android:background="@drawable/button_background"
+        android:background="@drawable/share_button_background"
         android:visibility="gone"/>
 
 </RelativeLayout>

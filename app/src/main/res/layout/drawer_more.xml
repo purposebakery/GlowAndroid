@@ -8,20 +8,22 @@
     <LinearLayout
         android:id="@+id/more_newsletter_container"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/button_default_small"
+        android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:background="@drawable/drawer_button_background">
 
         <ImageView
             android:layout_width="@dimen/button_default"
             android:layout_height="@dimen/button_default"
-            android:src="@drawable/icon_news2_black" />
+            android:src="@drawable/icon_news_black" />
 
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
-            android:text="@string/more_dialog_newsletter"
+            android:text="@string/drawer_newsletter"
             android:textSize="14sp"
             android:textColor="@color/text_inverted"/>
     </LinearLayout>
@@ -29,21 +31,22 @@
     <LinearLayout
         android:id="@+id/more_shop_container"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/button_default_small"
+        android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:layout_marginTop="8dp"
-        android:orientation="horizontal" >
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:background="@drawable/drawer_button_background">
 
         <ImageView
             android:layout_width="@dimen/button_default"
             android:layout_height="@dimen/button_default"
-            android:src="@drawable/icon_shop2_black" />
+            android:src="@drawable/icon_shop_black" />
 
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
-            android:text="@string/more_dialog_shop"
+            android:text="@string/drawer_shop"
             android:textSize="14sp"
             android:textColor="@color/text_inverted" />
     </LinearLayout>

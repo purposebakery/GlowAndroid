@@ -2,27 +2,15 @@ package com.techlung.android.glow;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.NavigationView;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
-import android.widget.Button;
-import android.widget.TextView;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
@@ -39,6 +27,7 @@ import com.techlung.android.glow.utils.DialogHelper;
 import com.techlung.android.glow.utils.Mailer;
 
 public class GlowActivity extends AppCompatActivity {
+    public static final String TAG = GlowActivity.class.getName();
     public static final int TRANSITION_SPEED = 300;
     public static final boolean DEBUG = false;
 
@@ -232,7 +221,6 @@ public class GlowActivity extends AppCompatActivity {
         pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
             }
 
             @Override
@@ -246,7 +234,7 @@ public class GlowActivity extends AppCompatActivity {
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
+                selectionFlowFragment.hideTouchOverlays();
             }
         });
     }
@@ -319,11 +307,11 @@ public class GlowActivity extends AppCompatActivity {
     }
 
     private void share() {
-        Intent sendIntent = new Intent();
-        sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, getShareText());
-        sendIntent.setType("text/plain");
-        startActivity(sendIntent);
+        if (currentState == State.SELECTION) {
+            DialogHelper.showShareAppAlert(this);
+        } else if (currentState == State.TRACT) {
+            DialogHelper.showShareTractAlert(this, tractFragment.getTract());
+        }
     }
 
     private String getShareText() {
@@ -334,6 +322,15 @@ public class GlowActivity extends AppCompatActivity {
         }
         return null;
     }
+    private String getShareTitle() {
+        if (currentState == State.SELECTION) {
+            return getResources().getString(R.string.share_app_dialog_title);
+        } else if (currentState == State.TRACT) {
+            return getResources().getString(R.string.share_tract_dialog_title);
+        }
+        return null;
+    }
+
 
     private void checkFirstStart(final ContentStorageLoader.OnGlowDataLoadedListener listener) {
         if (settings.isFirstStart()) {

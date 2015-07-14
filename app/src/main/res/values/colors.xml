@@ -9,6 +9,7 @@
 
     <!--<color name="pallet_fg">#003462</color>8e1537-->
     <color name="pallet_acent">#ffc107</color>
+    <color name="pallet_acent_transparent">#88ffc107</color>
     <color name="pallet_main">#e0e0e0</color>
     <color name="pallet_passive">#333333</color>
     <color name="pallet_passive_selection">#333333</color>
@@ -16,5 +17,7 @@
 
     <color name="button_pressed_true">#44FFFFFF</color>
     <color name="button_pressed_false">#00FFFFFF</color>
+    <color name="white_transparent">#88FFFFFF</color>
+    <color name="black_transparent">#88000000</color>
 
 </resources>
