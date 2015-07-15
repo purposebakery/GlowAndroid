@@ -16,6 +16,8 @@
             android:id="@+id/contact_phone_container"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
             android:background="@drawable/contact_button_background">
             <ImageView
                 android:layout_width="@dimen/button_default"
@@ -28,6 +30,8 @@
             android:id="@+id/contact_mail_container"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
             android:background="@drawable/contact_button_background">
             <ImageView
                 android:layout_width="@dimen/button_default"
@@ -41,6 +45,8 @@
             android:id="@+id/contact_www_container"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
             android:background="@drawable/contact_button_background">
             <ImageView
                 android:layout_width="@dimen/button_default"

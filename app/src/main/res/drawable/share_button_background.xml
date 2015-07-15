@@ -6,6 +6,6 @@
         android:drawable="@drawable/circle_transparent" />
 
     <item android:state_pressed="true"
-        android:drawable="@drawable/circle_white_transparent" />
+        android:drawable="@drawable/circle_grey_transparent" />
 
 </selector>

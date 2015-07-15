@@ -2,8 +2,8 @@
 <resources>
 
     <!-- COMMON -->
-    <dimen name="button_default_tiny">24dp</dimen>
-    <dimen name="button_default">28dp</dimen>
+    <dimen name="button_default_tiny">16dp</dimen>
+    <dimen name="button_default">24dp</dimen>
     <dimen name="drawer_item_height">48dp</dimen>
 
     <dimen name="selection_scroll_width">30dp</dimen>

@@ -30,7 +30,7 @@
             android:scaleType="centerInside"
             android:layout_toRightOf="@+id/drawer_toggle"
             android:layout_centerVertical="true"
-            android:src="@drawable/glow_logo_horizontal_small_black" />
+            android:src="@drawable/glow_logo_horizontal_small_black_compressed" />
     </RelativeLayout>
 
 
