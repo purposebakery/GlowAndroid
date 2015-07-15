@@ -36,7 +36,7 @@ public class SelectionViewController {
     public static final int TRACT_ELEVATION_DP = 15;
     public static final int SCROLL_ELEVATION_DP = 8;
     public static final int SCROLL_WIDTH_DP = 30;
-    public static final int MENU_HEIGHT_DP = 50;
+    public static final int MENU_HEIGHT_DP = 96;
     public static final int START_POINT_Y_CHANGE = 20;
     private Gauss gauss;
     private Gauss gaussScroll;

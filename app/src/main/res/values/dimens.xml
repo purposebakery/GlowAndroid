@@ -3,11 +3,16 @@
 
     <!-- COMMON -->
     <dimen name="button_default_tiny">24dp</dimen>
-    <dimen name="button_default_small">36dp</dimen>
-    <dimen name="button_default">34dp</dimen>
+    <dimen name="button_default">28dp</dimen>
     <dimen name="drawer_item_height">48dp</dimen>
 
     <dimen name="selection_scroll_width">30dp</dimen>
     <dimen name="drawer_width">2400dp</dimen>
+
+    <dimen name="menu_main_bar_height">48dp</dimen>
+    <dimen name="menu_pager_bar_height">48dp</dimen>
+    <dimen name="menu_pager_bar_line_height">5dp</dimen>
+    <dimen name="menu_height">96dp</dimen>
+
 
 </resources>

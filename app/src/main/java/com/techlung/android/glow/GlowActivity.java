@@ -40,6 +40,10 @@ public class GlowActivity extends AppCompatActivity {
     private TractViewController tractFragment;
 
     private ViewPager pager;
+    private View pagerSelectorSelect;
+    private View pagerSelectorTract;
+    private View pagerSelectorSelectBar;
+    private View pagerSelectorTractBar;
 
     public enum State {
         SELECTION, TRACT
@@ -237,6 +241,30 @@ public class GlowActivity extends AppCompatActivity {
                 selectionFlowFragment.hideTouchOverlays();
             }
         });
+
+        pagerSelectorSelect = findViewById(R.id.menu_pager_select);
+        pagerSelectorSelect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (currentState != State.SELECTION) {
+                    pagerToSelection();
+                }
+            }
+        });
+        pagerSelectorSelectBar = findViewById(R.id.menu_pager_select_bar);
+        pagerSelectorSelectBar.setVisibility(View.VISIBLE);
+
+        pagerSelectorTract = findViewById(R.id.menu_pager_tract);
+        pagerSelectorTract.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (currentState != State.TRACT) {
+                    pagerToTract();
+                }
+            }
+        });
+        pagerSelectorTractBar = findViewById(R.id.menu_pager_tract_bar);
+        pagerSelectorTractBar.setVisibility(View.INVISIBLE);
     }
 
     private class MyAdapter extends PagerAdapter {
@@ -284,14 +312,6 @@ public class GlowActivity extends AppCompatActivity {
 
         View logo = findViewById(R.id.header_logo);
         logo.setOnClickListener(headerBackOnClickListener);
-
-        View close = findViewById(R.id.close);
-        close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
     }
 
     private void initShareButton() {
@@ -322,6 +342,7 @@ public class GlowActivity extends AppCompatActivity {
         }
         return null;
     }
+
     private String getShareTitle() {
         if (currentState == State.SELECTION) {
             return getResources().getString(R.string.share_app_dialog_title);
@@ -362,14 +383,20 @@ public class GlowActivity extends AppCompatActivity {
     }
 
     public void showSelection() {
-
-        pager.setCurrentItem(0);
-        changeState(State.SELECTION);
+        pagerToSelection();
     }
 
     public void showTract(Tract tract) {
         tractFragment.setTract(tract);
+        pagerToTract();
+    }
 
+    private void pagerToSelection() {
+        pager.setCurrentItem(0);
+        changeState(State.SELECTION);
+    }
+
+    private void pagerToTract() {
         pager.setCurrentItem(1);
         changeState(State.TRACT);
     }
@@ -377,29 +404,35 @@ public class GlowActivity extends AppCompatActivity {
     private void changeState(State state) {
         this.currentState = state;
 
-        //try {
-            if (state == State.TRACT) {
-                fadeInAndOutShare();
-            } else {
-                fadeInAndOutShare();
-            }
-        /*} catch (Exception e) {
-            e.printStackTrace();
-        }*/
+        if (state == State.TRACT) {
+            fadeInAndOutShare();
+            pagerSelectorTractBar.setVisibility(View.VISIBLE);
+            YoYo.with(Techniques.SlideOutRight).duration(TRANSITION_SPEED / 2).playOn(pagerSelectorSelectBar);
+            YoYo.with(Techniques.SlideInLeft).duration(TRANSITION_SPEED / 2).playOn(pagerSelectorTractBar);
+        } else {
+            fadeInAndOutShare();
+            pagerSelectorSelectBar.setVisibility(View.VISIBLE);
+            YoYo.with(Techniques.SlideOutLeft).duration(TRANSITION_SPEED / 2).playOn(pagerSelectorTractBar);
+            YoYo.with(Techniques.SlideInRight).duration(TRANSITION_SPEED / 2).playOn(pagerSelectorSelectBar);
+        }
     }
+
 
     private void fadeInAndOutShare() {
         YoYo.with(Techniques.TakingOff).duration(TRANSITION_SPEED).withListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
             }
+
             @Override
             public void onAnimationEnd(Animator animation) {
                 YoYo.with(Techniques.Landing).duration(TRANSITION_SPEED).playOn(shareButton);
             }
+
             @Override
             public void onAnimationCancel(Animator animation) {
             }
+
             @Override
             public void onAnimationRepeat(Animator animation) {
             }
@@ -409,7 +442,6 @@ public class GlowActivity extends AppCompatActivity {
     public boolean isRunning() {
         return isRunning;
     }
-
 
 
 }

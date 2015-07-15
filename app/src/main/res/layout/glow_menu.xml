@@ -6,39 +6,95 @@
     android:background="@color/pallet_main">
 
 
-    <ImageButton
-        android:id="@+id/drawer_toggle"
-        android:layout_width="@dimen/button_default_small"
-        android:layout_height="@dimen/button_default_small"
-        android:padding="9dp"
-        android:layout_centerVertical="true"
-        android:src="@drawable/icon_menu_black"
-        android:scaleType="centerInside"
-        android:background="@drawable/share_button_background"/>
+    <RelativeLayout
+        android:id="@+id/menu_main_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/menu_main_bar_height">
 
-    <ImageView
-        android:id="@+id/header_logo"
-        android:layout_width="100dp"
-        android:layout_height="36dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginBottom="8dp"
-        android:layout_centerInParent="true"
-        android:scaleType="centerInside"
-        android:layout_toRightOf="@+id/drawer_toggle"
-        android:src="@drawable/glow_logo_horizontal_small_black" />
+        <ImageButton
+            android:id="@+id/drawer_toggle"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:padding="14dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/icon_menu_black"
+            android:scaleType="centerInside"
+            android:background="@drawable/share_button_background"/>
+
+        <ImageView
+            android:id="@+id/header_logo"
+            android:layout_width="100dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"
+            android:scaleType="centerInside"
+            android:layout_toRightOf="@+id/drawer_toggle"
+            android:layout_centerVertical="true"
+            android:src="@drawable/glow_logo_horizontal_small_black" />
+    </RelativeLayout>
 
 
-    <ImageButton
-        android:id="@+id/close"
-        android:layout_width="@dimen/button_default_small"
-        android:layout_height="@dimen/button_default_small"
-        android:padding="12dp"
-        android:layout_centerVertical="true"
-        android:layout_alignParentRight="true"
-        android:src="@drawable/icon_close_black"
-        android:scaleType="centerInside"
-        android:background="@drawable/share_button_background"
-        android:visibility="gone"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_below="@+id/menu_main_bar"
+        android:layout_height="@dimen/menu_pager_bar_height"
+        android:clipChildren="false">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:clipChildren="false">
+
+            <RelativeLayout
+                android:id="@+id/menu_pager_select"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:background="@drawable/drawer_button_background"
+                android:clipChildren="false">
+
+                <ImageView
+                    android:layout_width="@dimen/button_default_tiny"
+                    android:layout_height="@dimen/button_default_tiny"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/pager_select_grey_dark"/>
+
+                <View
+                    android:id="@+id/menu_pager_select_bar"
+                    android:layout_width="match_parent"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/pallet_acent"
+                    android:layout_height="@dimen/menu_pager_bar_line_height"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/menu_pager_tract"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:background="@drawable/drawer_button_background"
+                android:clipChildren="false">
+
+                <ImageView
+                    android:layout_width="@dimen/button_default_tiny"
+                    android:layout_height="@dimen/button_default_tiny"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/pager_tract_grey_dark" />
+
+
+                <View
+                    android:id="@+id/menu_pager_tract_bar"
+                    android:layout_width="match_parent"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/pallet_acent"
+                    android:layout_height="@dimen/menu_pager_bar_line_height"/>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </RelativeLayout>
 
 </RelativeLayout>

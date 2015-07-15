@@ -15,10 +15,9 @@
         <include
             android:id="@+id/header"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="@dimen/menu_height"
             android:layout_alignParentTop="true"
-            layout="@layout/glow_menu"
-            android:background="@color/black" />
+            layout="@layout/glow_menu"/>
 
 
         <android.support.v4.view.ViewPager
@@ -66,70 +65,12 @@
         app:headerLayout="@layout/navigation_header"
         app:menu="@menu/navigation_menu" />
     -->
-    <RelativeLayout
+
+    <include
         android:id="@+id/left_drawer"
         android:layout_width="240dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@color/pallet_main">
-
-
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <ImageView
-                    android:id="@+id/drawer_logo"
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:src="@drawable/glow_logo_vertical_black"
-                    android:scaleType="centerInside"/>
-
-                <include
-                    android:id="@+id/drawer_contact"
-                    layout="@layout/drawer_contact"
-                    android:layout_below="@id/drawer_logo"
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    android:layout_marginBottom="16dp"/>
-
-
-                <View
-                    android:id="@+id/separator"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_below="@id/drawer_contact"
-                    android:background="@color/pallet_acent"/>
-
-
-                <include
-                    android:id="@+id/drawer_more"
-                    layout="@layout/drawer_more"
-                    android:layout_below="@id/separator"
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent"/>
-            </RelativeLayout>
-        </ScrollView>
-
-        <RelativeLayout
-            android:id="@+id/glow_info"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentBottom="true"
-            android:layout_margin="8dp"
-            android:background="@drawable/info_button_background">
-            <ImageView
-                android:layout_width="@dimen/button_default_tiny"
-                android:layout_height="@dimen/button_default_tiny"
-                android:layout_centerInParent="true"
-                android:src="@drawable/icon_information" />
-
-        </RelativeLayout>
-    </RelativeLayout>
+        layout="@layout/drawer"/>
 
 </android.support.v4.widget.DrawerLayout>

@@ -17,7 +17,10 @@
 
     <color name="button_pressed_true">#44FFFFFF</color>
     <color name="button_pressed_false">#00FFFFFF</color>
+
     <color name="white_transparent">#88FFFFFF</color>
     <color name="black_transparent">#88000000</color>
+
+    <color name="grey">#666666</color>
 
 </resources>

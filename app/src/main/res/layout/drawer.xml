@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="240dp"
+    android:layout_height="match_parent"
+    android:layout_gravity="start"
+    android:background="@color/pallet_main">
+
+    <include
+        android:id="@+id/drawer_logo"
+        layout="@layout/drawer_header"
+        android:layout_width="match_parent"
+        android:layout_height="200dp" />
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/drawer_logo"
+        android:background="@color/pallet_main"
+        android:elevation="4dp">
+
+        <include
+            android:id="@+id/drawer_contact"
+            layout="@layout/drawer_contact"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <View
+            android:id="@+id/separator"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/drawer_contact"
+            android:background="@color/grey" />
+
+        <include
+            android:id="@+id/drawer_more"
+            layout="@layout/drawer_more"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/separator" />
+
+        <RelativeLayout
+            android:id="@+id/glow_info"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_margin="8dp"
+            android:background="@drawable/info_button_background"
+            android:elevation="4dp">
+
+            <ImageView
+                android:layout_width="@dimen/button_default_tiny"
+                android:layout_height="@dimen/button_default_tiny"
+                android:layout_centerInParent="true"
+                android:src="@drawable/icon_information_grey_dark" />
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+</RelativeLayout>
