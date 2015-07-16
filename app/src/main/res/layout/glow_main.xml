@@ -39,11 +39,6 @@
             android:layout_alignParentBottom="true"
             android:background="@drawable/share_button_background">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/circle_acent"/>
-
             <ImageView
                 android:layout_width="@dimen/button_default"
                 android:layout_height="@dimen/button_default"

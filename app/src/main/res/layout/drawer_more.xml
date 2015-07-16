@@ -8,7 +8,7 @@
     <LinearLayout
         android:id="@+id/more_newsletter_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/drawer_item_height"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingLeft="16dp"
@@ -36,7 +36,7 @@
     <LinearLayout
         android:id="@+id/more_shop_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/drawer_item_height"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingLeft="16dp"
