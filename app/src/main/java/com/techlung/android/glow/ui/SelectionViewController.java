@@ -1,7 +1,6 @@
 package com.techlung.android.glow.ui;
 
 import android.app.Activity;
-import android.graphics.Rect;
 import android.os.Handler;
 import android.support.v4.view.MotionEventCompat;
 import android.util.Log;
@@ -282,7 +281,6 @@ public class SelectionViewController {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             int action = MotionEventCompat.getActionMasked(event);
-            float difference;
 
             switch (action) {
                 case (MotionEvent.ACTION_DOWN):
@@ -361,8 +359,6 @@ public class SelectionViewController {
         }
     }
 
-    Rect outRect = new Rect();
-    int[] location = new int[2];
 
     private boolean inViewInBounds(SelectionItem item, int x, int y) {
         float tractWidth = (tractWidthPx * item.scale);
@@ -473,29 +469,6 @@ public class SelectionViewController {
     }
 
 
-    private void attractScrollDepedingOnDistance(int position) {
-        float difference = (scrollPosition - position) * tractCount;
-
-        if (difference == 0) {
-            return;
-        }
-
-        addMovementDifferenceToScrollPosition((tractHeightPx / difference) * 0.001f);
-    }
-
-    private boolean isVeryCloseToScrollPosition() {
-        return Math.abs(scrollPosition % 1) < 0.01f;
-    }
-
-    private int getNearestPosition() {
-        int scrollPositionRounded = Math.round(scrollPosition);
-        if (scrollPositionRounded < 0) {
-            scrollPositionRounded = 0;
-        } else if (scrollPositionRounded > tractCount - 1) {
-            scrollPositionRounded = tractCount - 1;
-        }
-        return scrollPositionRounded;
-    }
 
     private boolean isScrollOutideBounds() {
         return scrollPosition < 0 || scrollPosition > tractCount - 1;
@@ -530,5 +503,7 @@ public class SelectionViewController {
         return (float) scale;
     }
 
-
+    public float getScrollPosition() {
+        return scrollPosition;
+    }
 }

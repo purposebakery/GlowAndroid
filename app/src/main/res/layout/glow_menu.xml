@@ -23,14 +23,52 @@
 
         <ImageView
             android:id="@+id/header_logo"
-            android:layout_width="100dp"
-            android:layout_height="35dp"
+            android:layout_width="170dp"
+            android:layout_height="match_parent"
             android:layout_marginTop="2dp"
             android:layout_marginBottom="2dp"
             android:scaleType="centerInside"
             android:layout_toRightOf="@+id/drawer_toggle"
             android:layout_centerVertical="true"
+            android:alpha="1"
             android:src="@drawable/glow_logo_horizontal_small_black_compressed" />
+
+        <RelativeLayout
+            android:id="@+id/menu_tract_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/drawer_toggle"
+            android:alpha="0">
+
+            <ImageView
+                android:id="@+id/menu_tract_cover"
+                android:layout_width="26dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                android:layout_marginLeft="14dp"
+                android:layout_marginRight="14dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:elevation="4dp"
+                android:background="@color/pallet_main"
+                android:src="@drawable/ic_launcher"/>
+
+            <TextView
+                android:id="@+id/menu_tract_title"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:layout_toLeftOf="@id/menu_tract_cover"
+                android:text="Warum ich am Samstag zur Kirche gehe"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
+
+        </RelativeLayout>
     </RelativeLayout>
 
 

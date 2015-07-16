@@ -45,11 +45,15 @@ public class GlowActivity extends AppCompatActivity {
     private View pagerSelectorSelectBar;
     private View pagerSelectorTractBar;
 
+    private View menuTractContainer;
+    private View menuLogo;
+
     public enum State {
         SELECTION, TRACT
     }
 
     public State currentState = State.SELECTION;
+    public int currentScrollPosition = 0;
     private boolean isRunning;
 
     private View shareButton;
@@ -123,8 +127,8 @@ public class GlowActivity extends AppCompatActivity {
             public void onGlowDataLoaded() {
                 loadContent();
 
-                initViewPager();
                 initMenu();
+                initViewPager();
                 initShareButton();
                 initDrawer();
             }
@@ -239,6 +243,12 @@ public class GlowActivity extends AppCompatActivity {
             @Override
             public void onPageScrollStateChanged(int state) {
                 selectionFlowFragment.hideTouchOverlays();
+
+                int scrollPosition = Math.round(selectionFlowFragment.getScrollPosition());
+                if (scrollPosition != currentScrollPosition) {
+                    currentScrollPosition = scrollPosition;
+                    tractFragment.setTract(GlowData.getInstance().getPamphlets().get(scrollPosition));
+                }
             }
         });
 
@@ -287,7 +297,7 @@ public class GlowActivity extends AppCompatActivity {
                 selectionFlowFragment = new SelectionViewController(container);
                 view = selectionFlowFragment.getView();
             } else {
-                tractFragment = new TractViewController(container);
+                tractFragment = new TractViewController(container, findViewById(R.id.header));
                 view = tractFragment.getView();
             }
             container.addView(view);
@@ -301,6 +311,7 @@ public class GlowActivity extends AppCompatActivity {
     }
 
     private void initMenu() {
+        /*
         View.OnClickListener headerBackOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -308,10 +319,11 @@ public class GlowActivity extends AppCompatActivity {
                     onBackPressed();
                 }
             }
-        };
+        };*/
 
-        View logo = findViewById(R.id.header_logo);
-        logo.setOnClickListener(headerBackOnClickListener);
+        menuLogo = findViewById(R.id.header_logo);
+        menuTractContainer = findViewById(R.id.menu_tract_container);
+//        menuLogo.setOnClickListener(headerBackOnClickListener);
     }
 
     private void initShareButton() {
@@ -393,12 +405,12 @@ public class GlowActivity extends AppCompatActivity {
 
     private void pagerToSelection() {
         pager.setCurrentItem(0);
-        changeState(State.SELECTION);
+        //changeState(State.SELECTION);
     }
 
     private void pagerToTract() {
         pager.setCurrentItem(1);
-        changeState(State.TRACT);
+        //changeState(State.TRACT);
     }
 
     private void changeState(State state) {
@@ -409,14 +421,17 @@ public class GlowActivity extends AppCompatActivity {
             pagerSelectorTractBar.setVisibility(View.VISIBLE);
             YoYo.with(Techniques.SlideOutRight).duration(TRANSITION_SPEED / 2).playOn(pagerSelectorSelectBar);
             YoYo.with(Techniques.SlideInLeft).duration(TRANSITION_SPEED / 2).playOn(pagerSelectorTractBar);
+
+            tractFragment.updateMenuFadeContinuousTract();
         } else {
             fadeInAndOutShare();
             pagerSelectorSelectBar.setVisibility(View.VISIBLE);
             YoYo.with(Techniques.SlideOutLeft).duration(TRANSITION_SPEED / 2).playOn(pagerSelectorTractBar);
             YoYo.with(Techniques.SlideInRight).duration(TRANSITION_SPEED / 2).playOn(pagerSelectorSelectBar);
+
+            tractFragment.updateMenuFadeContinuousSelection();
         }
     }
-
 
     private void fadeInAndOutShare() {
         YoYo.with(Techniques.TakingOff).duration(TRANSITION_SPEED).withListener(new Animator.AnimatorListener() {
