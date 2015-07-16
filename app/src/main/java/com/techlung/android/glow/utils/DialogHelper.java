@@ -88,11 +88,7 @@ public class DialogHelper {
         builder.setPositiveButton(R.string.alert_share, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Intent sendIntent = new Intent();
-                sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, editText.getText());
-                sendIntent.setType("text/plain");
-                GlowActivity.getInstance().startActivity(sendIntent);
+                sendShareMessage(editText.getText().toString());
 
                 dialog.dismiss();
             }
@@ -107,8 +103,6 @@ public class DialogHelper {
     }
 
     public static void showShareTractAlert(final Context context, final Tract tract) {
-        final boolean complete = false;
-
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         final EditText editText = new EditText(context);
         editText.setText(context.getString(R.string.share_tract_text) + "\n\n" + tract.getUrl() + "\n\n" + context.getString(R.string.share_regards));
@@ -119,11 +113,7 @@ public class DialogHelper {
         builder.setPositiveButton(R.string.alert_share, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Intent sendIntent = new Intent();
-                sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, editText.getText());
-                sendIntent.setType("text/plain");
-                GlowActivity.getInstance().startActivity(sendIntent);
+                sendShareMessage(editText.getText().toString());
 
                 dialog.dismiss();
             }
@@ -135,5 +125,14 @@ public class DialogHelper {
             }
         });
         builder.show();
+    }
+
+    private static void sendShareMessage(String message) {
+        Intent share = new Intent(Intent.ACTION_SEND);
+        share.setType("text/plain");
+        share.putExtra(Intent.EXTRA_TEXT, message);
+
+        String chooserMessage = GlowActivity.getInstance().getResources().getString(R.string.alert_share);
+        GlowActivity.getInstance().startActivity(Intent.createChooser(share, chooserMessage));
     }
 }

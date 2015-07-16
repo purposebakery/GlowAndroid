@@ -14,8 +14,8 @@
     <string name="newsletter_mail_message">ich habe Interesse am GLOW Newsletter. Bitte meldet mich dafür an. Vielen Dank! </string>
     <string name="newsletter_mail_bye">Mit besten Grüßen</string>
 
-    <string name="share_app_text">Hallo,\n\nich habe diese interessante christliche Android App gefunden. Du findest sie im Play Store und folgendem Link: </string>
-    <string name="share_tract_text">Hallo,\n\nich habe diesen interessanten christlichen Flyer gefunden. Du kannst ihn dir Internet unter folgendem Link durchlesen: </string>
+    <string name="share_app_text">Hallo,\n\nich möchte eine App mit dir teilen. Du findest sie im Play Store unter folgendem Link: </string>
+    <string name="share_tract_text">Hallo,\n\nich möchte etwas mit dir teilen. Folge einfach diesem Link und sag mir, was du davon hälst: </string>
     <string name="share_regards">Beste Grüße</string>
 
     <string name="info_title">GLOW für Android</string>
@@ -28,15 +28,11 @@
     <string name="alert_cancel">Abbrechen</string>
 
     <string name="exceptionlogs_title">Ups...</string>
-    <string name="exceptionlogs_message">Diese App ist das letzte mal scheinbar abgestürzt. Schickst du uns den Fehler per Mail? Das wäre eine sehr große Hilfe!</string>
+    <string name="exceptionlogs_message">Diese App ist das letzte Mal scheinbar abgestürzt. Schickst du uns den Fehler per Mail? Danke =)</string>
     <string name="exceptionlogs_mail_reciepient">deutschland@glowonline.org</string>
     <string name="exceptionlogs_mail_subject">GLOW Android - Error Logs</string>
 
-
     <string name="share_app_dialog_title">App teilen</string>
     <string name="share_tract_dialog_title">Flyer teilen</string>
-    <string name="share_tract_dialog_button_complete">Kompletten Flyer teilen</string>
-    <string name="share_tract_dialog_button_link">Flyer link teilen</string>
-
 
 </resources>
