@@ -23,7 +23,8 @@
                 android:layout_width="@dimen/button_default"
                 android:layout_height="@dimen/button_default"
                 android:layout_centerInParent="true"
-                android:src="@drawable/icon_phone_grey_dark"/>
+                android:src="@drawable/ic_action_phone"
+                android:alpha="@dimen/button_alpha"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -37,7 +38,8 @@
                 android:layout_width="@dimen/button_default"
                 android:layout_height="@dimen/button_default"
                 android:layout_centerInParent="true"
-                android:src="@drawable/icon_mail_grey_dark"/>
+                android:src="@drawable/ic_action_email"
+                android:alpha="@dimen/button_alpha"/>
         </RelativeLayout>
 
 
@@ -52,7 +54,8 @@
                 android:layout_width="@dimen/button_default"
                 android:layout_height="@dimen/button_default"
                 android:layout_centerInParent="true"
-                android:src="@drawable/icon_www_grey_dark" />
+                android:src="@drawable/ic_action_language"
+                android:alpha="@dimen/button_alpha"/>
         </RelativeLayout>
 
     </LinearLayout>

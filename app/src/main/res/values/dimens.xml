@@ -2,17 +2,19 @@
 <resources>
 
     <!-- COMMON -->
-    <dimen name="button_default_tiny">16dp</dimen>
+    <dimen name="button_default_tiny">18dp</dimen>
     <dimen name="button_default">24dp</dimen>
+
     <dimen name="drawer_item_height">48dp</dimen>
 
     <dimen name="selection_scroll_width">30dp</dimen>
-    <dimen name="drawer_width">2400dp</dimen>
 
     <dimen name="menu_main_bar_height">48dp</dimen>
     <dimen name="menu_pager_bar_height">48dp</dimen>
-    <dimen name="menu_pager_bar_line_height">5dp</dimen>
+    <dimen name="menu_pager_bar_line_height">3dp</dimen>
     <dimen name="menu_height">96dp</dimen>
+
+    <item name="button_alpha" format="float" type="dimen">0.75</item>
 
 
 </resources>

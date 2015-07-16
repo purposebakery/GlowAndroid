@@ -45,9 +45,9 @@
                 android:background="@drawable/circle_acent"/>
 
             <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/icon_share_white"
+                android:layout_width="@dimen/button_default"
+                android:layout_height="@dimen/button_default"
+                android:src="@drawable/ic_action_share"
                 android:layout_centerInParent="true"/>
 
         </RelativeLayout>

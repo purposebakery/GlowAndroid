@@ -21,7 +21,8 @@
         <ImageView
             android:layout_width="@dimen/button_default"
             android:layout_height="@dimen/button_default"
-            android:src="@drawable/icon_news_grey_dark" />
+            android:src="@drawable/ic_action_inbox"
+            android:alpha="@dimen/button_alpha" />
 
         <TextView
             android:layout_width="fill_parent"
@@ -47,7 +48,8 @@
         <ImageView
             android:layout_width="@dimen/button_default"
             android:layout_height="@dimen/button_default"
-            android:src="@drawable/icon_shop_grey_dark" />
+            android:src="@drawable/ic_action_credit_card"
+            android:alpha="@dimen/button_alpha" />
 
         <TextView
             android:layout_width="fill_parent"

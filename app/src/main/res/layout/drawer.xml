@@ -55,7 +55,8 @@
                 android:layout_width="@dimen/button_default_tiny"
                 android:layout_height="@dimen/button_default_tiny"
                 android:layout_centerInParent="true"
-                android:src="@drawable/icon_information_grey_dark" />
+                android:src="@drawable/ic_action_help"
+                android:alpha="@dimen/button_alpha" />
 
         </RelativeLayout>
     </RelativeLayout>

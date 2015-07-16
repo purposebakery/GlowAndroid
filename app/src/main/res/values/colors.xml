@@ -8,8 +8,8 @@
     <color name="text_inverted">#111111</color>
 
     <!--<color name="pallet_fg">#003462</color>8e1537-->
-    <color name="pallet_acent">#ffc107</color>
-    <color name="pallet_acent_transparent">#88ffc107</color>
+    <color name="pallet_acent">#ff9800</color>
+    <color name="pallet_acent_transparent">#88ff9800</color>
 
     <color name="pallet_main">#e0e0e0</color>
     <color name="pallet_passive">#333333</color>

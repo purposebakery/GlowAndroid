@@ -29,7 +29,7 @@ public class TractViewController {
 
     public static final String TAG = TractViewController.class.getName();
 
-    private static final int MENU_FADE_DISTANCE_DP = 100;
+    private static final int MENU_FADE_DISTANCE_DP = 150;
 
     Tract tract;
     Settings s;

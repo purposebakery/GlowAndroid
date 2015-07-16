@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:scaleType="centerCrop"
-        android:src="@drawable/glow_logo_horizontal_small"/>
+        android:src="@drawable/ic_launcher"/>
 
     <View
         android:id="@+id/overlay"

@@ -31,7 +31,7 @@
             android:layout_toRightOf="@+id/drawer_toggle"
             android:layout_centerVertical="true"
             android:alpha="1"
-            android:src="@drawable/glow_logo_horizontal_small_black_compressed" />
+            android:src="@drawable/glow_logo_horizontal_small_black" />
 
         <RelativeLayout
             android:id="@+id/menu_tract_container"
@@ -93,10 +93,11 @@
                 android:clipChildren="false">
 
                 <ImageView
-                    android:layout_width="@dimen/button_default_tiny"
-                    android:layout_height="@dimen/button_default_tiny"
+                    android:layout_width="@dimen/button_default"
+                    android:layout_height="@dimen/button_default"
                     android:layout_centerInParent="true"
-                    android:src="@drawable/pager_select_grey_dark"/>
+                    android:src="@drawable/ic_action_apps"
+                    android:alpha="@dimen/button_alpha"/>
 
                 <View
                     android:id="@+id/menu_pager_select_bar"
@@ -116,10 +117,11 @@
                 android:clipChildren="false">
 
                 <ImageView
-                    android:layout_width="@dimen/button_default_tiny"
-                    android:layout_height="@dimen/button_default_tiny"
+                    android:layout_width="@dimen/button_default"
+                    android:layout_height="@dimen/button_default"
                     android:layout_centerInParent="true"
-                    android:src="@drawable/pager_tract_grey_dark" />
+                    android:src="@drawable/ic_action_book"
+                    android:alpha="@dimen/button_alpha" />
 
 
                 <View
