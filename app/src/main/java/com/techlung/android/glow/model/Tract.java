@@ -23,6 +23,7 @@ import android.util.DisplayMetrics;
 public class Tract {
 	private String id;
 	private String title;
+	private String htmlTitle;
 	private String url;
 
 	//private Drawable cover;
@@ -54,6 +55,7 @@ public class Tract {
 		ParameterReader pr = new ParameterReader(f);
 
 		setTitle(pr.readParameterString(Common.META_TITLE));
+		setHtmlTitle(pr.readParameterString(Common.META_TITLE_HTML));
 		setUrl(pr.readParameterString(Common.META_URL));
 	}
 
@@ -183,6 +185,14 @@ public class Tract {
 
 	public Uri getCoverPathUri() {
 		return Uri.fromFile(new File(getCoverPath()));
+	}
+
+	public String getHtmlTitle() {
+		return htmlTitle;
+	}
+
+	public void setHtmlTitle(String htmlTitle) {
+		this.htmlTitle = htmlTitle;
 	}
 
 	public class ImageGetter implements Html.ImageGetter {

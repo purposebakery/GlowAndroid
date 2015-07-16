@@ -15,6 +15,7 @@ public class Common {
 	public static final String FILE_COVER = "cover.png"; // default
 	
 	public static final String META_TITLE = "title";
+	public static final String META_TITLE_HTML = "title_html";
 	public static final String META_URL = "url";
 	
 	public static final String CONTACT_EMAIL = "email";

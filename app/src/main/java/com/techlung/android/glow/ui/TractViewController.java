@@ -60,7 +60,7 @@ public class TractViewController {
         activity = GlowActivity.getInstance();
         s = Settings.getInstance(activity);
 
-        blairFont = Typeface.createFromAsset(GlowActivity.getInstance().getAssets(), "fonts/BlairLight.otf");
+        blairFont = Typeface.createFromAsset(GlowActivity.getInstance().getAssets(), "fonts/Blair.otf");
 
         menuTractCover = (ImageView) header.findViewById(R.id.menu_tract_cover);
         menuTractTitle = (TextView) header.findViewById(R.id.menu_tract_title);
@@ -187,10 +187,10 @@ public class TractViewController {
         System.gc();
 
         image.setImageURI(tract.getCoverPathUri());
-        title.setText(tract.getTitle());
+        title.setText(Html.fromHtml(tract.getHtmlTitle()));
 
         menuTractCover.setImageURI(tract.getCoverPathUri());
-        menuTractTitle.setText(tract.getTitle());
+        menuTractTitle.setText(Html.fromHtml(tract.getHtmlTitle()));
 
         contentView.setText(Html.fromHtml(tract.getHtmlContent(), new ImageGetter(), null));
         contentView.setMovementMethod(LinkMovementMethod.getInstance());
