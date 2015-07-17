@@ -4,12 +4,23 @@
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
     
-    <color name="text">#FFFFFF</color>
-    <color name="text_inverted">#000000</color>
+    <color name="text">#EEEEEE</color>
+    <color name="text_inverted">#111111</color>
 
-    <color name="pallet_fg">#003462</color>
-    <color name="pallet_passive">#222222</color>
-    <color name="pallet_bg">#888888</color>
-    
-    
+    <!--<color name="pallet_fg">#003462</color>8e1537-->
+    <color name="pallet_acent_light">#ffcc80</color>
+    <color name="pallet_acent">#ff9800</color>
+    <color name="pallet_acent_transparent">#88ff9800</color>
+
+
+    <color name="pallet_main">#e0e0e0</color>
+    <color name="pallet_passive">#333333</color>
+    <color name="pallet_passive_selection">#333333</color>
+
+    <color name="white_transparent">#AAFFFFFF</color>
+
+    <color name="grey">#666666</color>
+    <color name="grey_light">#999999</color>
+    <color name="grey_very_light">#BBBBBB</color>
+
 </resources>

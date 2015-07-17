@@ -1,62 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
- 
+
     <string name="app_name">GLOW</string>
-    <string name="menu_settings">Settings</string>
-    <string name="menu_contact">Contact</string>
-    
-    <string name="title_activity_glow_pamphlet">Glow tract</string>
-    <string name="title_activity_glow_settings">Settings</string>
-    <string name="title_activity_glow_contact">Contact</string>
-    
-    <string name="lang_de">German</string>
-    <string name="lang_en">English</string>
-    
-    <string name="msg_webdataloadsuccess">Content successfully downloaded from internet.</string>
-    <string name="msg_webdataloadfail">Content could not be downloaded. Please make sure you have a connection to the internet.</string>
-    <string name="msg_webversionloadfail">Your local versions could not be matched to the available versions on the internet. Please make sure you have a connection to the internet.</string>
-    
-    <string name="msg_firstStartSuccess_title">Welcome to GLOW!</string>
-    <string name="msg_firstStartSuccess_message">I successfully downloaded content. The GLOW Team wishes you God´s blessing!</string>
-    <string name="msg_firstStartSuccess_confirmation">Thank you!</string>
-   
-    <string name="msg_downloadTitle">Please wait...</string>
-    <string name="msg_downloadText">Downloading data...</string>
-    
-    <string name="pamphlet_email"></string>
-    <string name="pamphlet_phone"></string>
-    <string name="pamphlet_www"></string>
-    
-    <string name="contact_email_chooserTitle">Send email to GLOW…</string>
-    <string name="contact_email_subject">GLOW inquiry</string>
-    <string name="contact_text">Should you have any questions concerning the tracts, do not hestiate to contact us. We\'re alway happy to help as good as possible…</string>
-        
-    <string name="settings_language">Tract language</string>
-    <string name="settings_size">Text size</string>
-     <string-array name="settings_size_array">
-        <item>small</item>
-        <item>medium</item>
-        <item>large</item>
-    </string-array>
-    
-    <string name="nav_more">more</string>
-    <string name="nav_share">share</string>
-    <string name="nav_contact">contact</string>
 
-    <string name="dialog_button">OK</string>
+    <string name="drawer_newsletter">Newsletter anfragen</string>
+    <string name="drawer_shop">Shop besuchen</string>
 
-    <string name="contact_dialog_title">Contact</string>
+    <string name="contact_email_chooserTitle">GLOW eine Email schicken…</string>
+    <string name="contact_email_subject">GLOW Anfrage</string>
 
-    <string name="more_dialog_title">More</string>
-    <string name="more_dialog_shop">Shop</string>
-    <string name="more_dialog_newsletter">Newsletter</string>
-    
-    <string name="newsletter_mail_subject">GLOW Newsletter Request</string>
-    <string name="newsletter_mail_hello">Dear GLOW Team,</string>
-    <string name="newsletter_mail_message">I\'m interested in receiving the GLOW Newsletter. Please sign me up. Thanks! </string>
-    <string name="newsletter_mail_bye">Best regards</string>
-   
-    <string name="share_text">I found this interesting christian material. You might be interested too: </string>
-    
-    
+    <string name="newsletter_mail_subject">GLOW Newsletter Anfrage</string>
+    <string name="newsletter_mail_hello">Liebes GLOW Team,</string>
+    <string name="newsletter_mail_message">ich habe Interesse am GLOW Newsletter. Bitte meldet mich dafür an. Vielen Dank! </string>
+    <string name="newsletter_mail_bye">Mit besten Grüßen</string>
+
+    <string name="share_app_text">Hallo,\n\nich möchte eine App mit dir teilen. Du findest sie im Play Store unter folgendem Link: </string>
+    <string name="share_tract_text">Hallo,\n\nich möchte etwas mit dir teilen. Folge einfach diesem Link und sag mir, was du davon hälst: </string>
+    <string name="share_regards">Beste Grüße</string>
+
+    <string name="info_title">GLOW für Android</string>
+
+    <string name="alert_loading">Laden...</string>
+    <string name="alert_Ok">OK</string>
+    <string name="alert_No">Nein</string>
+    <string name="alert_thanks">Danke</string>
+    <string name="alert_share">Teilen</string>
+    <string name="alert_cancel">Abbrechen</string>
+
+    <string name="exceptionlogs_title">Ups...</string>
+    <string name="exceptionlogs_message">Diese App ist das letzte Mal scheinbar abgestürzt. Schickst du uns den Fehler per Mail? Danke =)</string>
+    <string name="exceptionlogs_mail_reciepient">deutschland@glowonline.org</string>
+    <string name="exceptionlogs_mail_subject">GLOW Android - Error Logs</string>
+
+    <string name="share_app_dialog_title">App teilen</string>
+    <string name="share_tract_dialog_title">Flyer teilen</string>
+
 </resources>

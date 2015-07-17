@@ -6,20 +6,32 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 
+import com.techlung.android.glow.GlowActivity;
 import com.techlung.android.glow.io.ParameterReader;
 import com.techlung.android.glow.settings.Common;
+import com.techlung.android.glow.utils.ToolBox;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.text.Html;
+import android.text.Spanned;
+import android.util.DisplayMetrics;
 
 public class Tract {
 	private String id;
 	private String title;
+	private String htmlTitle;
 	private String url;
 
-	private Drawable cover;
+	//private Drawable cover;
 	private String coverPath;
 	private String htmlContent;
+	private Spanned htmlContentSpanned;
 	private String htmlAdditional;
+	private Spanned htmlAdditionalSpanned;
 	
 	private HashMap<String, String> imagePaths = new HashMap<String, String>();
 
@@ -43,13 +55,15 @@ public class Tract {
 		ParameterReader pr = new ParameterReader(f);
 
 		setTitle(pr.readParameterString(Common.META_TITLE));
+		setHtmlTitle(pr.readParameterString(Common.META_TITLE_HTML));
 		setUrl(pr.readParameterString(Common.META_URL));
 	}
 
+	/*
 	public void loadCover(File f) {
 		Drawable cover = Drawable.createFromPath(f.getAbsolutePath());
 		setCover(cover);
-	}
+	}*/
 
 	public void loadHtmlContent(File f) {
 		
@@ -128,13 +142,14 @@ public class Tract {
 		this.htmlContent = htmlContent;
 	}
 
+	/*
 	public Drawable getCover() {
 		return cover;
 	}
 
 	public void setCover(Drawable cover) {
 		this.cover = cover;
-	}
+	}*/
 
 	public String getHtmlAdditional() {
 		return htmlAdditional;
@@ -166,5 +181,69 @@ public class Tract {
 
 	public void setCoverPath(String coverPath) {
 		this.coverPath = coverPath;
+	}
+
+	public Uri getCoverPathUri() {
+		return Uri.fromFile(new File(getCoverPath()));
+	}
+
+	public String getHtmlTitle() {
+		return htmlTitle;
+	}
+
+	public void setHtmlTitle(String htmlTitle) {
+		this.htmlTitle = htmlTitle;
+	}
+
+	public class ImageGetter implements Html.ImageGetter {
+
+		float height = 0.0f;
+		float width = 0.0f;
+
+		float width_src = 0.0f;
+		float height_src = 0.0f;
+
+		float factor = 0.0f;
+
+		@Override
+		public Drawable getDrawable(String source) {
+
+			try {
+				BitmapFactory.Options options = new BitmapFactory.Options();
+				Bitmap bitmap = BitmapFactory.decodeFile(getImagePath(source), options);
+				Drawable d = new BitmapDrawable(GlowActivity.getInstance().getResources(), bitmap);
+				DisplayMetrics metrics = new DisplayMetrics();
+				GlowActivity.getInstance().getWindowManager().getDefaultDisplay()
+						.getMetrics(metrics);
+
+				height = metrics.heightPixels;
+				width = metrics.widthPixels;
+
+				if (Common.isXLargeScreen(GlowActivity.getInstance())) {
+					width -= ToolBox.convertDpToPixel(300, GlowActivity.getInstance());
+				}
+
+				height *= 0.7;
+				width *= 0.7;
+
+				width_src = d.getIntrinsicWidth();
+				height_src = d.getIntrinsicHeight();
+
+				if (width_src <= height_src) {
+					factor = height / height_src;
+				} else {
+					factor = width / width_src;
+				}
+
+				d.setBounds(0, 0, (int) (width_src * factor),
+						(int) (height_src * factor));
+
+				return d;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return null;
+
+		}
 	}
 }

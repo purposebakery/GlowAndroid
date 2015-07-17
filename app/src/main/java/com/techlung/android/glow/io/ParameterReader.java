@@ -58,8 +58,9 @@ public class ParameterReader {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
-		} 
-		return null;
+		}
+
+		throw new IllegalStateException("Error parsing param " + keyParam + " from  " + f.getAbsolutePath());
 	}
 	
 	public List<String> readParameterStringList(String keyParam) {

@@ -1,0 +1,3 @@
+﻿title=Gibt es Hoffnung nach dem Tod
+title_html=Gibt es <b>Hoffnung</b> nach dem Tod
+url=http://de.glowonline.org/literature/gibt-es-hoffnung-nach-dem-tod

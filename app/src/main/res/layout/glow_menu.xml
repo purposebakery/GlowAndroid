@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:elevation="4dp"
+    android:background="@color/pallet_main">
+
+
+    <RelativeLayout
+        android:id="@+id/menu_main_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/menu_main_bar_height">
+
+        <ImageButton
+            android:id="@+id/drawer_toggle"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:padding="12dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_action_menu"
+            android:background="@android:color/transparent"
+            android:scaleType="centerInside"/>
+
+        <ImageView
+            android:id="@+id/header_logo"
+            android:layout_width="170dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"
+            android:scaleType="centerInside"
+            android:layout_toRightOf="@+id/drawer_toggle"
+            android:layout_centerVertical="true"
+            android:alpha="1"
+            android:src="@drawable/glow_logo_horizontal_small_black" />
+
+        <RelativeLayout
+            android:id="@+id/menu_tract_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/drawer_toggle"
+            android:alpha="0">
+
+            <ImageView
+                android:id="@+id/menu_tract_cover"
+                android:layout_width="26dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                android:layout_marginLeft="14dp"
+                android:layout_marginRight="14dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:elevation="4dp"
+                android:background="@color/pallet_main"
+                android:src="@drawable/ic_launcher"/>
+
+            <TextView
+                android:id="@+id/menu_tract_title"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:layout_toLeftOf="@id/menu_tract_cover"
+                android:text="Warum ich am Samstag zur Kirche gehe"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"/>
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_below="@+id/menu_main_bar"
+        android:layout_height="@dimen/menu_pager_bar_height"
+        android:clipChildren="false">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:clipChildren="false">
+
+            <RelativeLayout
+                android:id="@+id/menu_pager_select"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:background="@drawable/drawer_button_background"
+                android:clipChildren="false">
+
+                <ImageView
+                    android:layout_width="@dimen/button_default"
+                    android:layout_height="@dimen/button_default"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/ic_action_apps"
+                    android:alpha="@dimen/button_alpha"/>
+
+                <View
+                    android:id="@+id/menu_pager_select_bar"
+                    android:layout_width="match_parent"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/pallet_acent"
+                    android:layout_height="@dimen/menu_pager_bar_line_height"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/menu_pager_tract"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:background="@drawable/drawer_button_background"
+                android:clipChildren="false">
+
+                <ImageView
+                    android:layout_width="@dimen/button_default"
+                    android:layout_height="@dimen/button_default"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/ic_action_book"
+                    android:alpha="@dimen/button_alpha" />
+
+
+                <View
+                    android:id="@+id/menu_pager_tract_bar"
+                    android:layout_width="match_parent"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/pallet_acent"
+                    android:layout_height="@dimen/menu_pager_bar_line_height"/>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>

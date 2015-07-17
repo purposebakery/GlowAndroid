@@ -1,23 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-	android:id="@+id/root">
-
-    <fragment
-        android:id="@+id/selection"
+    android:fitsSystemWindows="true">
+    <!-- The main content view -->
+    <RelativeLayout
+        android:id="@+id/root"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:name="com.techlung.android.glow.ui.SelectionFlowFragment"
-        tools:layout="@layout/selection_flow_fragment">
-    </fragment>
+        android:layout_height="match_parent">
 
-    <fragment
-        android:id="@+id/tract"
-        android:layout_width="match_parent"
+        <include
+            android:id="@+id/header"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/menu_height"
+            android:layout_alignParentTop="true"
+            layout="@layout/glow_menu"/>
+
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/main_pager"
+            android:layout_below="@+id/header"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </android.support.v4.view.ViewPager>
+
+        <RelativeLayout
+            android:id="@+id/share_button"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginBottom="16dp"
+            android:elevation="16dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/share_button_background">
+
+            <ImageView
+                android:layout_width="@dimen/button_default"
+                android:layout_height="@dimen/button_default"
+                android:src="@drawable/ic_action_share"
+                android:layout_centerInParent="true"/>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+    <!-- The navigation drawer -->
+
+    <!--
+
+    <android.support.design.widget.NavigationView
+        android:id="@+id/navigation"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:name="com.techlung.android.glow.ui.TractFragment"
-        tools:layout="@layout/tract_fragment">
-    </fragment>
-</RelativeLayout>
+        android:layout_gravity="start"
+        app:headerLayout="@layout/navigation_header"
+        app:menu="@menu/navigation_menu" />
+    -->
+
+    <include
+        android:id="@+id/left_drawer"
+        android:layout_width="240dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        layout="@layout/drawer"/>
+
+</android.support.v4.widget.DrawerLayout>
