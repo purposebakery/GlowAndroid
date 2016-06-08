@@ -29,10 +29,11 @@ public class ContentStorageLoader {
 
 	public ContentStorageLoader(Activity a) {
 		this.a = a;
-		this.dataDir = a.getExternalFilesDir(null).toString() + "/";
-		this.dataFilePath = this.dataDir + "de.zip";
+		//this.dataDir = a.getExternalFilesDir(null).toString() + "/";
+		//this.dataFilePath = this.dataDir + "de.zip";
 	}
-	
+
+	/*
 	public void unpackAsset(final OnGlowDataLoadedListener listener) {
 		DialogHelper.showProgressDialog();
 
@@ -59,8 +60,9 @@ public class ContentStorageLoader {
 		};
 		unzipTask.execute();
 
-	}
+	}*/
 
+	/*
 	private boolean clearDirectory(File dir) {
 		boolean success = true;
 
@@ -87,7 +89,7 @@ public class ContentStorageLoader {
 
 			copyFile(in, out);
 		} catch (IOException e) {
-			Log.e(ContentStorageLoader.class.getName(), "failed to copy asset file " + filename, e);
+			Log.e(ContentStorageLoader.class.getNameResource(), "failed to copy asset file " + filename, e);
 		} finally {
 			closeStreams(in, out);
 		}
@@ -153,13 +155,13 @@ public class ContentStorageLoader {
 				ZipInputStream zin = new ZipInputStream(fin);
 				ZipEntry ze = null;
 				while ((ze = zin.getNextEntry()) != null) {
-					Log.v("Glow", "Unzipping " + ze.getName() + " to " +_zipPath);
+					Log.v("Glow", "Unzipping " + ze.getNameResource() + " to " +_zipPath);
 
 					if (ze.isDirectory()) {
-						_dirChecker(_zipPath + ze.getName());
+						_dirChecker(_zipPath + ze.getNameResource());
 					} else {
 
-						File f = new File(_zipPath + ze.getName());
+						File f = new File(_zipPath + ze.getNameResource());
 						File dir = f.getParentFile();
 						if (dir != null && !dir.exists()) {
 							dir.mkdirs();
@@ -203,93 +205,44 @@ public class ContentStorageLoader {
 				Log.v("Glow", "Created Directory " + f.getAbsolutePath());
 			}
 		}
-	}
+	}*/
 
 	public void load() {
 		// validate
-		boolean noData = false;
+		try {
+			AssetManager assetManager = a.getResources().getAssets();
 
-		File dataDir = new File(this.dataDir + "/de");
+			String lang = "de";
 
-		if (!dataDir.exists() || !dataDir.isDirectory()) {
-			noData = true;
-		}
+			String[] pamphlets = assetManager.list(lang);
 
-		File[] pamphlets;
-		if (!noData) {
-			// get Flyer Dirs
-			pamphlets = dataDir.listFiles(new FilenameFilter() {
-				@Override
-				public boolean accept(File dir, String name) {
-					return new File(dir, name).isDirectory();
-				}
-			});
+			// Reset Content
+			GlowData.getInstance().clear();
 
-			if (pamphlets != null && pamphlets.length != 0) {
+			// Create Pamphlets and add to Content
+			for (String pamphletDir: pamphlets) {
 
-				// Reset Content
-				GlowData.getInstance().clear();
-				
-				// Create Pamphlets and add to Content
-				for (int i = 0; i < pamphlets.length; i++) {
-					File pamphletDir = pamphlets[i];
-					String id = dataDir.getName() + "-" + pamphletDir.getName();
 
-					File metaFile = new File(pamphletDir.getAbsolutePath() + "/" + Common.FILE_META);
-					File contentFile = new File(pamphletDir.getAbsolutePath() + "/" + Common.FILE_CONTENT);
-					File additionalFile = new File(pamphletDir.getAbsolutePath() + "/" + Common.FILE_ADDITIONAL);
-					File coverFile = new File(pamphletDir.getAbsolutePath() + "/" + Common.FILE_COVER);
+				if (pamphletDir.equals(Common.FILE_CONTACT)) {
+					GlowData.getInstance().loadContact(assetManager.open(lang + "/" + pamphletDir));
+				} else if (pamphletDir.equals(Common.FILE_INFO)) {
+					GlowData.getInstance().loadInfo(assetManager.open(lang + "/" + pamphletDir));
+				} else {
+					Tract newPamphlet = new Tract(lang + "/" + pamphletDir);
 
-					File[] imagesFiles = pamphletDir.listFiles(new FilenameFilter() {
-						@Override
-						public boolean accept(File dir, String name) {
-							return !name.contains(Common.FILE_COVER) && (name.endsWith(".jpg") || name.endsWith(".png"));
-						}
-					});
-					
-					// Add and load Pamphlet
-					Tract newPamphlet = new Tract(id);
-					
-					if (metaFile.exists()) newPamphlet.loadMeta(metaFile);
-					if (contentFile.exists()) newPamphlet.loadHtmlContent(contentFile);
-					if (additionalFile.exists()) newPamphlet.loadHtmlAdditional(additionalFile);
-					if (coverFile.exists()) {
-                        //newPamphlet.loadCover(coverFile);
-                        newPamphlet.setCoverPath(coverFile.getAbsolutePath());
-                    }
-					if (imagesFiles != null && imagesFiles.length != 0) newPamphlet.loadImages(imagesFiles);
+					newPamphlet.loadMeta(assetManager.open(lang + "/" + pamphletDir + "/" + Common.FILE_META));
+					newPamphlet.loadHtmlContent(assetManager.open(lang + "/" + pamphletDir + "/" + Common.FILE_CONTENT));
+					newPamphlet.loadHtmlAdditional(assetManager.open(lang + "/" + pamphletDir + "/" + Common.FILE_ADDITIONAL));
+					newPamphlet.setCoverPath(lang + "/" + pamphletDir + "/" + Common.FILE_COVER);
 
 					GlowData.getInstance().addPamphlet(newPamphlet);
 				}
-				
-				// Load Contact
-				File contactFile = new File(dataDir.getAbsolutePath() + "/" + Common.FILE_CONTACT);
-				if (contactFile != null && contactFile.exists() && contactFile.isFile()) {
-					GlowData.getInstance().loadContact(contactFile);
-				}
 
-				// Load Info
-				File infoFile = new File(dataDir.getAbsolutePath() + "/" + Common.FILE_INFO);
-				if (infoFile != null && infoFile.exists() && infoFile.isFile()) {
-					GlowData.getInstance().loadInfo(infoFile);
-
-				}
-
-			} else {
-				noData = true;
 			}
-		} else {
-			// Reset Content
-			GlowData.getInstance().clear();
-		}
 
-		/*
-		if (noData) {
-			UiThreadMessenger.sendMessage("No Data on Phone...");//Toast.makeText(a, "", Toast.LENGTH_LONG).show();
-		}*/
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
-    public interface OnGlowDataLoadedListener {
-        void onGlowDataLoaded();
-    }
 }

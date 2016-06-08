@@ -1,24 +1,16 @@
 package com.techlung.android.glow.model;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 
-import com.techlung.android.glow.GlowActivity;
+import com.techlung.android.glow.utils.IOUtils;
 import com.techlung.android.glow.io.ParameterReader;
 import com.techlung.android.glow.settings.Common;
-import com.techlung.android.glow.utils.ToolBox;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
+import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
-import android.text.Html;
 import android.text.Spanned;
-import android.util.DisplayMetrics;
 
 public class Tract {
 	private String id;
@@ -35,10 +27,6 @@ public class Tract {
 	
 	private HashMap<String, String> imagePaths = new HashMap<String, String>();
 
-	/*
-	 * Constructor
-	 */
-
 	public Tract(String id) {
 		for (Tract p : GlowData.getInstance().getPamphlets()) {
 			if (p.getId().equals(id)) {
@@ -48,70 +36,48 @@ public class Tract {
 		this.id = id;
 	}
 
-	/*
-	 * Functions
-	 */
-	public void loadMeta(File f) {
-		ParameterReader pr = new ParameterReader(f);
+	public void loadMeta(InputStream is) {
+		ParameterReader pr = new ParameterReader(is);
 
 		setTitle(pr.readParameterString(Common.META_TITLE));
 		setHtmlTitle(pr.readParameterString(Common.META_TITLE_HTML));
 		setUrl(pr.readParameterString(Common.META_URL));
 	}
 
-	/*
-	public void loadCover(File f) {
-		Drawable cover = Drawable.createFromPath(f.getAbsolutePath());
-		setCover(cover);
-	}*/
 
-	public void loadHtmlContent(File f) {
+	public void loadHtmlContent(InputStream is) {
 		
-		try {			
-			FileReader fileReader = new FileReader(f);
-			BufferedReader bufferedReader = new BufferedReader(fileReader);
-			StringBuffer stringBuffer = new StringBuffer();
-			String line;
-			while ((line = bufferedReader.readLine()) != null) {
-				stringBuffer.append(line);
-				stringBuffer.append("\n");
-			}
-			fileReader.close();
+		try {
+			String content = IOUtils.readStream(is);
 			
-			setHtmlContent(stringBuffer.toString());
+			setHtmlContent(content);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}		
 	}
 	
-	public void loadHtmlAdditional(File f) {
+	public void loadHtmlAdditional(InputStream is) {
 		
-		try {			
-			FileReader fileReader = new FileReader(f);
-			BufferedReader bufferedReader = new BufferedReader(fileReader);
-			StringBuffer stringBuffer = new StringBuffer();
-			String line;
-			while ((line = bufferedReader.readLine()) != null) {
-				stringBuffer.append(line);
-				stringBuffer.append("\n");
-			}
-			fileReader.close();
+		try {
+			String additional = IOUtils.readStream(is);
 			
-			setHtmlAdditional(stringBuffer.toString());
+			setHtmlAdditional(additional);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}		
 	}
 
+	/*
 	public void loadImages(File[] fs) {
 		for (File f : fs) {
-			getImagePaths().put(f.getName(), f.getAbsolutePath());
+			getImagePaths().put(f.getNameResource(), f.getAbsolutePath());
 		}
-	}
+	}*/
 
+	/*
 	public String getImagePath(String name) {
 		return imagePaths.get(name);
-	}
+	}*/
 
 	/*
 	 * GETTER SETTER
@@ -158,14 +124,14 @@ public class Tract {
 	public void setHtmlAdditional(String htmlAdditional) {
 		this.htmlAdditional = htmlAdditional;
 	}
+/*
 
 	public HashMap<String, String> getImagePaths() {
 		return imagePaths;
 	}
-
 	public void setImagePaths(HashMap<String, String> imagePaths) {
 		this.imagePaths = imagePaths;
-	}
+	}*/
 
 	public String getUrl() {
 		return url;
@@ -183,8 +149,32 @@ public class Tract {
 		this.coverPath = coverPath;
 	}
 
-	public Uri getCoverPathUri() {
-		return Uri.fromFile(new File(getCoverPath()));
+	public Drawable getCoverDrawable(Context context) {
+		try
+		{
+			InputStream ims = context.getAssets().open(getCoverPath());
+			Drawable d = Drawable.createFromStream(ims, null);
+			return d;
+		}
+		catch(IOException ex)
+		{
+			ex.printStackTrace();
+			return null;
+		}
+	}
+
+	public Drawable getImageDrawable(Context context, String imageName) {
+		try
+		{
+			InputStream ims = context.getAssets().open(getId() + "/" + imageName);
+			Drawable d = Drawable.createFromStream(ims, null);
+			return d;
+		}
+		catch(IOException ex)
+		{
+			ex.printStackTrace();
+			return null;
+		}
 	}
 
 	public String getHtmlTitle() {
@@ -195,6 +185,7 @@ public class Tract {
 		this.htmlTitle = htmlTitle;
 	}
 
+	/*
 	public class ImageGetter implements Html.ImageGetter {
 
 		float height = 0.0f;
@@ -245,5 +236,5 @@ public class Tract {
 			return null;
 
 		}
-	}
+	}*/
 }

@@ -10,8 +10,11 @@ import android.widget.EditText;
 
 import com.techlung.android.glow.GlowActivity;
 import com.techlung.android.glow.R;
+import com.techlung.android.glow.enums.UserType;
 import com.techlung.android.glow.model.GlowData;
 import com.techlung.android.glow.model.Tract;
+import com.techlung.android.glow.notification.NotificationManager;
+import com.techlung.android.glow.settings.Preferences;
 
 public class DialogHelper {
     private static ProgressDialog progressDialog;
@@ -49,28 +52,6 @@ public class DialogHelper {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-            }
-        });
-        builder.show();
-    }
-
-    public static void showErrorAlert(Context context, final String exceptionLogs) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setMessage(R.string.exceptionlogs_message);
-        builder.setTitle(R.string.exceptionlogs_title);
-        builder.setPositiveButton(R.string.alert_Ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-                Mailer.sendErrorLog(GlowActivity.getInstance(), exceptionLogs);
-                GlowActivity.getInstance().recreate();
-            }
-        });
-        builder.setNegativeButton(R.string.alert_No, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-                GlowActivity.getInstance().recreate();
             }
         });
         builder.show();
@@ -134,5 +115,32 @@ public class DialogHelper {
 
         String chooserMessage = GlowActivity.getInstance().getResources().getString(R.string.alert_share);
         GlowActivity.getInstance().startActivity(Intent.createChooser(share, chooserMessage));
+    }
+
+    public static void showCheckAndSetUserType(final Context context) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setCancelable(false);
+
+        builder.setTitle(R.string.check_user_type_title);
+        builder.setMessage(R.string.check_user_type_message);
+
+        builder.setPositiveButton(R.string.check_user_type_distributor, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Preferences.setUserType(UserType.DISTRIBUTOR);
+                Preferences.setNotificationEnabled(true);
+                NotificationManager.setNextNotification(context, false);
+            }
+        });
+
+        builder.setNegativeButton(R.string.check_user_type_reader, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Preferences.setUserType(UserType.DISTRIBUTOR);
+                Preferences.setNotificationEnabled(false);
+            }
+        });
+
+        builder.show();
     }
 }

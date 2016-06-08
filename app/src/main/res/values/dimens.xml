@@ -5,7 +5,7 @@
     <dimen name="button_default_tiny">18dp</dimen>
     <dimen name="button_default">24dp</dimen>
 
-    <dimen name="drawer_item_height">54dp</dimen>
+    <dimen name="drawer_item_height">48dp</dimen>
 
     <dimen name="selection_scroll_width">30dp</dimen>
 

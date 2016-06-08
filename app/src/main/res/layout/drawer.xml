@@ -5,20 +5,20 @@
     android:layout_gravity="start"
     android:clickable="true"
     android:elevation="12dp"
-    android:background="@color/pallet_main">
+    android:background="@color/colorPrimaryLight">
 
     <include
         android:id="@+id/drawer_logo"
         layout="@layout/drawer_header"
         android:layout_width="match_parent"
-        android:layout_height="200dp" />
+        android:layout_height="160dp" />
 
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/drawer_logo"
-        android:background="@color/pallet_main"
+        android:background="@color/colorPrimaryLight"
         android:elevation="4dp">
 
         <include
@@ -32,7 +32,8 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_below="@id/drawer_contact"
-            android:background="@color/grey_very_light" />
+            android:background="@color/colorPrimary"
+            android:alpha="0.5"/>
 
         <include
             android:id="@+id/drawer_more"

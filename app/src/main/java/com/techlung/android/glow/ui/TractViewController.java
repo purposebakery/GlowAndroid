@@ -22,8 +22,12 @@ import com.techlung.android.glow.R;
 import com.techlung.android.glow.model.GlowData;
 import com.techlung.android.glow.model.Tract;
 import com.techlung.android.glow.settings.Common;
+import com.techlung.android.glow.settings.Preferences;
 import com.techlung.android.glow.settings.Settings;
+import com.techlung.android.glow.utils.ContactUtil;
 import com.techlung.android.glow.utils.ToolBox;
+
+import java.io.InputStream;
 
 public class TractViewController {
 
@@ -97,6 +101,28 @@ public class TractViewController {
 
         contentView = (TextView) view.findViewById(R.id.activity_glow_pamphlet_list_content);
         additionalView = (TextView) view.findViewById(R.id.activity_glow_pamphlet_list_additional);
+
+        view.findViewById(R.id.contact_mail_container).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ContactUtil.doMailContact(activity);
+            }
+        });
+
+        view.findViewById(R.id.contact_phone_container).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ContactUtil.doPhoneContact(activity);
+            }
+        });
+
+        view.findViewById(R.id.contact_www_container).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ContactUtil.doWWWContact(activity);
+            }
+        });
+
         image = (ImageView) view.findViewById(R.id.activity_glow_pamphlet_list_image);
         title = (TextView) view.findViewById(R.id.activity_glow_pamphlet_list_title);
 
@@ -186,10 +212,10 @@ public class TractViewController {
         //additionalView.setText("");
         System.gc();
 
-        image.setImageURI(tract.getCoverPathUri());
+        image.setImageDrawable(tract.getCoverDrawable(activity));
         title.setText(Html.fromHtml(tract.getHtmlTitle()));
 
-        menuTractCover.setImageURI(tract.getCoverPathUri());
+        menuTractCover.setImageDrawable(tract.getCoverDrawable(activity));
         menuTractTitle.setText(Html.fromHtml(tract.getHtmlTitle()));
 
         contentView.setText(Html.fromHtml(tract.getHtmlContent(), new ImageGetter(), null));
@@ -216,9 +242,12 @@ public class TractViewController {
         public Drawable getDrawable(String source) {
 
             try {
-                BitmapFactory.Options options = new BitmapFactory.Options();
-                Bitmap bitmap = BitmapFactory.decodeFile(tract.getImagePath(source), options);
-                Drawable d = new BitmapDrawable(activity.getResources(), bitmap);
+
+                Drawable d = tract.getImageDrawable(activity, source);
+                if (d == null) {
+                    return null;
+                }
+
                 DisplayMetrics metrics = new DisplayMetrics();
                 activity.getWindowManager().getDefaultDisplay()
                         .getMetrics(metrics);

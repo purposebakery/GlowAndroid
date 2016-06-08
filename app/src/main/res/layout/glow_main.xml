@@ -20,6 +20,24 @@
             layout="@layout/glow_menu"/>
 
 
+
+        <RelativeLayout
+            android:id="@+id/main_hide_mask"
+            android:layout_below="@+id/header"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/readingBackgroundDark">
+
+            <TextView
+                android:id="@+id/main_hide_mask_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/alert_loading"
+                android:layout_centerInParent="true"
+                android:textColor="@color/colorPrimaryLight"/>
+
+        </RelativeLayout>
+
         <android.support.v4.view.ViewPager
             android:id="@+id/main_pager"
             android:layout_below="@+id/header"
@@ -28,11 +46,24 @@
 
         </android.support.v4.view.ViewPager>
 
-        <RelativeLayout
-            android:id="@+id/share_button"
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/share_dynamic_button"
+            android:visibility="gone"
             android:layout_width="56dp"
             android:layout_height="56dp"
-            android:layout_marginRight="30dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="16dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:src="@drawable/ic_action_share"/>
+
+        <!--
+        <RelativeLayout
+            android:id="@+id/share_button"
+            android:visibility="gone"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginRight="16dp"
             android:layout_marginBottom="16dp"
             android:elevation="16dp"
             android:layout_alignParentRight="true"
@@ -45,7 +76,9 @@
                 android:src="@drawable/ic_action_share"
                 android:layout_centerInParent="true"/>
 
-        </RelativeLayout>
+        </RelativeLayout>-->
+
+
 
     </RelativeLayout>
     <!-- The navigation drawer -->

@@ -61,4 +61,69 @@
     </LinearLayout>
 
 
+
+    <LinearLayout
+        android:id="@+id/more_share_container"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/drawer_item_height"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:background="@drawable/drawer_button_background">
+
+        <ImageView
+            android:layout_width="@dimen/button_default"
+            android:layout_height="@dimen/button_default"
+            android:src="@drawable/ic_share_drawer"
+            android:alpha="@dimen/button_alpha" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:text="@string/drawer_share"
+            android:textSize="16sp"
+            android:textColor="@color/text_inverted"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorPrimary"
+        android:alpha="0.5"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp" />
+
+
+    <LinearLayout
+        android:id="@+id/more_settings_container"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/drawer_item_height"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:background="@drawable/drawer_button_background">
+
+        <ImageView
+            android:layout_width="@dimen/button_default"
+            android:layout_height="@dimen/button_default"
+            android:src="@drawable/ic_settings"
+            android:alpha="@dimen/button_alpha" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:text="@string/drawer_settings"
+            android:textSize="16sp"
+            android:textColor="@color/text_inverted" />
+    </LinearLayout>
+
+
 </LinearLayout>

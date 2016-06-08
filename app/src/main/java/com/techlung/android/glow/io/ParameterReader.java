@@ -1,23 +1,25 @@
 package com.techlung.android.glow.io;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.util.Log;
+import com.techlung.android.glow.utils.IOUtils;
 
 public class ParameterReader {
 	
-	File f;
-	public ParameterReader(File f) {
-		this.f = f;
+	String fileContent = "";
+	public ParameterReader(InputStream is) {
+		try {
+			this.fileContent = IOUtils.readStream(is);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 	}
 	
-	public int readParameterInt( String keyParam) {
+	public int readParameterInt(String keyParam) {
 		String res =readParameterString(keyParam);
 		try {
 			int result = Integer.parseInt(res);
@@ -29,38 +31,23 @@ public class ParameterReader {
 	}
 	
 	public String readParameterString(String keyParam) {
-		String param = "";
-		String key = "";
-		FileReader r = null;
-		BufferedReader b = null;
-		try {
-			r = new FileReader(f);
-			b = new BufferedReader(r);
-			
-			String line;
-			while((line = b.readLine()) != null)  {
-				if (line.contains("=")) {
-					key = line.substring(0, line.indexOf("=")).trim();
-					param = line.substring(line.indexOf("=") +1, line.length()).trim();
+		String[] lines = fileContent.split("\n");
 
-					if ((int) key.charAt(0) == 65279) {
-						key = key.substring(1, key.length());
-					}
-					if (!key.equals("") && !param.equals("") && keyParam.equals(key)) {
-						b.close();
-						return param;
-					}
+		for (String line : lines) {
+			if (line.contains("=")) {
+				String key = line.substring(0, line.indexOf("=")).trim();
+				String param = line.substring(line.indexOf("=") +1, line.length()).trim();
+
+				if ((int) key.charAt(0) == 65279) {
+					key = key.substring(1, key.length());
+				}
+				if (!key.equals("") && !param.equals("") && keyParam.equals(key)) {
+					return param;
 				}
 			}
-
-			b.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 
-		throw new IllegalStateException("Error parsing param " + keyParam + " from  " + f.getAbsolutePath());
+		throw new IllegalStateException("Error parsing param " + keyParam + " from  " + fileContent);
 	}
 	
 	public List<String> readParameterStringList(String keyParam) {

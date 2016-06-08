@@ -5,10 +5,12 @@ import android.content.pm.PackageManager;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 import com.techlung.android.glow.GlowActivity;
+import com.techlung.android.glow.utils.IOUtils;
 import com.techlung.android.glow.io.ParameterReader;
 import com.techlung.android.glow.settings.Common;
 
@@ -41,8 +43,8 @@ public class GlowData {
 		pamphlets.add(p);
 	}
 	
-	public void loadContact(File f) {
-		ParameterReader pr = new ParameterReader(f);
+	public void loadContact(InputStream is) {
+		ParameterReader pr = new ParameterReader(is);
 
 		contact.setEmail(pr.readParameterString(Common.CONTACT_EMAIL));
 		contact.setWww(pr.readParameterString(Common.CONTACT_WWW));
@@ -51,9 +53,9 @@ public class GlowData {
 		contact.setAppUrl(pr.readParameterString(Common.CONTACT_APP_URL));
 	}
 
-	public void loadInfo(File f) {
+	public void loadInfo(InputStream is) {
 		try {
-			info = readFile(f);
+			info = IOUtils.readStream(is);
 
 			PackageInfo pInfo = GlowActivity.getInstance().getPackageManager().getPackageInfo(GlowActivity.getInstance().getPackageName(), 0);
 			String version = pInfo.versionName;
@@ -117,7 +119,7 @@ public class GlowData {
 			scanner.close();
 		}
 	}
-	
-	
+
+
 	
 }

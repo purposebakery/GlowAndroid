@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:elevation="4dp"
-    android:background="@color/pallet_main">
+    android:background="@color/colorPrimaryLight">
 
 
     <RelativeLayout
@@ -52,7 +52,7 @@
                 android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
                 android:elevation="4dp"
-                android:background="@color/pallet_main"
+                android:background="@color/colorPrimary"
                 android:src="@drawable/ic_launcher"/>
 
             <TextView
@@ -100,7 +100,7 @@
                     android:alpha="@dimen/button_alpha"/>
 
                 <View
-                    android:id="@+id/menu_pager_select_bar"
+                    android:id="@+id/menu_pager_bar"
                     android:layout_width="match_parent"
                     android:layout_alignParentBottom="true"
                     android:background="@color/pallet_acent"
@@ -122,14 +122,6 @@
                     android:layout_centerInParent="true"
                     android:src="@drawable/ic_action_book"
                     android:alpha="@dimen/button_alpha" />
-
-
-                <View
-                    android:id="@+id/menu_pager_tract_bar"
-                    android:layout_width="match_parent"
-                    android:layout_alignParentBottom="true"
-                    android:background="@color/pallet_acent"
-                    android:layout_height="@dimen/menu_pager_bar_line_height"/>
 
             </RelativeLayout>
 

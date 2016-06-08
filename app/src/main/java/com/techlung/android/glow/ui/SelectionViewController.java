@@ -18,6 +18,7 @@ import com.techlung.android.glow.GlowActivity;
 import com.techlung.android.glow.R;
 import com.techlung.android.glow.model.GlowData;
 import com.techlung.android.glow.model.Tract;
+import com.techlung.android.glow.settings.Preferences;
 import com.techlung.android.glow.utils.Gauss;
 import com.techlung.android.glow.utils.ToolBox;
 
@@ -30,12 +31,13 @@ public class SelectionViewController {
     public static final int TOUCH_MOVEMENT_THRESHOLD_DP = 10;
     public static final int TRACT_TOUCH_ANIMATION_LENGTH = 100;
 
-    private static final double GAUSS_SCALE = 1;
+    private static final double GAUSS_SCALE = 0.6;
     private static final double GAUSS_SCROLL_SCALE = 0.4f;
     public static final int TRACT_ELEVATION_DP = 15;
     public static final int SCROLL_ELEVATION_DP = 8;
     public static final int SCROLL_WIDTH_DP = 30;
     public static final int MENU_HEIGHT_DP = 96;
+    public static final int STATUS_BAR_HEIGHT_DP = 28;
     public static final int START_POINT_Y_CHANGE = 20;
     private Gauss gauss;
     private Gauss gaussScroll;
@@ -113,9 +115,9 @@ public class SelectionViewController {
         tractCount = GlowData.getInstance().getPamphlets().size();
 
         screenWidthPx = ToolBox.getScreenWidthPx(activity);
-        screenHeightPx = ToolBox.getScreenHeightPx(activity) - ToolBox.convertDpToPixel(MENU_HEIGHT_DP, activity); // minus menu height
+        screenHeightPx = ToolBox.getScreenHeightPx(activity) - ToolBox.convertDpToPixel(MENU_HEIGHT_DP, activity) - ToolBox.convertDpToPixel(STATUS_BAR_HEIGHT_DP, activity); // minus menu height
 
-        tractWidthPx = (int) (screenWidthPx * 0.7f);
+        tractWidthPx = (int) (screenWidthPx * 0.5f);
         tractHeightPx = (int) (tractWidthPx * 1.5f);
 
         scrollTractWidthPx = ToolBox.convertDpToPixel(SCROLL_WIDTH_DP, activity);
@@ -144,7 +146,8 @@ public class SelectionViewController {
             item.debug = (TextView) item.view.findViewById(R.id.debug);
             item.image.getLayoutParams().height = tractHeightPx;
             item.image.getLayoutParams().width = tractWidthPx;
-            item.image.setImageURI(item.tract.getCoverPathUri());
+
+            item.image.setImageDrawable(item.tract.getCoverDrawable(activity));
 
             rootView.addView(item.view);
         }
@@ -158,7 +161,7 @@ public class SelectionViewController {
             scrollItem.overlay = scrollItem.view.findViewById(R.id.overlay);
             scrollItem.image.getLayoutParams().height = scrollTractHeightPx;
             scrollItem.image.getLayoutParams().width = scrollTractWidthPx;
-            scrollItem.image.setImageURI(scrollItem.tract.getCoverPathUri());
+            scrollItem.image.setImageDrawable(scrollItem.tract.getCoverDrawable(activity));
 
             scrollView.addView(scrollItem.view);
         }
@@ -178,6 +181,7 @@ public class SelectionViewController {
             item.view.setY(item.y);
             item.view.setScaleX(item.scale);
             item.view.setScaleY(item.scale);
+            //item.view.setAlpha(item.scale);
             if (android.os.Build.VERSION.SDK_INT >= 21) {
                 item.view.setElevation(item.scale * ToolBox.convertDpToPixel(TRACT_ELEVATION_DP, GlowActivity.getInstance()) + 4);
             }
@@ -379,6 +383,7 @@ public class SelectionViewController {
         float yOld = event.getHistoricalY(0);
 
         float difference = y - yOld;
+        difference *= 1.4;
         return difference;
     }
 

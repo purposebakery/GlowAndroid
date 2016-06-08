@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/pallet_passive" >
+    android:background="@color/readingBackgroundDark" >
 
     <ScrollView
         android:id="@+id/activity_glow_pamphlet_table"
@@ -54,7 +54,8 @@
                 android:text="Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text"
                 android:textColor="@color/text" />
 
-            <FrameLayout
+            <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="16dp"
@@ -70,7 +71,12 @@
                     android:text="Additional"
                     android:textColor="@color/text"/>
 
-            </FrameLayout>
+                <include
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    layout="@layout/tract_contact"/>
+
+            </LinearLayout>
 
 
         </LinearLayout>

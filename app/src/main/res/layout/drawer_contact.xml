@@ -13,7 +13,7 @@
         android:orientation="horizontal" >
 
         <RelativeLayout
-            android:id="@+id/contact_phone_container"
+            android:id="@+id/contact_phone_container_drawer"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginLeft="8dp"
@@ -28,7 +28,7 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/contact_mail_container"
+            android:id="@+id/contact_mail_container_drawer"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginLeft="8dp"
@@ -44,7 +44,7 @@
 
 
         <RelativeLayout
-            android:id="@+id/contact_www_container"
+            android:id="@+id/contact_www_container_drawer"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginLeft="8dp"

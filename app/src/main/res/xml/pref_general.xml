@@ -1,0 +1,12 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ListPreference
+        android:defaultValue="READER"
+        android:entries="@array/pref_general_user_type_titles"
+        android:entryValues="@array/pref_general_user_type_values"
+        android:key="GENERAL_USER_TYPE"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:title="@string/pref_general_user_type" />
+
+</PreferenceScreen>

@@ -3,8 +3,10 @@
 
     <string name="app_name">GLOW</string>
 
+    <string name="drawer_share">App teilen</string>
     <string name="drawer_newsletter">Newsletter anfragen</string>
     <string name="drawer_shop">Shop besuchen</string>
+    <string name="drawer_settings">Einstellungen</string>
 
     <string name="contact_email_chooserTitle">GLOW eine Email schicken…</string>
     <string name="contact_email_subject">GLOW Anfrage</string>
@@ -13,6 +15,10 @@
     <string name="newsletter_mail_hello">Liebes GLOW Team,</string>
     <string name="newsletter_mail_message">ich habe Interesse am GLOW Newsletter. Bitte meldet mich dafür an. Vielen Dank! </string>
     <string name="newsletter_mail_bye">Mit besten Grüßen</string>
+
+    <string name="share_menu_general_help">Allgemeine Ratschläge</string>
+    <string name="share_menu_tract_help">Flyer Leitfaden</string>
+    <string name="share_menu_tract_send">Link teilen</string>
 
     <string name="share_app_text">Hallo,\n\nich möchte eine App mit dir teilen. Du findest sie im Play Store unter folgendem Link: </string>
     <string name="share_tract_text">Hallo,\n\nich möchte etwas mit dir teilen. Folge einfach diesem Link und sag mir, was du davon hälst: </string>
@@ -27,12 +33,87 @@
     <string name="alert_share">Teilen</string>
     <string name="alert_cancel">Abbrechen</string>
 
-    <string name="exceptionlogs_title">Ups...</string>
-    <string name="exceptionlogs_message">Diese App ist das letzte Mal scheinbar abgestürzt. Schickst du uns den Fehler per Mail? Danke =)</string>
-    <string name="exceptionlogs_mail_reciepient">deutschland@glowonline.org</string>
-    <string name="exceptionlogs_mail_subject">GLOW Android - Error Logs</string>
-
     <string name="share_app_dialog_title">App teilen</string>
     <string name="share_tract_dialog_title">Flyer teilen</string>
 
+
+    <!-- Strings related to Settings -->
+    <string name="check_user_type_title">Hallo lieber Nutzer!</string>
+    <string name="check_user_type_message">Bist du ein Glow Flyer Verteiler oder ließt du diese nur? Keine Sorge, diese Information dient nur dazu, gewisse Funktionen für Verteiler zu aktivieren und ist nur für dich einsehbar. Du kannst diese Einstellung jederzeit in den Einstellungen verändern.</string>
+    <string name="check_user_type_reader">Leser</string>
+    <string name="check_user_type_distributor">Leser &amp; Verteiler</string>
+
+
+    <!-- Example General settings -->
+    <string name="pref_general">Allgemein</string>
+
+    <string name="pref_general_user_type">Benutzer</string>
+    <string-array name="pref_general_user_type_titles">
+        <item>Verteiler</item>
+        <item>Leser</item>
+    </string-array>
+    <string-array name="pref_general_user_type_values">
+        <item>DISTRIBUTOR</item>
+        <item>READER</item>
+    </string-array>
+
+    <string name="pref_general_bright_background">Heller Hintergrund</string>
+
+
+
+    <!-- Example settings for Notifications -->
+    <string name="pref_notifications">Erinnerungen</string>
+
+    <string name="pref_notifications_enable">Erinnerungen</string>
+
+    <string name="pref_notifications_frequency">Häufigkeit</string>
+    <string-array name="pref_notifications_frequency_titles">
+        <item>täglich</item>
+        <item>wöchentlich</item>
+    </string-array>
+    <string-array name="pref_notifications_frequency_values">
+        <item>DAILY</item>
+        <item>WEEKLY</item>
+    </string-array>
+
+    <string name="pref_notifications_time">Uhrzeit</string>
+
+    <string name="pref_notifications_weekday">Wochentag</string>
+    <string-array name="pref_notifications_weekday_titles">
+        <item>Samstag</item>
+        <item>Montag</item>
+        <item>Dienstag</item>
+        <item>Mittwoch</item>
+        <item>Donnerstag</item>
+        <item>Freitag</item>
+        <item>Sonntag</item>
+    </string-array>
+    <string-array name="pref_notifications_weekday_values">
+        <item>SATURDAY</item>
+        <item>MONDAY</item>
+        <item>TUESDAY</item>
+        <item>WEDNESDAY</item>
+        <item>THURSDAY</item>
+        <item>FRIDAY</item>
+        <item>SUNDAY</item>
+    </string-array>
+
+    <string name="pref_notification_toast">Nächste Benachrichtigung: </string>
+
+
+
+    <string name="pref_title_social_recommendations">Enable social recommendations</string>
+    <string name="pref_description_social_recommendations">Recommendations for people to contact
+        based on your message history
+    </string>
+
+    <string name="pref_title_new_message_notifications">New message notifications</string>
+
+    <string name="pref_title_ringtone">Ringtone</string>
+    <string name="pref_ringtone_silent">Silent</string>
+
+    <string name="pref_title_vibrate">Vibrate</string>
+
+    <string name="notification_title">GLOW heute</string>
+    <string name="notification_message">Vergiss mich nicht ;)</string>
 </resources>
