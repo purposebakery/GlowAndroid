@@ -9,10 +9,7 @@
 
     <dimen name="selection_scroll_width">30dp</dimen>
 
-    <dimen name="menu_main_bar_height">48dp</dimen>
-    <dimen name="menu_pager_bar_height">48dp</dimen>
-    <dimen name="menu_pager_bar_line_height">3dp</dimen>
-    <dimen name="menu_height">96dp</dimen>
+    <dimen name="menu_height">56dp</dimen>
 
     <item name="button_alpha" format="float" type="dimen">0.75</item>
 

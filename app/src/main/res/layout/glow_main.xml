@@ -12,18 +12,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <include
-            android:id="@+id/header"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/menu_height"
-            android:layout_alignParentTop="true"
-            layout="@layout/glow_menu"/>
 
 
 
         <RelativeLayout
             android:id="@+id/main_hide_mask"
-            android:layout_below="@+id/header"
+            android:layout_marginTop="@dimen/menu_height"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/readingBackgroundDark">
@@ -35,16 +29,24 @@
                 android:text="@string/alert_loading"
                 android:layout_centerInParent="true"
                 android:textColor="@color/colorPrimaryLight"/>
-
         </RelativeLayout>
 
         <android.support.v4.view.ViewPager
             android:id="@+id/main_pager"
-            android:layout_below="@+id/header"
+            android:layout_marginTop="@dimen/menu_height"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
+            android:layout_height="match_parent"
+            android:clipChildren="false">
         </android.support.v4.view.ViewPager>
+
+
+        <include
+            android:id="@+id/header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:clipChildren="false"
+            layout="@layout/glow_menu"/>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/share_dynamic_button"

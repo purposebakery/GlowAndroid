@@ -1,19 +1,19 @@
 package com.techlung.android.glow.ui;
 
-import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -22,18 +22,15 @@ import com.techlung.android.glow.R;
 import com.techlung.android.glow.model.GlowData;
 import com.techlung.android.glow.model.Tract;
 import com.techlung.android.glow.settings.Common;
-import com.techlung.android.glow.settings.Preferences;
 import com.techlung.android.glow.settings.Settings;
 import com.techlung.android.glow.utils.ContactUtil;
 import com.techlung.android.glow.utils.ToolBox;
-
-import java.io.InputStream;
 
 public class TractViewController {
 
     public static final String TAG = TractViewController.class.getName();
 
-    private static final int MENU_FADE_DISTANCE_DP = 150;
+    private static final int MENU_FADE_DISTANCE_DP = 130;
 
     Tract tract;
     Settings s;
@@ -41,18 +38,34 @@ public class TractViewController {
     TextView contentView;
     TextView additionalView;
 
-    ImageView image;
-    TextView title;
+    //ImageView image;
+    //TextView title;
 
     ScrollView scrollView;
 
-    Activity activity;
+    GlowActivity activity;
 
     View view;
 
-    ImageView menuTractCover;
+    View menuTractHeaderBox;
+    View menuBar;
+
+    ImageView menuTractImage;
     TextView menuTractTitle;
-    View menuTractContainer;
+
+    // menu transaction
+    int menuTractImageTopDistance;
+    int menuTractImageRightDistance;
+    float menuTractImageScaleDistance;
+
+    int menuTractTitleTopDistance;
+    int menuTractTitleRightDistance;
+
+    int tractHeaderBoxMarginDistance;
+    float menuElevation;
+    float tractHeaderBoxDefaultElevation;
+    //float dp4inPx;
+
     View menuLogo;
 
     Typeface blairFont;
@@ -66,15 +79,31 @@ public class TractViewController {
 
         blairFont = Typeface.createFromAsset(GlowActivity.getInstance().getAssets(), "fonts/Blair.otf");
 
-        menuTractCover = (ImageView) header.findViewById(R.id.menu_tract_cover);
-        menuTractTitle = (TextView) header.findViewById(R.id.menu_tract_title);
+        menuTractHeaderBox = activity.getMenuTractHeaderBox();
+        menuTractImage = activity.getMenuTractImage();
+        menuTractTitle = activity.getMenuTractTitle();
         menuTractTitle.setTypeface(blairFont);
-        menuTractContainer = header.findViewById(R.id.menu_tract_container);
         menuLogo = header.findViewById(R.id.header_logo);
+
 
         view = createView(LayoutInflater.from(activity), container);
 
         menuFadeDistancePx = ToolBox.convertDpToPixel(MENU_FADE_DISTANCE_DP, activity);
+        menuTractImageTopDistance = ToolBox.convertDpToPixel(105, activity);
+        menuTractImageRightDistance = ToolBox.convertDpToPixel(41, activity);
+        menuTractImageScaleDistance = 1.0f - (44.0f / 90.0f);
+
+        menuTractTitleRightDistance = ToolBox.convertDpToPixel(24, activity);
+        menuTractTitleTopDistance = ToolBox.convertDpToPixel(105, activity);
+
+        tractHeaderBoxMarginDistance = ToolBox.convertDpToPixel(16, activity);
+        menuBar = header.findViewById(R.id.menu_main_bar);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            menuElevation = menuBar.getElevation();
+            tractHeaderBoxDefaultElevation = menuTractHeaderBox.getElevation();
+        }
+        //dp4inPx = (float) ToolBox.convertDpToPixel(4, activity);
 
         setTract(GlowData.getInstance().getPamphlets().get(0));
     }
@@ -86,6 +115,7 @@ public class TractViewController {
     private View createView(LayoutInflater inflater, final ViewGroup container) {
 
         view = inflater.inflate(R.layout.tract_fragment, container, false);
+
 
         scrollView = (ScrollView) view.findViewById(R.id.activity_glow_pamphlet_table);
         scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
@@ -123,76 +153,96 @@ public class TractViewController {
             }
         });
 
-        image = (ImageView) view.findViewById(R.id.activity_glow_pamphlet_list_image);
-        title = (TextView) view.findViewById(R.id.activity_glow_pamphlet_list_title);
+        //image = (ImageView) view.findViewById(R.id.activity_glow_pamphlet_list_image);
+        //title = (TextView) view.findViewById(R.id.activity_glow_pamphlet_list_title);
 
-        title.setTypeface(blairFont);
+        //title.setTypeface(blairFont);
 
         return view;
     }
 
+    public float getMenuTractImageTranslationX() {
+        if (currentScrollY > menuFadeDistancePx) {
+            return menuTractImageRightDistance;
+        } else {
+            float progress = (currentScrollY / (float)menuFadeDistancePx);
+            return menuTractImageRightDistance * progress;
+        }
+    }
+
+    public float getMenuTractTitleTranslationX() {
+        if (currentScrollY > menuFadeDistancePx) {
+            return menuTractTitleRightDistance;
+        } else {
+            float progress = (currentScrollY / (float)menuFadeDistancePx);
+            return menuTractTitleRightDistance * progress;
+        }
+    }
+
+    public void scrollToTop() {
+        tract.setScrollPosition(currentScrollY);
+        scrollView.smoothScrollTo(0,0);
+    }
+
     public void updateMenuFade() {
+        menuTractTitle.setTranslationX(getMenuTractTitleTranslationX());
+        menuTractImage.setTranslationX(getMenuTractImageTranslationX());
+
+        menuTractHeaderBox.setTranslationY(-1 * currentScrollY);
+
         if (currentScrollY > menuFadeDistancePx) {
-            menuTractContainer.setAlpha(1);
             menuLogo.setAlpha(0);
+
+            menuTractHeaderBox.setAlpha(1);
+            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) menuTractHeaderBox.getLayoutParams();
+            params.setMargins(0, params.topMargin, 0, params.bottomMargin);
+            menuTractHeaderBox.setLayoutParams(params);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                menuTractHeaderBox.setElevation(menuElevation);
+            }
+
+            menuTractImage.setTranslationY(-1 * menuTractImageTopDistance);
+            menuTractImage.setScaleX(1 - menuTractImageScaleDistance);
+            menuTractImage.setScaleY(1 - menuTractImageScaleDistance);
+
+            menuTractTitle.setTranslationY(-1 * menuTractTitleTopDistance);
+
+            menuTractTitle.setTextColor(0xff000000);
         } else {
-            float alpha = (currentScrollY / (float)menuFadeDistancePx);
-            menuTractContainer.setAlpha(alpha);
-            menuLogo.setAlpha(1.0f - alpha);
+            float progress = (currentScrollY / (float)menuFadeDistancePx);
+            menuLogo.setAlpha(1.0f - progress);
+
+            menuTractHeaderBox.setAlpha(0.25f + (0.75f * progress));
+            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) menuTractHeaderBox.getLayoutParams();
+            int margin = (int)(tractHeaderBoxMarginDistance - tractHeaderBoxMarginDistance * progress);
+            params.setMargins(margin, params.topMargin, margin, params.bottomMargin);
+            menuTractHeaderBox.setLayoutParams(params);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                float elevationProgress = progress * 5;
+                if (elevationProgress > 1) {
+                    elevationProgress = 1;
+                }
+                menuTractHeaderBox.setElevation(tractHeaderBoxDefaultElevation + (menuElevation - tractHeaderBoxDefaultElevation) * elevationProgress);
+                //Log.d("TAG Elevation box", "" + (tractHeaderBoxDefaultElevation + (menuElevation - tractHeaderBoxDefaultElevation) * elevationProgress));
+                //Log.d("TAb Elevation menu", "" + menuBar.getElevation());
+            }
+
+            menuTractImage.setTranslationY(-1 * menuTractImageTopDistance * progress);
+            menuTractImage.setScaleX(1 - menuTractImageScaleDistance * progress);
+            menuTractImage.setScaleY(1 - menuTractImageScaleDistance * progress);
+
+            menuTractTitle.setTranslationY(-1 * menuTractTitleTopDistance * progress);
+            int grey = (int) (255 - 255 * progress);
+            if (grey > 255) {
+                grey = 255;
+            } else if (grey < 0) {
+                grey = 0;
+            }
+
+            //Log.d("TAG", "" + grey);
+            menuTractTitle.setTextColor(Color.argb(255, grey, grey, grey));
         }
     }
-
-    public void updateMenuFadeContinuousTract() {
-        float targetTractAlpha;
-        float targetLogoAlpha;
-        if (currentScrollY > menuFadeDistancePx) {
-            targetTractAlpha = 1;
-            targetLogoAlpha = 0;
-        } else {
-            float alpha = (currentScrollY / (float)menuFadeDistancePx);
-            targetTractAlpha = alpha;
-            targetLogoAlpha = 1.0f - alpha;
-        }
-
-        menuTractContainer.animate().alpha(targetTractAlpha).setDuration(GlowActivity.TRANSITION_SPEED);
-        menuLogo.animate().alpha(targetLogoAlpha).setDuration(GlowActivity.TRANSITION_SPEED);
-
-        /*
-        AlphaAnimation tractAnimation = new AlphaAnimation(menuTractContainer.getAlpha(), targetTractAlpha);
-        tractAnimation.setDuration(GlowActivity.TRANSITION_SPEED);
-        tractAnimation.setFillAfter(true);
-        tractAnimation.setFillEnabled(true);
-        menuTractContainer.startAnimation(tractAnimation);
-
-        AlphaAnimation logoAnimation = new AlphaAnimation(menuLogo.getAlpha(), targetLogoAloha);
-        logoAnimation.setDuration(GlowActivity.TRANSITION_SPEED);
-        logoAnimation.setFillAfter(true);
-        logoAnimation.setFillEnabled(true);
-        menuLogo.startAnimation(logoAnimation);*/
-    }
-
-    public void updateMenuFadeContinuousSelection() {
-/*        Log.d(TAG, "Update Menu updateMenuFadeContinuousSelection");
-        menuTractContainer.setVisibility(View.VISIBLE);
-        AlphaAnimation tractAnimation = new AlphaAnimation(menuTractContainer.getAlpha(), 0.0f);
-        tractAnimation.setDuration(GlowActivity.TRANSITION_SPEED);
-        tractAnimation.setFillAfter(true);
-        tractAnimation.setFillEnabled(true);
-        menuTractContainer.startAnimation(tractAnimation);
-*/
-        menuTractContainer.animate().alpha(0.0f).setDuration(GlowActivity.TRANSITION_SPEED);
-
-        menuLogo.animate().alpha(1.0f).setDuration(GlowActivity.TRANSITION_SPEED);
-        /*
-        menuLogo.setVisibility(View.VISIBLE);
-        AlphaAnimation logoAnimation = new AlphaAnimation(menuLogo.getAlpha() + 0.01f, 1.0f);
-        logoAnimation.setDuration(GlowActivity.TRANSITION_SPEED);
-        logoAnimation.setFillAfter(true);
-        logoAnimation.setFillEnabled(true);
-        menuLogo.startAnimation(logoAnimation);*/
-    }
-
-
     public void setTract(Tract p) {
         this.tract = p;
         dataToUi();
@@ -212,10 +262,10 @@ public class TractViewController {
         //additionalView.setText("");
         System.gc();
 
-        image.setImageDrawable(tract.getCoverDrawable(activity));
-        title.setText(Html.fromHtml(tract.getHtmlTitle()));
+        //image.setImageDrawable(tract.getCoverDrawable(activity));
+        //title.setText(Html.fromHtml(tract.getHtmlTitle()));
 
-        menuTractCover.setImageDrawable(tract.getCoverDrawable(activity));
+        menuTractImage.setImageDrawable(tract.getCoverDrawable(activity));
         menuTractTitle.setText(Html.fromHtml(tract.getHtmlTitle()));
 
         contentView.setText(Html.fromHtml(tract.getHtmlContent(), new ImageGetter(), null));
@@ -224,8 +274,18 @@ public class TractViewController {
         additionalView.setText(Html.fromHtml(tract.getHtmlAdditional(), new ImageGetter(), null));
         additionalView.setMovementMethod(LinkMovementMethod.getInstance());
 
-        scrollView.scrollTo(0, 0);
-        currentScrollY = 0;
+        //scrollView.scrollTo((int)currentScrollY, 0);
+        scrollToLastPosition();
+
+        updateMenuFade();
+    }
+
+    public void scrollToLastPosition() {
+        currentScrollY = tract.getScrollPosition();
+
+        scrollView.smoothScrollTo(0,(int)currentScrollY);
+
+        updateMenuFade();
     }
 
     public class ImageGetter implements Html.ImageGetter {

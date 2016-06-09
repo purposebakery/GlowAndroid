@@ -11,6 +11,7 @@ import com.techlung.android.glow.settings.Common;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.text.Spanned;
+import android.util.Log;
 
 public class Tract {
 	private String id;
@@ -21,9 +22,9 @@ public class Tract {
 	//private Drawable cover;
 	private String coverPath;
 	private String htmlContent;
-	private Spanned htmlContentSpanned;
 	private String htmlAdditional;
-	private Spanned htmlAdditionalSpanned;
+
+	private float scrollPosition = 0;
 	
 	private HashMap<String, String> imagePaths = new HashMap<String, String>();
 
@@ -237,4 +238,13 @@ public class Tract {
 
 		}
 	}*/
+
+	public float getScrollPosition() {
+		return scrollPosition;
+	}
+
+	public void setScrollPosition(float scrollPosition) {
+		Log.d("TAG", "Save scrol at" + scrollPosition);
+		this.scrollPosition = scrollPosition;
+	}
 }

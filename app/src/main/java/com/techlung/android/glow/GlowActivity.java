@@ -1,34 +1,28 @@
 package com.techlung.android.glow;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.bowyer.app.fabtransitionlayout.BottomSheetLayout;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
-import com.nineoldandroids.animation.Animator;
 import com.techlung.android.glow.io.ContentStorageLoader;
-import com.techlung.android.glow.model.Contact;
 import com.techlung.android.glow.model.GlowData;
 import com.techlung.android.glow.model.Tract;
-import com.techlung.android.glow.settings.Preferences;
 import com.techlung.android.glow.settings.Settings;
 import com.techlung.android.glow.settings.SettingsActivity;
 import com.techlung.android.glow.ui.SelectionViewController;
@@ -53,12 +47,13 @@ public class GlowActivity extends BaseActivity {
     private TractViewController tractFragment;
 
     private ViewPager pager;
-    private View pagerSelectorSelect;
-    private View pagerSelectorTract;
-    private View pagerSelectorBar;
+    //private View pagerSelectorSelect;
+    //private View pagerSelectorTract;
+    //private View pagerSelectorBar;
 
-    private View menuTractContainer;
-    private View menuLogo;
+    private TextView menuTractTitle;
+    private ImageView menuTractImage;
+    private View menuTractHeaderBox;
 
     public enum State {
         SELECTION, TRACT
@@ -69,7 +64,6 @@ public class GlowActivity extends BaseActivity {
     private boolean isRunning;
 
     private FloatingActionButton shareButton;
-    private BottomSheetLayout shareBottomSheet;
     private ListView shareBottomList;
 
     private static GlowActivity instance;
@@ -90,6 +84,9 @@ public class GlowActivity extends BaseActivity {
         setContentView(R.layout.glow_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Log.d("TAG!!!", "" + findViewById(R.id.menu_main_bar).getElevation());
+        }
         //setReadingBackgroundColor();
         //changeState(State.SELECTION);
 
@@ -240,17 +237,22 @@ public class GlowActivity extends BaseActivity {
         pager = (ViewPager) findViewById(R.id.main_pager);
         pager.setAdapter(new MyAdapter());
 
-        pagerSelectorBar = findViewById(R.id.menu_pager_bar);
+        //pagerSelectorBar = findViewById(R.id.menu_pager_bar);
 
         pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             float screenWidthPx = ToolBox.getScreenWidthPx(GlowActivity.this);
 
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
                 if (position == 0) {
-                    pagerSelectorBar.setTranslationX(positionOffset * (screenWidthPx / 2));
+                    menuTractImage.setTranslationX(tractFragment.getMenuTractImageTranslationX() + screenWidthPx - (positionOffset * screenWidthPx));
+                    menuTractTitle.setTranslationX(tractFragment.getMenuTractTitleTranslationX() + screenWidthPx - (positionOffset * screenWidthPx));
+                    menuTractHeaderBox.setTranslationX(screenWidthPx - (positionOffset * screenWidthPx));
                 } else if (position == 1) {
-                    pagerSelectorBar.setTranslationX(screenWidthPx / 2);
+                    menuTractImage.setTranslationX(tractFragment.getMenuTractImageTranslationX());
+                    menuTractTitle.setTranslationX(tractFragment.getMenuTractTitleTranslationX());
+                    menuTractHeaderBox.setTranslationX(0);
                 }
 
                 //Log.d("TAG", position  + " " + positionOffset);
@@ -260,10 +262,10 @@ public class GlowActivity extends BaseActivity {
             public void onPageSelected(int position) {
                 if (position == 0) {
                     changeState(State.SELECTION);
-                    pagerSelectorBar.setTranslationX(0);
+                    //pagerSelectorBar.setTranslationX(0);
                 } else {
                     changeState(State.TRACT);
-                    pagerSelectorBar.setTranslationX(screenWidthPx / 2);
+                    //pagerSelectorBar.setTranslationX(screenWidthPx / 2);
                 }
             }
 
@@ -272,6 +274,12 @@ public class GlowActivity extends BaseActivity {
                 selectionFlowFragment.hideTouchOverlays();
 
                 int scrollPosition = Math.round(selectionFlowFragment.getScrollPosition());
+                if (scrollPosition < 0) {
+                    scrollPosition = 0;
+                } else if (scrollPosition > GlowData.getInstance().getPamphlets().size() - 1) {
+                    scrollPosition = GlowData.getInstance().getPamphlets().size() - 1;
+                }
+
                 if (scrollPosition != currentScrollPosition) {
                     currentScrollPosition = scrollPosition;
                     tractFragment.setTract(GlowData.getInstance().getPamphlets().get(scrollPosition));
@@ -279,6 +287,7 @@ public class GlowActivity extends BaseActivity {
             }
         });
 
+        /*
         pagerSelectorSelect = findViewById(R.id.menu_pager_select);
         pagerSelectorSelect.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -297,7 +306,7 @@ public class GlowActivity extends BaseActivity {
                     pagerToTract();
                 }
             }
-        });
+        });*/
 
     }
 
@@ -335,8 +344,15 @@ public class GlowActivity extends BaseActivity {
     }
 
     private void initMenu() {
-        menuLogo = findViewById(R.id.header_logo);
-        menuTractContainer = findViewById(R.id.menu_tract_container);
+        menuTractImage = (ImageView) findViewById(R.id.activity_glow_pamphlet_list_image);
+        menuTractTitle = (TextView) findViewById(R.id.activity_glow_pamphlet_list_title);
+        menuTractHeaderBox = findViewById(R.id.tract_header_box);
+
+        float screenWidthPx = ToolBox.getScreenWidthPx(GlowActivity.this);
+        menuTractImage.setTranslationX(screenWidthPx);
+        menuTractTitle.setTranslationX(screenWidthPx);
+        menuTractHeaderBox.setTranslationX(screenWidthPx);
+        menuTractHeaderBox.setVisibility(View.VISIBLE);
     }
 
     private void initShareButton() {
@@ -350,7 +366,7 @@ public class GlowActivity extends BaseActivity {
                         //YoYo.with(Techniques.Pulse).duration(TRANSITION_SPEED).playOn(shareButton);
 
                         //DialogHelper.showShareTractAlert(GlowActivity.this, tractFragment.getTract());
-                        shareBottomSheet.expandFab();
+                        //shareBottomSheet.expandFab();
                     }
                 });
 
@@ -417,13 +433,15 @@ public class GlowActivity extends BaseActivity {
     }
 
     private void pagerToSelection() {
-        pager.setCurrentItem(0);
-        //changeState(State.SELECTION);
+        pager.setCurrentItem(0, true);
+        //pager.scrollTo(0, 0);
+        changeState(State.SELECTION);
     }
 
     private void pagerToTract() {
-        pager.setCurrentItem(1);
-        //changeState(State.TRACT);
+        //pager.scrollTo(1,0);
+        pager.setCurrentItem(1, true);
+        changeState(State.TRACT);
     }
 
     private void changeState(State state) {
@@ -435,15 +453,27 @@ public class GlowActivity extends BaseActivity {
             YoYo.with(Techniques.BounceInRight).duration(TRANSITION_SPEED).playOn(shareButton);
             shareButton.setVisibility(View.VISIBLE);
 
-            tractFragment.updateMenuFadeContinuousTract();
+            tractFragment.scrollToLastPosition();
         } else {
 
             shareButton.setScaleX(1);
             shareButton.setScaleY(1);
             YoYo.with(Techniques.SlideOutRight).duration(TRANSITION_SPEED).playOn(shareButton);
 
-            tractFragment.updateMenuFadeContinuousSelection();
+            tractFragment.scrollToTop();
         }
+    }
+
+    public ImageView getMenuTractImage() {
+        return menuTractImage;
+    }
+
+    public TextView getMenuTractTitle() {
+        return menuTractTitle;
+    }
+
+    public View getMenuTractHeaderBox() {
+        return menuTractHeaderBox;
     }
 
     public boolean isRunning() {
