@@ -121,6 +121,6 @@
 
     <string name="pref_title_vibrate">Vibrate</string>
 
-    <string name="notification_title">GLOW heute</string>
-    <string name="notification_message">Vergiss mich nicht ;)</string>
+    <string name="notification_title">GLOW - leuchte heute</string>
+    <string name="notification_message">... und gibt anderen davon ab!</string>
 </resources>

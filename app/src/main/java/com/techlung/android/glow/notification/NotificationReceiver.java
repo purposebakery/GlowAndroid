@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.techlung.android.glow.GlowActivity;
 import com.techlung.android.glow.R;
@@ -31,11 +33,9 @@ public class NotificationReceiver extends BroadcastReceiver {
 
     private void showNotification(Context context) {
 
-        //NotificationUtil.MortalityDayQuote quote = NotificationUtil.getQuote(context);
-
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(context)
-                        .setSmallIcon(R.drawable.ic_launcher)
+                        .setSmallIcon(R.drawable.ic_logo_notification)
                         .setContentTitle(context.getString(R.string.notification_title))
                         .setContentText(context.getString(R.string.notification_message));
 // Creates an explicit intent for an Activity in your app

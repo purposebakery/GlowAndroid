@@ -37,11 +37,11 @@ public class NotificationManager {
     }
 
     private static void toastNextNotificationTime(long time, Context context) {
-        DateFormat format = new SimpleDateFormat("EEEE dd.MM.yyyy", Locale.ENGLISH);
+        DateFormat format = new SimpleDateFormat("EEEE dd.MM.yyyy HH:mm", Locale.GERMAN);
         Date date = new Date();
         date.setTime(time);
 
-        Toast.makeText(context, context.getString(R.string.pref_notification_toast) + "\n" + format.format(date), Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, context.getString(R.string.pref_notification_toast) + "\n" + format.format(date), Toast.LENGTH_LONG).show();
     }
 
     private static long getNextNotificationTime() {
@@ -54,9 +54,7 @@ public class NotificationManager {
         NotificationWeekday weekday = Preferences.getNotificationWeekday();
 
         // set day
-        if (frequency == NotificationFrequency.DAILY) {
-            day.add(Calendar.HOUR, 24);
-        } else if (frequency == NotificationFrequency.WEEKLY) {
+        if (frequency == NotificationFrequency.WEEKLY) {
             int weekdayGregorianCalendar = Calendar.SUNDAY;
             switch (weekday) {
                 case SUNDAY:
@@ -82,18 +80,22 @@ public class NotificationManager {
                     break;
             }
             day.set(Calendar.DAY_OF_WEEK, weekdayGregorianCalendar);
-
-            Date dayNowTemp = new Date();
-            if (dayNowTemp.after(day.getTime())) {
-                day.add(Calendar.HOUR, 168); // one week in hours
-            }
         }
 
         // Set time of day
-        day.set(Calendar.HOUR, hour);
+        day.set(Calendar.HOUR_OF_DAY, hour);
         day.set(Calendar.MINUTE, minute);
         day.set(Calendar.SECOND, 0);
         day.set(Calendar.MILLISECOND, 0);
+
+        Date dayNowTemp = new Date();
+        if (dayNowTemp.after(day.getTime())) {
+            if (frequency == NotificationFrequency.WEEKLY) {
+                day.add(Calendar.HOUR, 168); // one week in hours
+            } else if (frequency == NotificationFrequency.DAILY) {
+                day.add(Calendar.HOUR, 24); // one day in hours
+            }
+        }
 
         return day.getTimeInMillis();
     }}

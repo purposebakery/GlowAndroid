@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.techlung.android.glow">
 
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
@@ -36,18 +37,21 @@
             android:label="@string/drawer_settings"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"/>
+
+
+        <receiver
+            android:name=".notification.NotificationReceiver"
+            android:enabled="true"/>
+        <receiver
+            android:name=".notification.RebootReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
     </application>
 
 
-    <receiver
-        android:name=".notification.NotificationReceiver"
-        android:enabled="true"></receiver>
-    <receiver
-        android:name=".notification.RebootReceiver"
-        android:enabled="true">
-        <intent-filter>
-            <action android:name="android.intent.action.BOOT_COMPLETED" />
-        </intent-filter>
-    </receiver>
 
 </manifest>

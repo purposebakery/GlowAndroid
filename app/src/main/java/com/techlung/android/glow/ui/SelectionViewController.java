@@ -115,7 +115,7 @@ public class SelectionViewController {
         tractCount = GlowData.getInstance().getPamphlets().size();
 
         screenWidthPx = ToolBox.getScreenWidthPx(activity);
-        screenHeightPx = ToolBox.getScreenHeightPx(activity) - ToolBox.convertDpToPixel(MENU_HEIGHT_DP, activity) - ToolBox.convertDpToPixel(STATUS_BAR_HEIGHT_DP, activity); // minus menu height
+        screenHeightPx = ToolBox.getScreenHeightPx(activity) - ToolBox.convertDpToPixel(MENU_HEIGHT_DP, activity) - getStatusBarHeight(); // minus menu height
 
         tractWidthPx = (int) (screenWidthPx * 0.5f);
         tractHeightPx = (int) (tractWidthPx * 1.5f);
@@ -124,6 +124,15 @@ public class SelectionViewController {
         scrollTractHeightPx = (int) (scrollTractWidthPx * 1.5f);
 
         tractStartingPoint = screenHeightPx / 2 - tractHeightPx / 2 - ToolBox.convertDpToPixel(START_POINT_Y_CHANGE, activity);;
+    }
+
+    public int getStatusBarHeight() {
+        int result = 0;
+        int resourceId = activity.getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = activity.getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
     }
 
     private View createView(LayoutInflater inflater, ViewGroup container) {

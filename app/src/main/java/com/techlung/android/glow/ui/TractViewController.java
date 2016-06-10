@@ -72,6 +72,7 @@ public class TractViewController {
 
     private int menuFadeDistancePx;
     private float currentScrollY;
+    private int screenWidthPx;
 
     public TractViewController(ViewGroup container, View header) {
         activity = GlowActivity.getInstance();
@@ -89,6 +90,8 @@ public class TractViewController {
         view = createView(LayoutInflater.from(activity), container);
 
         menuFadeDistancePx = ToolBox.convertDpToPixel(MENU_FADE_DISTANCE_DP, activity);
+        screenWidthPx = ToolBox.getScreenWidthPx(activity);
+
         menuTractImageTopDistance = ToolBox.convertDpToPixel(105, activity);
         menuTractImageRightDistance = ToolBox.convertDpToPixel(41, activity);
         menuTractImageScaleDistance = 1.0f - (44.0f / 90.0f);
@@ -115,7 +118,6 @@ public class TractViewController {
     private View createView(LayoutInflater inflater, final ViewGroup container) {
 
         view = inflater.inflate(R.layout.tract_fragment, container, false);
-
 
         scrollView = (ScrollView) view.findViewById(R.id.activity_glow_pamphlet_table);
         scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
@@ -193,8 +195,7 @@ public class TractViewController {
     }
 
     public void updateMenuFade() {
-        menuTractTitle.setTranslationX(getMenuTractTitleTranslationX());
-        menuTractImage.setTranslationX(getMenuTractImageTranslationX());
+        activity.updateMenuElementPositions();
 
         menuTractHeaderBox.setTranslationY(-1 * currentScrollY);
 
@@ -220,7 +221,13 @@ public class TractViewController {
             float progress = (currentScrollY / (float)menuFadeDistancePx);
             menuLogo.setAlpha(1.0f - progress);
 
-            menuTractHeaderBox.setAlpha(0.25f + (0.75f * progress));
+            float alpha = 0.25f + (0.75f * progress * 1.5f);
+            if (alpha > 1) {
+                alpha = 1;
+            } else if (alpha < 0) {
+                alpha = 0;
+            }
+            menuTractHeaderBox.setAlpha(alpha);
             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) menuTractHeaderBox.getLayoutParams();
             int margin = (int)(tractHeaderBoxMarginDistance - tractHeaderBoxMarginDistance * progress);
             params.setMargins(margin, params.topMargin, margin, params.bottomMargin);
@@ -231,8 +238,6 @@ public class TractViewController {
                     elevationProgress = 1;
                 }
                 menuTractHeaderBox.setElevation(tractHeaderBoxDefaultElevation + (menuElevation - tractHeaderBoxDefaultElevation) * elevationProgress);
-                //Log.d("TAG Elevation box", "" + (tractHeaderBoxDefaultElevation + (menuElevation - tractHeaderBoxDefaultElevation) * elevationProgress));
-                //Log.d("TAb Elevation menu", "" + menuBar.getElevation());
             }
 
             menuTractImage.setTranslationY(-1 * menuTractImageTopDistance * progress);
@@ -247,7 +252,6 @@ public class TractViewController {
                 grey = 0;
             }
 
-            //Log.d("TAG", "" + grey);
             menuTractTitle.setTextColor(Color.argb(255, grey, grey, grey));
         }
     }

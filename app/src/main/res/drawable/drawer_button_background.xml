@@ -6,6 +6,6 @@
         android:drawable="@android:color/transparent" />
 
     <item android:state_pressed="true"
-        android:drawable="@color/colorPrimary" />
+        android:drawable="@color/colorPrimaryLightPressed"/>
 
 </selector>

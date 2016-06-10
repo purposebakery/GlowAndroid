@@ -2,6 +2,7 @@
 <resources>
 
     <color name="colorPrimaryLight">#f2f2f2</color>
+    <color name="colorPrimaryLightPressed">#CCCCCC</color>
     <color name="colorPrimary">#999999</color>
     <color name="colorPrimaryDark">#777777</color>
     <color name="colorAccent">#ff9800</color>

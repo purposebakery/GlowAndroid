@@ -1,6 +1,5 @@
 package com.techlung.android.glow;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
@@ -22,7 +21,6 @@ import android.widget.TextView;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
-import com.pixplicity.easyprefs.library.Prefs;
 import com.techlung.android.glow.io.ContentStorageLoader;
 import com.techlung.android.glow.model.GlowData;
 import com.techlung.android.glow.model.Tract;
@@ -50,9 +48,6 @@ public class GlowActivity extends BaseActivity {
     private TractViewController tractFragment;
 
     private ViewPager pager;
-    //private View pagerSelectorSelect;
-    //private View pagerSelectorTract;
-    //private View pagerSelectorBar;
 
     private TextView menuTractTitle;
     private ImageView menuTractImage;
@@ -64,8 +59,9 @@ public class GlowActivity extends BaseActivity {
 
     public State currentState = State.SELECTION;
     public int currentScrollPosition = 0;
+    public float currentPagerScrollPosition = 0;
     private boolean isRunning;
-
+    float screenWidthPx = 0;
     private FloatingActionButton shareButton;
     private ListView shareBottomList;
 
@@ -83,22 +79,15 @@ public class GlowActivity extends BaseActivity {
 
         // Init Settings
         settings = Settings.getInstance(this);
+        screenWidthPx = ToolBox.getScreenWidthPx(GlowActivity.this);
 
         setContentView(R.layout.glow_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Log.d("TAG!!!", "" + findViewById(R.id.menu_main_bar).getElevation());
-        }
-        //setReadingBackgroundColor();
-        //changeState(State.SELECTION);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
-                //float drawerWidth = getResources().getDimension(R.dimen.drawer_width);
-                //float scale = (drawerWidth - slideOffset) / drawerWidth;
                 drawerToggle.setScaleX(1 - slideOffset);
                 drawerToggle.setScaleY(1 - slideOffset);
                 drawerToggle.setRotation(slideOffset * 180);
@@ -107,12 +96,12 @@ public class GlowActivity extends BaseActivity {
 
             @Override
             public void onDrawerOpened(View drawerView) {
-                //YoYo.with(Techniques.TakingOff).duration(TRANSITION_SPEED).playOn(drawerToggle);
+
             }
 
             @Override
             public void onDrawerClosed(View drawerView) {
-                //YoYo.with(Techniques.Landing).duration(TRANSITION_SPEED).playOn(drawerToggle);
+
             }
 
             @Override
@@ -134,21 +123,6 @@ public class GlowActivity extends BaseActivity {
         loadContent();
 
     }
-
-    /*
-    private void setReadingBackgroundColor() {
-        View mainHideMask = findViewById(R.id.main_hide_mask);
-        TextView mainHideMaskText = (TextView) findViewById(R.id.main_hide_mask_text);
-
-        if (Preferences.isGeneralBrightBackground()) {
-            mainHideMask.setBackgroundResource(R.color.readingBackgroundBright);
-            mainHideMaskText.setTextColor(getResources().getColor(R.color.text_inverted));
-
-        } else {
-            mainHideMask.setBackgroundResource(R.color.readingBackgroundDark);
-            mainHideMaskText.setTextColor(getResources().getColor(R.color.text));
-        }
-    }*/
 
     private void initViews() {
         initMenu();
@@ -236,40 +210,51 @@ public class GlowActivity extends BaseActivity {
 
     }
 
+    public int getMenuElementsTranslationX() {
+        return (int)(screenWidthPx - (currentPagerScrollPosition * screenWidthPx));
+    }
+
+    public void updateMenuElementPositions() {
+        if (tractFragment != null) {
+            menuTractImage.setTranslationX(tractFragment.getMenuTractImageTranslationX() + getMenuElementsTranslationX());
+            menuTractTitle.setTranslationX(tractFragment.getMenuTractTitleTranslationX() + getMenuElementsTranslationX());
+        }
+    }
+
     private void initViewPager() {
         pager = (ViewPager) findViewById(R.id.main_pager);
         pager.setAdapter(new MyAdapter());
 
-        //pagerSelectorBar = findViewById(R.id.menu_pager_bar);
-
         pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            float screenWidthPx = ToolBox.getScreenWidthPx(GlowActivity.this);
 
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
                 if (position == 0) {
-                    menuTractImage.setTranslationX(tractFragment.getMenuTractImageTranslationX() + screenWidthPx - (positionOffset * screenWidthPx));
-                    menuTractTitle.setTranslationX(tractFragment.getMenuTractTitleTranslationX() + screenWidthPx - (positionOffset * screenWidthPx));
-                    menuTractHeaderBox.setTranslationX(screenWidthPx - (positionOffset * screenWidthPx));
+                    currentPagerScrollPosition = positionOffset;
+
+                    menuTractHeaderBox.setTranslationX(getMenuElementsTranslationX());
+                    updateMenuElementPositions();
+
                 } else if (position == 1) {
+                    currentPagerScrollPosition = 1;
+
                     menuTractImage.setTranslationX(tractFragment.getMenuTractImageTranslationX());
                     menuTractTitle.setTranslationX(tractFragment.getMenuTractTitleTranslationX());
                     menuTractHeaderBox.setTranslationX(0);
-                }
 
-                //Log.d("TAG", position  + " " + positionOffset);
+                }
             }
 
             @Override
             public void onPageSelected(int position) {
 
                 if (position == 0) {
+                    currentPagerScrollPosition = 0;
                     changeState(State.SELECTION);
-                    //pagerSelectorBar.setTranslationX(0);
                 } else {
+                    currentPagerScrollPosition = 1;
                     changeState(State.TRACT);
-                    //pagerSelectorBar.setTranslationX(screenWidthPx / 2);
                 }
             }
 
@@ -290,28 +275,6 @@ public class GlowActivity extends BaseActivity {
                 }
             }
         });
-
-        /*
-        pagerSelectorSelect = findViewById(R.id.menu_pager_select);
-        pagerSelectorSelect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (currentState != State.SELECTION) {
-                    pagerToSelection();
-                }
-            }
-        });
-
-        pagerSelectorTract = findViewById(R.id.menu_pager_tract);
-        pagerSelectorTract.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (currentState != State.TRACT) {
-                    pagerToTract();
-                }
-            }
-        });*/
-
     }
 
     private class MyAdapter extends PagerAdapter {
@@ -388,13 +351,8 @@ public class GlowActivity extends BaseActivity {
     private void loadContent() {
         AsyncTask<Void, Void, Void> loadTask = new AsyncTask<Void, Void, Void>() {
 
-            //ProgressDialog progressDialog;
             @Override
             protected void onPreExecute() {
-                //progressDialog = new ProgressDialog(GlowActivity.this);
-                //progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                //progressDialog.show();
-
                 super.onPreExecute();
             }
 
@@ -409,9 +367,7 @@ public class GlowActivity extends BaseActivity {
             protected void onPostExecute(Void aVoid) {
                 super.onPostExecute(aVoid);
                 initViews();
-                //if (progressDialog != null) {
-                //    progressDialog.dismiss();
-                //}
+
                 YoYo.with(Techniques.FadeIn).duration(TRANSITION_SPEED).playOn(pager);
             }
         };
@@ -446,19 +402,24 @@ public class GlowActivity extends BaseActivity {
 
     public void showTract(Tract tract) {
         tractFragment.setTract(tract);
+
+        DialogHelper.showScrollDialog(this);
+
         pagerToTract();
     }
 
     private void pagerToSelection() {
-        pager.setCurrentItem(0, true);
-        //pager.scrollTo(0, 0);
         changeState(State.SELECTION);
+
+        pager.setCurrentItem(0, true);
+        pager.scrollTo(0, 0);
     }
 
     private void pagerToTract() {
-        //pager.scrollTo(1,0);
-        pager.setCurrentItem(1, true);
         changeState(State.TRACT);
+
+        pager.scrollTo(1,0);
+        pager.setCurrentItem(1, true);
     }
 
     private void changeState(State state) {
@@ -475,8 +436,6 @@ public class GlowActivity extends BaseActivity {
             shareButton.setVisibility(View.VISIBLE);
 
             tractFragment.scrollToLastPosition();
-
-            DialogHelper.showScrollDialog(this);
 
         } else {
 
