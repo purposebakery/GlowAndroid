@@ -263,14 +263,14 @@ public class GlowActivity extends BaseActivity {
 
             @Override
             public void onPageSelected(int position) {
-                /*
+
                 if (position == 0) {
                     changeState(State.SELECTION);
                     //pagerSelectorBar.setTranslationX(0);
                 } else {
                     changeState(State.TRACT);
                     //pagerSelectorBar.setTranslationX(screenWidthPx / 2);
-                }*/
+                }
             }
 
             @Override
@@ -462,6 +462,10 @@ public class GlowActivity extends BaseActivity {
     }
 
     private void changeState(State state) {
+        if (this.currentState == state) {
+            return;
+        }
+
         this.currentState = state;
 
         if (state == State.TRACT) {
