@@ -32,9 +32,16 @@
     <string name="alert_thanks">Danke</string>
     <string name="alert_share">Teilen</string>
     <string name="alert_cancel">Abbrechen</string>
+    <string name="alert_info">Hinweis</string>
+
 
     <string name="share_app_dialog_title">App teilen</string>
     <string name="share_tract_dialog_title">Flyer teilen</string>
+
+    <string name="scroll_page_dialog_message">Benutze deinen Lautstärkeregler um zu blättern.</string>
+    <string name="scroll_page_dialog_volume_up">Seite zurück blättern.</string>
+    <string name="scroll_page_dialog_volume_down">Seite vor blättern.</string>
+    <string name="scroll_page_dialog_understood">Verstanden</string>*
 
 
     <!-- Strings related to Settings -->

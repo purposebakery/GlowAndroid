@@ -11,7 +11,6 @@ import com.techlung.android.glow.enums.UserType;
 public class Preferences {
 
     public static final String GENERAL_USER_TYPE = "GENERAL_USER_TYPE";
-    public static final String GENERAL_BRIGHT_BACKGROUND = "GENERAL_BRIGHT_BACKGROUND";
 
     public static final String NOTIFICATION_ENABLED = "NOTIFICATION_ENABLED";
     public static final String NOTIFICATION_FREQUENCY = "NOTIFICATION_FREQUENCY";

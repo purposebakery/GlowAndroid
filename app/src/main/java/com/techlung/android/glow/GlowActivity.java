@@ -1,5 +1,6 @@
 package com.techlung.android.glow;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
@@ -12,6 +13,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -20,6 +22,7 @@ import android.widget.TextView;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.pixplicity.easyprefs.library.Prefs;
 import com.techlung.android.glow.io.ContentStorageLoader;
 import com.techlung.android.glow.model.GlowData;
 import com.techlung.android.glow.model.Tract;
@@ -260,13 +263,14 @@ public class GlowActivity extends BaseActivity {
 
             @Override
             public void onPageSelected(int position) {
+                /*
                 if (position == 0) {
                     changeState(State.SELECTION);
                     //pagerSelectorBar.setTranslationX(0);
                 } else {
                     changeState(State.TRACT);
                     //pagerSelectorBar.setTranslationX(screenWidthPx / 2);
-                }
+                }*/
             }
 
             @Override
@@ -423,6 +427,19 @@ public class GlowActivity extends BaseActivity {
         }
     }
 
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (currentState == State.TRACT) {
+            if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
+                tractFragment.scrollPageDown();
+                return true;
+            } else if (keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
+                tractFragment.scrollPageUp();
+                return true;
+            }
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
     public void showSelection() {
         pagerToSelection();
     }
@@ -454,6 +471,9 @@ public class GlowActivity extends BaseActivity {
             shareButton.setVisibility(View.VISIBLE);
 
             tractFragment.scrollToLastPosition();
+
+            DialogHelper.showScrollDialog(this);
+
         } else {
 
             shareButton.setScaleX(1);
@@ -463,6 +483,8 @@ public class GlowActivity extends BaseActivity {
             tractFragment.scrollToTop();
         }
     }
+
+
 
     public ImageView getMenuTractImage() {
         return menuTractImage;

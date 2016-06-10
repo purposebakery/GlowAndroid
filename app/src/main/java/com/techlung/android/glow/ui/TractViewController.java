@@ -184,6 +184,14 @@ public class TractViewController {
         scrollView.smoothScrollTo(0,0);
     }
 
+    public void scrollPageDown() {
+        scrollView.smoothScrollBy(0, scrollView.getMeasuredHeight() - ToolBox.convertDpToPixel(16, activity));
+    }
+
+    public void scrollPageUp() {
+        scrollView.smoothScrollBy(0, -1 * (scrollView.getMeasuredHeight() - ToolBox.convertDpToPixel(16, activity)));
+    }
+
     public void updateMenuFade() {
         menuTractTitle.setTranslationX(getMenuTractTitleTranslationX());
         menuTractImage.setTranslationX(getMenuTractImageTranslationX());

@@ -6,8 +6,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.text.Html;
+import android.view.LayoutInflater;
 import android.widget.EditText;
 
+import com.pixplicity.easyprefs.library.Prefs;
 import com.techlung.android.glow.GlowActivity;
 import com.techlung.android.glow.R;
 import com.techlung.android.glow.enums.UserType;
@@ -142,5 +144,32 @@ public class DialogHelper {
         });
 
         builder.show();
+    }
+
+    public static void showScrollDialog(final Context context) {
+        if (Prefs.getBoolean("SCROLL_HINT_DIALOG_NOT_SHOWN", true)) {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+            builder.setTitle(R.string.alert_info);
+            builder.setView(LayoutInflater.from(context).inflate(R.layout.dialog_volume_hint, null, false));
+
+            builder.setPositiveButton(R.string.scroll_page_dialog_understood, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Prefs.putBoolean("SCROLL_HINT_DIALOG_NOT_SHOWN", false);
+                    dialog.dismiss();
+                }
+            });
+
+            /*
+            builder.setNegativeButton(R.string.scroll_page_dialog_remind_again, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });*/
+            builder.show();
+        }
     }
 }
