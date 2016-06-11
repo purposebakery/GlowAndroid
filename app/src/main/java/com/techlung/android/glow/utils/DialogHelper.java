@@ -172,4 +172,50 @@ public class DialogHelper {
             builder.show();
         }
     }
+
+    public static void showGeneralShareDialog(final Context context) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+        builder.setView(LayoutInflater.from(context).inflate(R.layout.dialog_share_general, null, false));
+
+        builder.setPositiveButton(R.string.alert_thanks, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+            /*
+            builder.setNegativeButton(R.string.scroll_page_dialog_remind_again, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });*/
+        builder.show();
+    }
+    public static void showTractInfoDialog(final Context context, final Tract tract) {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+            builder.setTitle("Coming up...");
+            //builder.setView(LayoutInflater.from(context).inflate(R.layout.dialog_share_general, null, false));
+
+            builder.setPositiveButton(R.string.alert_thanks, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+
+            /*
+            builder.setNegativeButton(R.string.scroll_page_dialog_remind_again, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });*/
+            builder.show();
+    }
 }

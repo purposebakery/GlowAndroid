@@ -1,29 +1,32 @@
 package com.techlung.android.glow;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewPropertyAnimator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.techlung.android.glow.enums.UserType;
 import com.techlung.android.glow.io.ContentStorageLoader;
 import com.techlung.android.glow.model.GlowData;
 import com.techlung.android.glow.model.Tract;
+import com.techlung.android.glow.settings.Preferences;
 import com.techlung.android.glow.settings.Settings;
 import com.techlung.android.glow.settings.SettingsActivity;
 import com.techlung.android.glow.ui.SelectionViewController;
@@ -62,8 +65,14 @@ public class GlowActivity extends BaseActivity {
     public float currentPagerScrollPosition = 0;
     private boolean isRunning;
     float screenWidthPx = 0;
+
     private FloatingActionButton shareButton;
-    private ListView shareBottomList;
+    private FloatingActionButton shareButtonClose;
+    private boolean shareButtonOpen;
+    private View shareButtonDistributorSpecific;
+    private View shareButtonDistributorGeneral;
+    private View shareButtonDistributorShare;
+    private View shareHideMask;
 
     private static GlowActivity instance;
 
@@ -125,6 +134,7 @@ public class GlowActivity extends BaseActivity {
     }
 
     private void initViews() {
+
         initMenu();
         initViewPager();
         initShareButton();
@@ -140,6 +150,8 @@ public class GlowActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         isRunning = true;
+
+        updateShareButtonIcon();
     }
 
     private void initDrawer() {
@@ -323,21 +335,163 @@ public class GlowActivity extends BaseActivity {
     }
 
     private void initShareButton() {
+        shareHideMask = findViewById(R.id.share_hide_mask);
+        shareHideMask.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (shareButtonOpen) {
+                    toggleShareClickDistributor();
+                }
+            }
+        });
+
         shareButton = (FloatingActionButton) findViewById(R.id.share_dynamic_button);
         shareButton.setVisibility(View.GONE);
+
+
+        shareButtonClose = (FloatingActionButton) findViewById(R.id.share_dynamic_button_close);
+        shareButtonClose.setVisibility(View.GONE);
 
         shareButton.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //YoYo.with(Techniques.Pulse).duration(TRANSITION_SPEED).playOn(shareButton);
-
-                        //DialogHelper.showShareTractAlert(GlowActivity.this, tractFragment.getTract());
-                        //shareBottomSheet.expandFab();
+                        toggleShareClick();
+                    }
+                });
+        shareButtonClose.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        toggleShareClick();
                     }
                 });
 
+
+        shareButtonDistributorGeneral = findViewById(R.id.share_dynamic_general);
+        shareButtonDistributorSpecific = findViewById(R.id.share_dynamic_specific);
+        shareButtonDistributorShare = findViewById(R.id.share_dynamic_share);
+
+        shareButtonDistributorShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleShareClickDistributor();
+                shareTract();
+            }
+        });
+
+        shareButtonDistributorGeneral.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleShareClickDistributor();
+                DialogHelper.showGeneralShareDialog(GlowActivity.this);
+            }
+        });
+
+        shareButtonDistributorSpecific.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleShareClickDistributor();
+                DialogHelper.showTractInfoDialog(GlowActivity.this, tractFragment.getTract());
+            }
+        });
+
+        updateShareButtonIcon();
     }
+
+    private void updateShareButtonIcon() {
+        if (shareButton != null) {
+            if (Preferences.getUserType() == UserType.READER) {
+                shareButton.setImageResource(R.drawable.ic_action_share);
+            } else if (Preferences.getUserType() == UserType.DISTRIBUTOR) {
+                shareButton.setImageResource(R.drawable.ic_sms);
+            }
+        }
+    }
+
+    private void toggleShareClick() {
+        if (Preferences.getUserType() == UserType.READER) {
+            shareTract();
+        } else if (Preferences.getUserType() == UserType.DISTRIBUTOR) {
+            toggleShareClickDistributor();
+        }
+    }
+
+    private void shareTract() {
+        DialogHelper.showShareTractAlert(GlowActivity.this, tractFragment.getTract());
+    }
+
+    private void toggleShareClickDistributor() {
+        if (shareButtonOpen) {
+            animateShareButtonDefaultHide(shareButtonDistributorSpecific);
+            animateShareButtonDefaultHide(shareButtonDistributorGeneral);
+            animateShareButtonDefaultHide(shareButtonDistributorShare);
+
+            shareButtonClose.animate().setDuration(100).alpha(0);
+
+            shareHideMask.animate().alpha(0).setDuration(100).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
+                    shareHideMask.setVisibility(View.GONE);
+                }
+            });
+            //shareButtonDistributorSpecific.animate().translationY(0).setDuration(300).setInterpolator(new DecelerateInterpolator(2));
+        } else {
+            int distanceDp = 80;
+
+            shareButtonClose.setVisibility(View.VISIBLE);
+            shareButtonClose.animate().setDuration(100).alpha(1);
+
+            shareHideMask.setVisibility(View.VISIBLE);
+
+            shareHideMask.animate().alpha(0.5f).setDuration(100).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
+                    shareHideMask.setVisibility(View.VISIBLE);
+                }
+            });
+            animateShareButtonDefaultShow(shareButtonDistributorSpecific, distanceDp);
+            animateShareButtonDefaultShow(shareButtonDistributorGeneral, distanceDp * 2);
+            animateShareButtonDefaultShow(shareButtonDistributorShare, distanceDp * 3);
+            //shareButtonDistributorSpecific.animate().translationY(-1 * ToolBox.convertDpToPixel(80, this)).setDuration(300);
+
+        }
+
+        shareButtonOpen = !shareButtonOpen;
+    }
+
+    private ViewPropertyAnimator animateShareButtonDefaultShow(final View view, int yPositionUpDp) {
+        view.setVisibility(View.VISIBLE);
+        view.setAlpha(0);
+        return view.animate().translationY(-1 * ToolBox.convertDpToPixel(yPositionUpDp, this)).setDuration(300).setInterpolator(new DecelerateInterpolator(2)).alpha(1).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                view.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
+    private ViewPropertyAnimator animateShareButtonDefaultHide(final View view) {
+        return view.animate().translationY(0).setDuration(300).setInterpolator(new DecelerateInterpolator(2)).alpha(0).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                view.setVisibility(View.GONE);
+            }
+        });
+    }
+    /*
+    private void animateYPosition(View view, int positionDp) {
+        TranslateAnimation animate = new TranslateAnimation(0,0,view.getTranslationY(),ToolBox.convertDpToPixel(positionDp, this));
+        animate.setDuration(300);
+        //animate.setFillAfter(true);
+        animate.setInterpolator(new DecelerateInterpolator(2));
+        view.startAnimation(animate);
+        //view.setVisibility(View.GONE);
+    }*/
 
 
     private void checkFirstStart() {
@@ -428,6 +582,10 @@ public class GlowActivity extends BaseActivity {
         }
 
         this.currentState = state;
+
+        if (shareButtonOpen) {
+            toggleShareClickDistributor();
+        }
 
         if (state == State.TRACT) {
             shareButton.setScaleX(1);

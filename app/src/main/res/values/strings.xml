@@ -17,8 +17,34 @@
     <string name="newsletter_mail_bye">Mit besten Grüßen</string>
 
     <string name="share_menu_general_help">Allgemeine Ratschläge</string>
+    <string name="share_menu_general_mindset">GLOW Haltung</string>
+    <string name="share_menu_general_mindset_read_title"><b>Lesen</b>\nLese zuerst selber die Flyer.</string>
+    <string name="share_menu_general_mindset_location_title"><b>Lagerort</b>\nLagere deine Flyer an einem gut sichtbaren Ort in deinem Zuhause/Auto.</string>
+    <string name="share_menu_general_mindset_pray_title"><b>Beten</b>\nBete um von Gott eingeleitete Begegnungen.</string>
+    <string name="share_menu_general_mindset_plan_title"><b>Plane</b>\nPlane dein Zuhause immer mit ein paar Stück Literatur zu verlassen.</string>
+    <string name="share_menu_general_mindset_handout_title"><b>Verteilen</b>\nTeile diese persönlich mit anderen oder hinterlasse sie.</string>
+
+    <string name="share_menu_general_say">Was Sagen?</string>
+    <string name="share_menu_general_say_one">\"Lesen Sie gerne? …\"</string>
+    <string name="share_menu_general_say_two">\"Hier, ein kleines Geschenk für Sie …\"</string>
+    <string name="share_menu_general_say_three">\"Hier ist ein kleines Stück christliche Literatur das ich sehr genossen habe …\"</string>
+
+    <string name="share_menu_general_ways">Arten zu Teilen</string>
+    <string name="share_menu_general_ways_1"><b>Gaststätte: </b>zum Trinkgeld</string>
+    <string name="share_menu_general_ways_2"><b>Tankstellen: </b>auf die Zapfsäule</string>
+    <string name="share_menu_general_ways_3"><b>Unterkünfte: </b>in Gideon Bibeln, Telefonbücher, als Trinkgeld</string>
+    <string name="share_menu_general_ways_4"><b>Briefe: </b>gewöhnlichem Briefverkehr dazulegen</string>
+    <string name="share_menu_general_ways_5"><b>Supermärkte: </b> in den Einkaufswagen</string>
+    <string name="share_menu_general_ways_6"><b>Öffentliche Toiletten</b></string>
+    <string name="share_menu_general_ways_7"><b>Wartezimmer</b></string>
+    <string name="share_menu_general_ways_8"><b>In der Nachbarschaft</b></string>
+
+    <string name="share_menu_general_sponsor">Sponsor einen GLOW Ständer</string>
+    <string name="share_menu_general_sponsor_text"><b>Sponsor einen GLOW Ständer an einem öffentlichen Ort.</b>\n(Waschsalon, Arzt Praxis, Amt, christlicher Bücherladen, etc.)</string>
+
+
     <string name="share_menu_tract_help">Flyer Leitfaden</string>
-    <string name="share_menu_tract_send">Link teilen</string>
+    <string name="share_menu_tract_share">Link teilen</string>
 
     <string name="share_app_text">Hallo,\n\nich möchte eine App mit dir teilen. Du findest sie im Play Store unter folgendem Link: </string>
     <string name="share_tract_text">Hallo,\n\nich möchte etwas mit dir teilen. Folge einfach diesem Link und sag mir, was du davon hälst: </string>
@@ -106,20 +132,6 @@
     </string-array>
 
     <string name="pref_notification_toast">Nächste Benachrichtigung: </string>
-
-
-
-    <string name="pref_title_social_recommendations">Enable social recommendations</string>
-    <string name="pref_description_social_recommendations">Recommendations for people to contact
-        based on your message history
-    </string>
-
-    <string name="pref_title_new_message_notifications">New message notifications</string>
-
-    <string name="pref_title_ringtone">Ringtone</string>
-    <string name="pref_ringtone_silent">Silent</string>
-
-    <string name="pref_title_vibrate">Vibrate</string>
 
     <string name="notification_title">GLOW - leuchte heute</string>
     <string name="notification_message">... und gibt anderen davon ab!</string>
