@@ -375,24 +375,30 @@ public class GlowActivity extends BaseActivity {
         shareButtonDistributorShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toggleShareClickDistributor();
-                shareTract();
+                if (shareButtonOpen) {
+                    toggleShareClickDistributor();
+                    shareTract();
+                }
             }
         });
 
         shareButtonDistributorGeneral.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toggleShareClickDistributor();
-                DialogHelper.showGeneralShareDialog(GlowActivity.this);
+                if (shareButtonOpen) {
+                    toggleShareClickDistributor();
+                    DialogHelper.showGeneralShareDialog(GlowActivity.this);
+                }
             }
         });
 
         shareButtonDistributorSpecific.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toggleShareClickDistributor();
-                DialogHelper.showTractInfoDialog(GlowActivity.this, tractFragment.getTract());
+                if (shareButtonOpen) {
+                    toggleShareClickDistributor();
+                    DialogHelper.showTractInfoDialog(GlowActivity.this, tractFragment.getTract());
+                }
             }
         });
 
