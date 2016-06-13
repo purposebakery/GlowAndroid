@@ -190,7 +190,7 @@ public class SelectionViewController {
             item.view.setY(item.y);
             item.view.setScaleX(item.scale);
             item.view.setScaleY(item.scale);
-            //item.view.setAlpha(item.scale);
+            //item.viewRoot.setAlpha(item.scale);
             if (android.os.Build.VERSION.SDK_INT >= 21) {
                 item.view.setElevation(item.scale * ToolBox.convertDpToPixel(TRACT_ELEVATION_DP, GlowActivity.getInstance()) + 4);
             }

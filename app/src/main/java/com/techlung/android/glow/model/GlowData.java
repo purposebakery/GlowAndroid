@@ -3,16 +3,14 @@ package com.techlung.android.glow.model;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 import com.techlung.android.glow.GlowActivity;
 import com.techlung.android.glow.utils.IOUtils;
 import com.techlung.android.glow.io.ParameterReader;
-import com.techlung.android.glow.settings.Common;
+import com.techlung.android.glow.Common;
 
 public class GlowData {
 
@@ -70,8 +68,6 @@ public class GlowData {
 	}
 
 
-
-	
 	// Getter / Setter
 	public ArrayList<Tract> getPamphlets() {
 		return pamphlets;
@@ -102,22 +98,6 @@ public class GlowData {
 
 	public void setInfo(String info) {
 		this.info = info;
-	}
-
-	private String readFile(File file) throws IOException {
-
-		StringBuilder fileContents = new StringBuilder((int)file.length());
-		Scanner scanner = new Scanner(file);
-		String lineSeparator = System.getProperty("line.separator");
-
-		try {
-			while(scanner.hasNextLine()) {
-				fileContents.append(scanner.nextLine() + lineSeparator);
-			}
-			return fileContents.toString();
-		} finally {
-			scanner.close();
-		}
 	}
 
 

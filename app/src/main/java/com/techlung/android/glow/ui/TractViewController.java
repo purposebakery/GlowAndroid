@@ -7,7 +7,6 @@ import android.os.Build;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,34 +20,30 @@ import com.techlung.android.glow.GlowActivity;
 import com.techlung.android.glow.R;
 import com.techlung.android.glow.model.GlowData;
 import com.techlung.android.glow.model.Tract;
-import com.techlung.android.glow.settings.Common;
+import com.techlung.android.glow.Common;
 import com.techlung.android.glow.settings.Settings;
 import com.techlung.android.glow.utils.ContactUtil;
 import com.techlung.android.glow.utils.ToolBox;
 
 public class TractViewController {
 
-    public static final String TAG = TractViewController.class.getName();
-
     private static final int MENU_FADE_DISTANCE_DP = 130;
+
+    GlowActivity activity;
 
     Tract tract;
     Settings s;
 
     TextView contentView;
     TextView additionalView;
-
-    //ImageView image;
-    //TextView title;
-
     ScrollView scrollView;
 
-    GlowActivity activity;
 
-    View view;
+    View viewRoot;
 
     View menuTractHeaderBox;
     View menuBar;
+    View menuLogo;
 
     ImageView menuTractImage;
     TextView menuTractTitle;
@@ -64,15 +59,10 @@ public class TractViewController {
     int tractHeaderBoxMarginDistance;
     float menuElevation;
     float tractHeaderBoxDefaultElevation;
-    //float dp4inPx;
-
-    View menuLogo;
+    int menuFadeDistancePx;
+    float currentScrollY;
 
     Typeface blairFont;
-
-    private int menuFadeDistancePx;
-    private float currentScrollY;
-    private int screenWidthPx;
 
     public TractViewController(ViewGroup container, View header) {
         activity = GlowActivity.getInstance();
@@ -87,10 +77,9 @@ public class TractViewController {
         menuLogo = header.findViewById(R.id.header_logo);
 
 
-        view = createView(LayoutInflater.from(activity), container);
+        viewRoot = createView(LayoutInflater.from(activity), container);
 
         menuFadeDistancePx = ToolBox.convertDpToPixel(MENU_FADE_DISTANCE_DP, activity);
-        screenWidthPx = ToolBox.getScreenWidthPx(activity);
 
         menuTractImageTopDistance = ToolBox.convertDpToPixel(105, activity);
         menuTractImageRightDistance = ToolBox.convertDpToPixel(41, activity);
@@ -106,20 +95,19 @@ public class TractViewController {
             menuElevation = menuBar.getElevation();
             tractHeaderBoxDefaultElevation = menuTractHeaderBox.getElevation();
         }
-        //dp4inPx = (float) ToolBox.convertDpToPixel(4, activity);
 
         setTract(GlowData.getInstance().getPamphlets().get(0));
     }
 
-    public View getView() {
-        return view;
+    public View getViewRoot() {
+        return viewRoot;
     }
 
     private View createView(LayoutInflater inflater, final ViewGroup container) {
 
-        view = inflater.inflate(R.layout.tract_fragment, container, false);
+        viewRoot = inflater.inflate(R.layout.tract_fragment, container, false);
 
-        scrollView = (ScrollView) view.findViewById(R.id.activity_glow_pamphlet_table);
+        scrollView = (ScrollView) viewRoot.findViewById(R.id.activity_glow_pamphlet_table);
         scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
             @Override
             public void onScrollChanged() {
@@ -131,36 +119,31 @@ public class TractViewController {
             }
         });
 
-        contentView = (TextView) view.findViewById(R.id.activity_glow_pamphlet_list_content);
-        additionalView = (TextView) view.findViewById(R.id.activity_glow_pamphlet_list_additional);
+        contentView = (TextView) viewRoot.findViewById(R.id.activity_glow_pamphlet_list_content);
+        additionalView = (TextView) viewRoot.findViewById(R.id.activity_glow_pamphlet_list_additional);
 
-        view.findViewById(R.id.contact_mail_container).setOnClickListener(new View.OnClickListener() {
+        viewRoot.findViewById(R.id.contact_mail_container).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ContactUtil.doMailContact(activity);
             }
         });
 
-        view.findViewById(R.id.contact_phone_container).setOnClickListener(new View.OnClickListener() {
+        viewRoot.findViewById(R.id.contact_phone_container).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ContactUtil.doPhoneContact(activity);
             }
         });
 
-        view.findViewById(R.id.contact_www_container).setOnClickListener(new View.OnClickListener() {
+        viewRoot.findViewById(R.id.contact_www_container).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ContactUtil.doWWWContact(activity);
             }
         });
 
-        //image = (ImageView) view.findViewById(R.id.activity_glow_pamphlet_list_image);
-        //title = (TextView) view.findViewById(R.id.activity_glow_pamphlet_list_title);
-
-        //title.setTypeface(blairFont);
-
-        return view;
+        return viewRoot;
     }
 
     public float getMenuTractImageTranslationX() {
@@ -270,12 +253,7 @@ public class TractViewController {
             return;
         }
 
-        //contentView.setText("");
-        //additionalView.setText("");
         System.gc();
-
-        //image.setImageDrawable(tract.getCoverDrawable(activity));
-        //title.setText(Html.fromHtml(tract.getHtmlTitle()));
 
         menuTractImage.setImageDrawable(tract.getCoverDrawable(activity));
         menuTractTitle.setText(Html.fromHtml(tract.getHtmlTitle()));
@@ -286,7 +264,6 @@ public class TractViewController {
         additionalView.setText(Html.fromHtml(tract.getHtmlAdditional(), new ImageGetter(), null));
         additionalView.setMovementMethod(LinkMovementMethod.getInstance());
 
-        //scrollView.scrollTo((int)currentScrollY, 0);
         scrollToLastPosition();
 
         updateMenuFade();
@@ -314,15 +291,13 @@ public class TractViewController {
         public Drawable getDrawable(String source) {
 
             try {
-
                 Drawable d = tract.getImageDrawable(activity, source);
                 if (d == null) {
                     return null;
                 }
 
                 DisplayMetrics metrics = new DisplayMetrics();
-                activity.getWindowManager().getDefaultDisplay()
-                        .getMetrics(metrics);
+                activity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
                 height = metrics.heightPixels;
                 width = metrics.widthPixels;

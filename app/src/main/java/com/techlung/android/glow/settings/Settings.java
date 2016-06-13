@@ -1,18 +1,13 @@
 package com.techlung.android.glow.settings;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.DatePickerDialog;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.util.Log;
 
+import com.techlung.android.glow.Common;
 import com.techlung.android.glow.GlowActivity;
-import com.techlung.android.glow.R;
-import com.techlung.android.glow.enums.UserType;
-import com.techlung.android.glow.notification.NotificationManager;
 
 public class Settings {
 

@@ -1,4 +1,4 @@
-package com.techlung.android.glow.settings;
+package com.techlung.android.glow;
 
 import android.content.Context;
 import android.content.res.Configuration;

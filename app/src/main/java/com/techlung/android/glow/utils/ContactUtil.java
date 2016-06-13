@@ -7,9 +7,6 @@ import android.net.Uri;
 import com.techlung.android.glow.R;
 import com.techlung.android.glow.model.GlowData;
 
-/**
- * Created by metz037 on 6/8/16.
- */
 public class ContactUtil {
 
     public static void doPhoneContact(Context context) {

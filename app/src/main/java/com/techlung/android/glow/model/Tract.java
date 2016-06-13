@@ -6,11 +6,10 @@ import java.util.HashMap;
 
 import com.techlung.android.glow.utils.IOUtils;
 import com.techlung.android.glow.io.ParameterReader;
-import com.techlung.android.glow.settings.Common;
+import com.techlung.android.glow.Common;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.text.Spanned;
 import android.util.Log;
 
 public class Tract {
@@ -87,18 +86,6 @@ public class Tract {
 			return false;
 		}
 	}
-
-	/*
-	public void loadImages(File[] fs) {
-		for (File f : fs) {
-			getImagePaths().put(f.getNameResource(), f.getAbsolutePath());
-		}
-	}*/
-
-	/*
-	public String getImagePath(String name) {
-		return imagePaths.get(name);
-	}*/
 
 	/*
 	 * GETTER SETTER

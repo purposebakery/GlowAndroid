@@ -16,7 +16,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
-import android.view.animation.BounceInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -38,35 +37,28 @@ import com.techlung.android.glow.utils.Mailer;
 import com.techlung.android.glow.utils.ToolBox;
 
 public class GlowActivity extends BaseActivity {
-    public static final String TAG = GlowActivity.class.getName();
-
-    public static final String FROM_NOTIFICATION = "FROM_NOTIFICATION";
-
-    public static final int TRANSITION_SPEED = 300;
     public static final boolean DEBUG = false;
-
-    private Settings settings;
-    private DrawerLayout mDrawerLayout;
-    private View drawerToggle;
-    private SelectionViewController selectionFlowFragment;
-    private TractViewController tractFragment;
-
-    private ViewPager pager;
-
-    private TextView menuTractTitle;
-    private ImageView menuTractImage;
-    private View menuTractHeaderBox;
 
     public enum State {
         SELECTION, TRACT
     }
 
-    public State currentState = State.SELECTION;
-    public int currentScrollPosition = 0;
-    public float currentPagerScrollPosition = 0;
-    private boolean isRunning;
-    float screenWidthPx = 0;
+    public static final String FROM_NOTIFICATION = "FROM_NOTIFICATION";
 
+    public static final int TRANSITION_SPEED = 300;
+
+    private Settings settings;
+
+    private DrawerLayout drawer;
+    private View drawerToggle;
+
+    private SelectionViewController selectionFlowFragment;
+    private TractViewController tractFragment;
+
+    private ViewPager pager;
+
+
+    // Share button elements
     private FloatingActionButton shareButton;
     private FloatingActionButton shareButtonClose;
     private boolean shareButtonOpen;
@@ -74,6 +66,20 @@ public class GlowActivity extends BaseActivity {
     private View shareButtonDistributorGeneral;
     private View shareButtonDistributorShare;
     private View shareHideMask;
+
+    public State currentState = State.SELECTION;
+
+    // Animating title
+    private TextView menuTractTitle;
+    private ImageView menuTractImage;
+    private View menuTractHeaderBox;
+
+    // Animating variables
+    public int currentScrollPosition = 0;
+    public float currentPagerScrollPosition = 0;
+    float screenWidthPx = 0;
+
+    private boolean isRunning;
 
     private static GlowActivity instance;
 
@@ -87,51 +93,15 @@ public class GlowActivity extends BaseActivity {
 
         instance = this;
 
-        // Init Settings
         settings = Settings.getInstance(this);
         screenWidthPx = ToolBox.getScreenWidthPx(GlowActivity.this);
 
         setContentView(R.layout.glow_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
-            @Override
-            public void onDrawerSlide(View drawerView, float slideOffset) {
-                drawerToggle.setScaleX(1 - slideOffset);
-                drawerToggle.setScaleY(1 - slideOffset);
-                drawerToggle.setRotation(slideOffset * 180);
-
-            }
-
-            @Override
-            public void onDrawerOpened(View drawerView) {
-
-            }
-
-            @Override
-            public void onDrawerClosed(View drawerView) {
-
-            }
-
-            @Override
-            public void onDrawerStateChanged(int newState) {
-
-            }
-        });
-
-        drawerToggle = findViewById(R.id.drawer_toggle);
-        drawerToggle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mDrawerLayout.openDrawer(Gravity.LEFT);
-            }
-        });
-
         checkFirstStart();
 
         loadContent();
-
     }
 
     private void initViews() {
@@ -156,25 +126,56 @@ public class GlowActivity extends BaseActivity {
     }
 
     private void initDrawer() {
+        // Init Drawer
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                drawerToggle.setScaleX(1 - slideOffset);
+                drawerToggle.setScaleY(1 - slideOffset);
+                drawerToggle.setRotation(slideOffset * 180);
+            }
 
-        View phoneContainer = findViewById(R.id.contact_phone_container_drawer);
-        phoneContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onDrawerOpened(View drawerView) {
+
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+            }
+        });
+
+        drawerToggle = findViewById(R.id.drawer_toggle);
+        drawerToggle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawer.openDrawer(Gravity.LEFT);
+            }
+        });
+
+        // Bind Drawer Menu Actions
+        findViewById(R.id.contact_phone_container_drawer).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ContactUtil.doPhoneContact(GlowActivity.this);
             }
         });
 
-        View mailContainer = findViewById(R.id.contact_mail_container_drawer);
-        mailContainer.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.contact_mail_container_drawer).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ContactUtil.doMailContact(GlowActivity.this);
             }
         });
 
-        View wwwContainer = findViewById(R.id.contact_www_container_drawer);
-        wwwContainer.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.contact_www_container_drawer).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ContactUtil.doWWWContact(GlowActivity.this);
@@ -223,8 +224,21 @@ public class GlowActivity extends BaseActivity {
 
     }
 
+    // Animating Menu
     public int getMenuElementsTranslationX() {
         return (int)(screenWidthPx - (currentPagerScrollPosition * screenWidthPx));
+    }
+
+    private void initMenu() {
+        menuTractImage = (ImageView) findViewById(R.id.activity_glow_pamphlet_list_image);
+        menuTractTitle = (TextView) findViewById(R.id.activity_glow_pamphlet_list_title);
+        menuTractHeaderBox = findViewById(R.id.tract_header_box);
+
+        float screenWidthPx = ToolBox.getScreenWidthPx(GlowActivity.this);
+        menuTractImage.setTranslationX(screenWidthPx);
+        menuTractTitle.setTranslationX(screenWidthPx);
+        menuTractHeaderBox.setTranslationX(screenWidthPx);
+        menuTractHeaderBox.setVisibility(View.VISIBLE);
     }
 
     public void updateMenuElementPositions() {
@@ -234,6 +248,7 @@ public class GlowActivity extends BaseActivity {
         }
     }
 
+    // Pager controlling
     private void initViewPager() {
         pager = (ViewPager) findViewById(R.id.main_pager);
         pager.setAdapter(new MyAdapter());
@@ -311,7 +326,7 @@ public class GlowActivity extends BaseActivity {
                 view = selectionFlowFragment.getView();
             } else {
                 tractFragment = new TractViewController(container, findViewById(R.id.header));
-                view = tractFragment.getView();
+                view = tractFragment.getViewRoot();
             }
             container.addView(view);
             return view;
@@ -323,18 +338,7 @@ public class GlowActivity extends BaseActivity {
         }
     }
 
-    private void initMenu() {
-        menuTractImage = (ImageView) findViewById(R.id.activity_glow_pamphlet_list_image);
-        menuTractTitle = (TextView) findViewById(R.id.activity_glow_pamphlet_list_title);
-        menuTractHeaderBox = findViewById(R.id.tract_header_box);
-
-        float screenWidthPx = ToolBox.getScreenWidthPx(GlowActivity.this);
-        menuTractImage.setTranslationX(screenWidthPx);
-        menuTractTitle.setTranslationX(screenWidthPx);
-        menuTractHeaderBox.setTranslationX(screenWidthPx);
-        menuTractHeaderBox.setVisibility(View.VISIBLE);
-    }
-
+    // Share Button controlling
     private void initShareButton() {
         shareHideMask = findViewById(R.id.share_hide_mask);
         shareHideMask.setOnClickListener(new View.OnClickListener() {
@@ -348,7 +352,6 @@ public class GlowActivity extends BaseActivity {
 
         shareButton = (FloatingActionButton) findViewById(R.id.share_dynamic_button);
         shareButton.setVisibility(View.GONE);
-
 
         shareButtonClose = (FloatingActionButton) findViewById(R.id.share_dynamic_button_close);
         shareButtonClose.setVisibility(View.GONE);
@@ -424,9 +427,6 @@ public class GlowActivity extends BaseActivity {
         }
     }
 
-    private void shareTract() {
-        DialogHelper.showShareTractAlert(GlowActivity.this, tractFragment.getTract());
-    }
 
     private void toggleShareClickDistributor() {
         if (shareButtonOpen) {
@@ -505,7 +505,11 @@ public class GlowActivity extends BaseActivity {
         }
     }
 
+    private void shareTract() {
+        DialogHelper.showShareTractAlert(GlowActivity.this, tractFragment.getTract());
+    }
 
+    // Load Data to Memory -> TODO reconsider this :)
     private void loadContent() {
         AsyncTask<Void, Void, Void> loadTask = new AsyncTask<Void, Void, Void>() {
 
@@ -516,8 +520,7 @@ public class GlowActivity extends BaseActivity {
 
             @Override
             protected Void doInBackground(Void... params) {
-                ContentStorageLoader csl = new ContentStorageLoader(GlowActivity.this);
-                csl.load();
+                ContentStorageLoader.load(GlowActivity.this);
                 return null;
             }
 
@@ -541,6 +544,7 @@ public class GlowActivity extends BaseActivity {
         }
     }
 
+    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (currentState == State.TRACT) {
             if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
@@ -554,6 +558,7 @@ public class GlowActivity extends BaseActivity {
 
         return super.onKeyDown(keyCode, event);
     }
+
     public void showSelection() {
         pagerToSelection();
     }
@@ -600,7 +605,6 @@ public class GlowActivity extends BaseActivity {
             tractFragment.scrollToLastPosition();
 
         } else {
-
             shareButton.setScaleX(1);
             shareButton.setScaleY(1);
             YoYo.with(Techniques.SlideOutRight).duration(TRANSITION_SPEED).playOn(shareButton);
@@ -608,8 +612,6 @@ public class GlowActivity extends BaseActivity {
             tractFragment.scrollToTop();
         }
     }
-
-
 
     public ImageView getMenuTractImage() {
         return menuTractImage;

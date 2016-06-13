@@ -1,11 +1,11 @@
 package com.techlung.android.glow.io;
 
+import com.techlung.android.glow.utils.IOUtils;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.techlung.android.glow.utils.IOUtils;
 
 public class ParameterReader {
 	
@@ -20,7 +20,7 @@ public class ParameterReader {
 	}
 	
 	public int readParameterInt(String keyParam) {
-		String res =readParameterString(keyParam);
+		String res = readParameterString(keyParam);
 		try {
 			int result = Integer.parseInt(res);
 			return result;
