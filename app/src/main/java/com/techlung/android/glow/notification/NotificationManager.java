@@ -26,6 +26,7 @@ public class NotificationManager {
         }
 
         Intent alarmIntent = new Intent(context, NotificationReceiver.class);
+        alarmIntent.setAction(NotificationReceiver.SHOW_NOTIFICATION);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         long nextNotificationTime = getNextNotificationTime();

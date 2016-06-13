@@ -16,6 +16,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
+import android.view.animation.BounceInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -429,7 +430,9 @@ public class GlowActivity extends BaseActivity {
 
     private void toggleShareClickDistributor() {
         if (shareButtonOpen) {
-            animateShareButtonDefaultHide(shareButtonDistributorSpecific);
+            if (tractFragment.getTract().hasManual()) {
+                animateShareButtonDefaultHide(shareButtonDistributorSpecific);
+            }
             animateShareButtonDefaultHide(shareButtonDistributorGeneral);
             animateShareButtonDefaultHide(shareButtonDistributorShare);
 
@@ -451,16 +454,21 @@ public class GlowActivity extends BaseActivity {
 
             shareHideMask.setVisibility(View.VISIBLE);
 
-            shareHideMask.animate().alpha(0.5f).setDuration(100).setListener(new AnimatorListenerAdapter() {
+            shareHideMask.animate().alpha(0.75f).setDuration(100).setListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     super.onAnimationEnd(animation);
                     shareHideMask.setVisibility(View.VISIBLE);
                 }
             });
-            animateShareButtonDefaultShow(shareButtonDistributorSpecific, distanceDp);
-            animateShareButtonDefaultShow(shareButtonDistributorGeneral, distanceDp * 2);
-            animateShareButtonDefaultShow(shareButtonDistributorShare, distanceDp * 3);
+            if (tractFragment.getTract().hasManual()) {
+                animateShareButtonDefaultShow(shareButtonDistributorSpecific, distanceDp);
+                animateShareButtonDefaultShow(shareButtonDistributorGeneral, distanceDp * 2);
+                animateShareButtonDefaultShow(shareButtonDistributorShare, distanceDp * 3);
+            } else {
+                animateShareButtonDefaultShow(shareButtonDistributorGeneral, distanceDp);
+                animateShareButtonDefaultShow(shareButtonDistributorShare, distanceDp * 2);
+            }
             //shareButtonDistributorSpecific.animate().translationY(-1 * ToolBox.convertDpToPixel(80, this)).setDuration(300);
 
         }
@@ -489,16 +497,6 @@ public class GlowActivity extends BaseActivity {
             }
         });
     }
-    /*
-    private void animateYPosition(View view, int positionDp) {
-        TranslateAnimation animate = new TranslateAnimation(0,0,view.getTranslationY(),ToolBox.convertDpToPixel(positionDp, this));
-        animate.setDuration(300);
-        //animate.setFillAfter(true);
-        animate.setInterpolator(new DecelerateInterpolator(2));
-        view.startAnimation(animate);
-        //view.setVisibility(View.GONE);
-    }*/
-
 
     private void checkFirstStart() {
         if (settings.isFirstStart()) {

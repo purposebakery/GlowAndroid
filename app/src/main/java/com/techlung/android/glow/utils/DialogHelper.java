@@ -7,7 +7,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.text.Html;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.pixplicity.easyprefs.library.Prefs;
 import com.techlung.android.glow.GlowActivity;
@@ -131,7 +133,7 @@ public class DialogHelper {
             public void onClick(DialogInterface dialog, int which) {
                 Preferences.setUserType(UserType.DISTRIBUTOR);
                 Preferences.setNotificationEnabled(true);
-                NotificationManager.setNextNotification(context, false);
+                NotificationManager.setNextNotification(context, true);
             }
         });
 
@@ -162,13 +164,6 @@ public class DialogHelper {
                 }
             });
 
-            /*
-            builder.setNegativeButton(R.string.scroll_page_dialog_remind_again, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });*/
             builder.show();
         }
     }
@@ -186,21 +181,19 @@ public class DialogHelper {
             }
         });
 
-            /*
-            builder.setNegativeButton(R.string.scroll_page_dialog_remind_again, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });*/
         builder.show();
     }
     public static void showTractInfoDialog(final Context context, final Tract tract) {
 
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
-            builder.setTitle("Coming up...");
-            //builder.setView(LayoutInflater.from(context).inflate(R.layout.dialog_share_general, null, false));
+            builder.setTitle(R.string.share_menu_tract_help);
+
+            View view = LayoutInflater.from(context).inflate(R.layout.dialog_share_specific, null, false);
+            TextView content = (TextView) view.findViewById(R.id.content);
+            content.setText(Html.fromHtml(tract.getHtmlManual()));
+
+            builder.setView(view);
 
             builder.setPositiveButton(R.string.alert_thanks, new DialogInterface.OnClickListener() {
                 @Override
@@ -209,13 +202,6 @@ public class DialogHelper {
                 }
             });
 
-            /*
-            builder.setNegativeButton(R.string.scroll_page_dialog_remind_again, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });*/
             builder.show();
     }
 }

@@ -16,6 +16,11 @@ import com.techlung.android.glow.settings.Preferences;
 
 public class NotificationReceiver extends BroadcastReceiver {
 
+    public static final String DEACTIVATE_NOTIFICATION = "DEACTIVATE_NOTIFICATION";
+    public static final String OPEN_APP = "OPEN_APP";
+    public static final String SHOW_NOTIFICATION = "SHOW_NOTIFICATION";
+    public static final int NOTIFICATION_ID = 1000;
+
     public NotificationReceiver() {
 
     }
@@ -24,20 +29,45 @@ public class NotificationReceiver extends BroadcastReceiver {
     public void onReceive(final Context context, Intent intent) {
         Preferences.initPreferences(context);
 
-        if (Preferences.isNotificationEnabled()) {
-            showNotification(context);
+        if (intent.getAction() != null && intent.getAction().equals(DEACTIVATE_NOTIFICATION)) {
+            // Deactivate Notifications
+            Preferences.setNotificationEnabled(false);
+            android.app.NotificationManager mNotificationManager =
+                    (android.app.NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            mNotificationManager.cancel(NOTIFICATION_ID);
+            Toast.makeText(context, R.string.notification_deactivate_toast, Toast.LENGTH_LONG).show();
+        } else if (intent.getAction() != null && intent.getAction().equals(OPEN_APP)) {
+            // Open App
+            android.app.NotificationManager mNotificationManager =
+                    (android.app.NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            mNotificationManager.cancel(NOTIFICATION_ID);
+            context.startActivity(new Intent(context, GlowActivity.class).putExtra(GlowActivity.FROM_NOTIFICATION, true));
+        } else {
+            // Show Notification
+            if (Preferences.isNotificationEnabled()) {
+                showNotification(context);
+                NotificationManager.setNextNotification(context, false);
+            }
         }
-
-        NotificationManager.setNextNotification(context, false);
     }
 
     private void showNotification(Context context) {
+        Intent deactivateIntent = new Intent(context, NotificationReceiver.class);
+        deactivateIntent.setAction(DEACTIVATE_NOTIFICATION);
+        PendingIntent deactivatePendingIntent = PendingIntent.getBroadcast(context, 0, deactivateIntent, 0);
+
+        Intent openAppIntent = new Intent(context, NotificationReceiver.class);
+        openAppIntent.setAction(OPEN_APP);
+        PendingIntent openAppPendingIntent = PendingIntent.getBroadcast(context, 0, openAppIntent, 0);
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(context)
+                        .setAutoCancel(true)
                         .setSmallIcon(R.drawable.ic_logo_notification)
                         .setContentTitle(context.getString(R.string.notification_title))
-                        .setContentText(context.getString(R.string.notification_message));
+                        .setContentText(context.getString(R.string.notification_message))
+                        .addAction(R.drawable.ic_block, context.getString(R.string.notification_deactivate), deactivatePendingIntent)
+                        .addAction(R.drawable.ic_launch, context.getString(R.string.notification_open_app), openAppPendingIntent);
 // Creates an explicit intent for an Activity in your app
         Intent resultIntent = new Intent(context, GlowActivity.class);
         resultIntent.putExtra(GlowActivity.FROM_NOTIFICATION, true);
@@ -63,7 +93,7 @@ public class NotificationReceiver extends BroadcastReceiver {
 // mId allows you to update the notification later on.
 
 
-        mNotificationManager.notify(1000,  mBuilder.build());
+        mNotificationManager.notify(NOTIFICATION_ID,  mBuilder.build());
     }
 
 }

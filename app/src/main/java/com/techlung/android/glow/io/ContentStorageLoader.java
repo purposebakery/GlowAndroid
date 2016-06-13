@@ -235,6 +235,12 @@ public class ContentStorageLoader {
 					newPamphlet.loadHtmlAdditional(assetManager.open(lang + "/" + pamphletDir + "/" + Common.FILE_ADDITIONAL));
 					newPamphlet.setCoverPath(lang + "/" + pamphletDir + "/" + Common.FILE_COVER);
 
+					try {
+						newPamphlet.loadHtmlManual(assetManager.open(lang + "/" + pamphletDir + "/" + Common.FILE_MANUAL));
+					} catch (IOException e) {
+						// all ok. Some tracts don't have manuals
+					}
+
 					GlowData.getInstance().addPamphlet(newPamphlet);
 				}
 

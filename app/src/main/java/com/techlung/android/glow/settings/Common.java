@@ -12,6 +12,7 @@ public class Common {
 	public static final String FILE_INFO = "info.html"; // default
 	public static final String FILE_CONTENT = "content.html"; // default
 	public static final String FILE_ADDITIONAL = "additional.html"; // default
+	public static final String FILE_MANUAL = "manual.html"; // default
 	public static final String FILE_COVER = "cover.png"; // default
 	
 	public static final String META_TITLE = "title";

@@ -23,6 +23,7 @@ public class Tract {
 	private String coverPath;
 	private String htmlContent;
 	private String htmlAdditional;
+	private String htmlManual;
 
 	private float scrollPosition = 0;
 	
@@ -68,6 +69,25 @@ public class Tract {
 		}		
 	}
 
+	public void loadHtmlManual(InputStream is) {
+
+		try {
+			String manual = IOUtils.readStream(is);
+
+			setHtmlManual(manual);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public boolean hasManual() {
+		if (getHtmlManual() != null && !getHtmlManual().trim().equals("")) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	/*
 	public void loadImages(File[] fs) {
 		for (File f : fs) {
@@ -109,15 +129,6 @@ public class Tract {
 		this.htmlContent = htmlContent;
 	}
 
-	/*
-	public Drawable getCover() {
-		return cover;
-	}
-
-	public void setCover(Drawable cover) {
-		this.cover = cover;
-	}*/
-
 	public String getHtmlAdditional() {
 		return htmlAdditional;
 	}
@@ -125,14 +136,14 @@ public class Tract {
 	public void setHtmlAdditional(String htmlAdditional) {
 		this.htmlAdditional = htmlAdditional;
 	}
-/*
 
-	public HashMap<String, String> getImagePaths() {
-		return imagePaths;
+	public String getHtmlManual() {
+		return htmlManual;
 	}
-	public void setImagePaths(HashMap<String, String> imagePaths) {
-		this.imagePaths = imagePaths;
-	}*/
+
+	public void setHtmlManual(String htmlManual) {
+		this.htmlManual = htmlManual;
+	}
 
 	public String getUrl() {
 		return url;
@@ -185,59 +196,6 @@ public class Tract {
 	public void setHtmlTitle(String htmlTitle) {
 		this.htmlTitle = htmlTitle;
 	}
-
-	/*
-	public class ImageGetter implements Html.ImageGetter {
-
-		float height = 0.0f;
-		float width = 0.0f;
-
-		float width_src = 0.0f;
-		float height_src = 0.0f;
-
-		float factor = 0.0f;
-
-		@Override
-		public Drawable getDrawable(String source) {
-
-			try {
-				BitmapFactory.Options options = new BitmapFactory.Options();
-				Bitmap bitmap = BitmapFactory.decodeFile(getImagePath(source), options);
-				Drawable d = new BitmapDrawable(GlowActivity.getInstance().getResources(), bitmap);
-				DisplayMetrics metrics = new DisplayMetrics();
-				GlowActivity.getInstance().getWindowManager().getDefaultDisplay()
-						.getMetrics(metrics);
-
-				height = metrics.heightPixels;
-				width = metrics.widthPixels;
-
-				if (Common.isXLargeScreen(GlowActivity.getInstance())) {
-					width -= ToolBox.convertDpToPixel(300, GlowActivity.getInstance());
-				}
-
-				height *= 0.7;
-				width *= 0.7;
-
-				width_src = d.getIntrinsicWidth();
-				height_src = d.getIntrinsicHeight();
-
-				if (width_src <= height_src) {
-					factor = height / height_src;
-				} else {
-					factor = width / width_src;
-				}
-
-				d.setBounds(0, 0, (int) (width_src * factor),
-						(int) (height_src * factor));
-
-				return d;
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			return null;
-
-		}
-	}*/
 
 	public float getScrollPosition() {
 		return scrollPosition;

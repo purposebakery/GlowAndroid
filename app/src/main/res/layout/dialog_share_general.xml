@@ -82,6 +82,12 @@
             android:text="@string/share_menu_general_ways_5"/>
         <TextView
             style="@style/ShareGeneralSayText"
+            android:text="@string/share_menu_general_ways_5_1"/>
+        <TextView
+            style="@style/ShareGeneralSayText"
+            android:text="@string/share_menu_general_ways_5_2"/>
+        <TextView
+            style="@style/ShareGeneralSayText"
             android:text="@string/share_menu_general_ways_6"/>
         <TextView
             style="@style/ShareGeneralSayText"
