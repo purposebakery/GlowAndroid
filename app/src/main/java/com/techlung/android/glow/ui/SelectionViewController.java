@@ -315,6 +315,10 @@ public class SelectionViewController {
         }
     }
 
+    public void scrollToPosition(int position) {
+        moveScrollPosition(position, ++currentMovementDifferenceId);
+    }
+
     private void moveScrollPosition(final float newScrollPosition, final float id) {
         if (!GlowActivity.getInstance().isRunning()) {
             currentMovementSpeed = 0;

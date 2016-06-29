@@ -62,6 +62,8 @@ public class TractViewController {
     int menuFadeDistancePx;
     float currentScrollY;
 
+    //int menuHeight;
+
     Typeface blairFont;
 
     public TractViewController(ViewGroup container, View header) {
@@ -83,6 +85,7 @@ public class TractViewController {
 
         menuTractImageTopDistance = ToolBox.convertDpToPixel(105, activity);
         menuTractImageRightDistance = ToolBox.convertDpToPixel(41, activity);
+        //menuHeight = ToolBox.convertDpToPixel(56, activity);
         menuTractImageScaleDistance = 1.0f - (44.0f / 90.0f);
 
         menuTractTitleRightDistance = ToolBox.convertDpToPixel(24, activity);
@@ -184,6 +187,7 @@ public class TractViewController {
 
         if (currentScrollY > menuFadeDistancePx) {
             menuLogo.setAlpha(0);
+            //menuLogo.setTranslationY(0);
 
             menuTractHeaderBox.setAlpha(1);
             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) menuTractHeaderBox.getLayoutParams();
@@ -203,6 +207,7 @@ public class TractViewController {
         } else {
             float progress = (currentScrollY / (float)menuFadeDistancePx);
             menuLogo.setAlpha(1.0f - progress);
+            //menuLogo.setTranslationY(-1 * menuHeight * 0.5f * progress);
 
             float alpha = 0.25f + (0.75f * progress * 1.5f);
             if (alpha > 1) {
@@ -228,13 +233,13 @@ public class TractViewController {
             menuTractImage.setScaleY(1 - menuTractImageScaleDistance * progress);
 
             menuTractTitle.setTranslationY(-1 * menuTractTitleTopDistance * progress);
+
             int grey = (int) (255 - 255 * progress);
             if (grey > 255) {
                 grey = 255;
             } else if (grey < 0) {
                 grey = 0;
             }
-
             menuTractTitle.setTextColor(Color.argb(255, grey, grey, grey));
         }
     }

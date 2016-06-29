@@ -41,7 +41,7 @@ public class NotificationReceiver extends BroadcastReceiver {
             android.app.NotificationManager mNotificationManager =
                     (android.app.NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             mNotificationManager.cancel(NOTIFICATION_ID);
-            context.startActivity(new Intent(context, GlowActivity.class).putExtra(GlowActivity.FROM_NOTIFICATION, true));
+            context.startActivity(new Intent(context, GlowActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).putExtra(GlowActivity.FROM_NOTIFICATION, true));
         } else {
             // Show Notification
             if (Preferences.isNotificationEnabled()) {
@@ -66,8 +66,7 @@ public class NotificationReceiver extends BroadcastReceiver {
                         .setSmallIcon(R.drawable.ic_logo_notification)
                         .setContentTitle(context.getString(R.string.notification_title))
                         .setContentText(context.getString(R.string.notification_message))
-                        .addAction(R.drawable.ic_block, context.getString(R.string.notification_deactivate), deactivatePendingIntent)
-                        .addAction(R.drawable.ic_launch, context.getString(R.string.notification_open_app), openAppPendingIntent);
+                        .addAction(R.drawable.ic_block, context.getString(R.string.notification_deactivate), deactivatePendingIntent);
 // Creates an explicit intent for an Activity in your app
         Intent resultIntent = new Intent(context, GlowActivity.class);
         resultIntent.putExtra(GlowActivity.FROM_NOTIFICATION, true);

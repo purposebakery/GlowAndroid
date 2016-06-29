@@ -247,9 +247,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             preferenceTime.setSummary(Preferences.getNotificationTime());
 
 
-            // FREQUENCY
-            final Preference preferenceFrequency = findPreference(Preferences.NOTIFICATION_FREQUENCY);
-            bindPreferenceSummaryToValue(preferenceFrequency);
 
             // WEEKDAY
             final Preference preferenceWeekday = findPreference(Preferences.NOTIFICATION_WEEKDAY);
@@ -263,9 +260,14 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     return true;
                 }
             });
+
+            // FREQUENCY
+            final Preference preferenceFrequency = findPreference(Preferences.NOTIFICATION_FREQUENCY);
+            updateFrequencyPreferenceSummary(preferenceFrequency, Preferences.getNotificationFrequency());
             preferenceFrequency.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    updateFrequencyPreferenceSummary(preferenceFrequency, NotificationFrequency.valueOf(newValue.toString()));
                     updateNewNotificationPreferenceVisibilityState(ViewEnabledStateChanger.FREQUENCY, newValue);
                     return true;
                 }
@@ -273,6 +275,17 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
             updateNewNotificationPreferenceVisibilityState(ViewEnabledStateChanger.NONE, null);
 
+        }
+
+        private void updateFrequencyPreferenceSummary(Preference preferenceFrequency, NotificationFrequency frequency) {
+            switch (frequency) {
+                case DAILY:
+                    preferenceFrequency.setSummary(getActivity().getResources().getStringArray(R.array.pref_notifications_frequency_titles)[0]);
+                    break;
+                case WEEKLY:
+                    preferenceFrequency.setSummary(getActivity().getResources().getStringArray(R.array.pref_notifications_frequency_titles)[1]);
+                    break;
+            }
         }
 
         private void updateNewNotificationPreferenceVisibilityState(ViewEnabledStateChanger changer, @Nullable Object newValue) {

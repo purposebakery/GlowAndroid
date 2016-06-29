@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#E0E0E0">
+
+    <TextView
+        android:id="@+id/message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="48dp"
+        android:layout_marginLeft="48dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_centerInParent="true"
+        android:textColor="#212121"
+        android:fontFamily="sans-serif-light"
+        android:textSize="22sp"
+        android:text="Jesus sagt: »Wer mein Wort hört und dem glaubt, der mich gesandt hat, der hat das ewige Leben und kommt nicht in das Gericht, sondern er ist vom Tod zum Leben hindurchgedrungen.«"/>
+
+    <TextView
+        android:id="@+id/author"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Author"
+        android:textColor="#212121"
+        android:fontFamily="sans-serif-light"
+        android:textSize="18sp"
+        android:layout_below="@+id/message"
+        android:layout_alignRight="@+id/message"/>
+</RelativeLayout>

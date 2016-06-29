@@ -6,6 +6,7 @@
         android:entryValues="@array/pref_general_user_type_values"
         android:key="GENERAL_USER_TYPE"
         android:negativeButtonText="@null"
+        android:icon="@drawable/ic_person"
         android:positiveButtonText="@null"
         android:title="@string/pref_general_user_type" />
 

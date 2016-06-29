@@ -1,13 +1,16 @@
 package com.techlung.android.glow.utils;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v4.app.DialogFragment;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -19,6 +22,8 @@ import com.techlung.android.glow.model.GlowData;
 import com.techlung.android.glow.model.Tract;
 import com.techlung.android.glow.notification.NotificationManager;
 import com.techlung.android.glow.settings.Preferences;
+
+import org.w3c.dom.Text;
 
 public class DialogHelper {
     private static ProgressDialog progressDialog;
@@ -183,7 +188,8 @@ public class DialogHelper {
 
         builder.show();
     }
-    public static void showTractInfoDialog(final Context context, final Tract tract) {
+
+    public static void showTractManualDialog(final Context context, final Tract tract) {
 
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
@@ -203,5 +209,56 @@ public class DialogHelper {
             });
 
             builder.show();
+    }
+
+    public static void showRandomNotificationDialog(final Context context, Tract tract) {
+
+        double random = Math.random();
+        if (random > 0.5) {
+            showMessageDialog(context);
+        } else {
+            if (tract.hasManual()) {
+                DialogHelper.showTractManualDialog(context, tract);
+            } else {
+                DialogHelper.showGeneralShareDialog(context);
+            }
+        }
+    }
+
+    public static void showMessageDialog(final Context context) {
+        Dialog dialog = new Dialog(context, android.R.style.Theme_Light);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_message);
+
+        TextView messageView = (TextView) dialog.findViewById(R.id.message);
+        TextView authorView = (TextView) dialog.findViewById(R.id.author);
+
+
+        String[] quotes = context.getResources().getStringArray(R.array.dialog_quotes);
+
+        int index = Prefs.getInt("LAST_QUOTE_INDEX", -1);
+        if (index >= quotes.length - 1) {
+            index = 0;
+        } else {
+            index++;
+        }
+        Prefs.putInt("LAST_QUOTE_INDEX", index);
+
+        String quote = quotes[index];
+        String message = "";
+        String author = "";
+
+        if (quote.contains("\n")) {
+            message = quote.substring(0, quote.lastIndexOf("\n"));
+            author = quote.substring(quote.lastIndexOf("\n"), quote.length());
+        } else {
+            message = quote;
+        }
+
+
+        messageView.setText(message);
+        authorView.setText(author);
+
+        dialog.show();
     }
 }

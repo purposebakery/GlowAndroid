@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="dialog_quotes">
+        <item>So sehr hat Gott die Welt geliebt, dass er seinen einzigen Sohn hingab, damit jeder, der an ihn glaubt, nicht zugrunde geht, sondern das ewige Leben hat.\nJohannes 3, 16</item>
+        <item>Denn es ist ein Gott und ein Mittler zwischen Gott und den Menschen: der Mensch Jesus Christus, der sich als Lösegeld hingegeben hat für alle.\n1.Timotheus 2, 5</item>
+        <item>Und in keinem anderen ist das Heil zu finden. Denn es ist uns Menschen kein anderer Name unter dem Himmel gegeben, durch den wir gerettet werden sollen.\nApostelgeschichte 4, 12</item>
+        <item>Wer den Namen des Herrn anruft, wird gerettet werden.\nRömer 10, 13</item>
+    </string-array>
+</resources>

@@ -1,14 +1,14 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- A 'parent' preference, which enables/disables child preferences (below)
-         when checked/unchecked. -->
     <SwitchPreference
         android:defaultValue="true"
         android:key="NOTIFICATION_ENABLED"
-        android:title="@string/pref_notifications_enable" />
+        android:summary="@string/pref_notifications_enable_summary"
+        android:title="@string/pref_notifications_enable"/>
 
     <ListPreference
         android:defaultValue="WEEKLY"
+        android:icon="@drawable/ic_cached"
         android:entries="@array/pref_notifications_frequency_titles"
         android:entryValues="@array/pref_notifications_frequency_values"
         android:key="NOTIFICATION_FREQUENCY"
@@ -19,9 +19,11 @@
     <Preference
         android:defaultValue="6:00"
         android:title="@string/pref_notifications_time"
+        android:icon="@drawable/ic_schedule"
         android:key="NOTIFICATION_TIME"/>
 
     <ListPreference
+        android:icon="@drawable/ic_event"
         android:defaultValue="SATURDAY"
         android:entries="@array/pref_notifications_weekday_titles"
         android:entryValues="@array/pref_notifications_weekday_values"

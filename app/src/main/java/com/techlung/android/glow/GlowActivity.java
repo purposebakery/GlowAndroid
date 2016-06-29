@@ -7,6 +7,7 @@ import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -81,6 +82,8 @@ public class GlowActivity extends BaseActivity {
 
     private boolean isRunning;
 
+    private boolean fromNotificationProcessed;
+
     private static GlowActivity instance;
 
     public static GlowActivity getInstance() {
@@ -110,6 +113,8 @@ public class GlowActivity extends BaseActivity {
         initViewPager();
         initShareButton();
         initDrawer();
+
+        checkAndDoFromNotification(true);
     }
 
     protected void onPause() {
@@ -401,7 +406,7 @@ public class GlowActivity extends BaseActivity {
             public void onClick(View v) {
                 if (shareButtonOpen) {
                     toggleShareClickDistributor();
-                    DialogHelper.showTractInfoDialog(GlowActivity.this, tractFragment.getTract());
+                    DialogHelper.showTractManualDialog(GlowActivity.this, tractFragment.getTract());
                 }
             }
         });
@@ -547,11 +552,34 @@ public class GlowActivity extends BaseActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (currentState == State.TRACT) {
+            // Scroll on pamphlet view
             if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
                 tractFragment.scrollPageDown();
                 return true;
             } else if (keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
                 tractFragment.scrollPageUp();
+                return true;
+            }
+        } else if (currentState == State.SELECTION) {
+            // Scroll on Selection
+            int amountPamphlets = GlowData.getInstance().getPamphlets().size();
+
+            int currentPosition = Math.round(selectionFlowFragment.getScrollPosition());
+            if (currentPosition > (amountPamphlets - 1)) {
+                currentPosition = amountPamphlets - 1;
+            } else if (currentPosition < 0) {
+                currentPosition = 0;
+            }
+
+            if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
+                if (currentPosition != amountPamphlets - 1) {
+                    selectionFlowFragment.scrollToPosition(currentPosition + 1);
+                }
+                return true;
+            } else if (keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
+                if (currentPosition != 0) {
+                    selectionFlowFragment.scrollToPosition(currentPosition - 1);
+                }
                 return true;
             }
         }
@@ -630,4 +658,50 @@ public class GlowActivity extends BaseActivity {
     }
 
 
+    public void checkAndDoFromNotification(boolean doCheck) {
+
+        if (doCheck && !checkFromNotification()) {
+            return;
+        }
+
+        int amountPamphlets = GlowData.getInstance().getPamphlets().size();
+        int index = (int) Math.round(Math.random() * (double)(amountPamphlets - 1));
+        if (index < 0) {
+            index = 0;
+        } else if (index > amountPamphlets - 1) {
+            index = amountPamphlets - 1;
+        }
+
+        final int finalIndex = index;
+        selectionFlowFragment.scrollToPosition(finalIndex);
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                final Tract tract = GlowData.getInstance().getPamphlets().get(finalIndex);
+                showTract(tract);
+
+                Handler dialogHandler = new Handler();
+                dialogHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        DialogHelper.showRandomNotificationDialog(GlowActivity.this, tract);
+                    };
+                }, 750);
+            }
+        }, 1400);
+    }
+
+    private boolean checkFromNotification() {
+        if (fromNotificationProcessed) {
+            return false;
+        }
+
+        Intent intent = getIntent();
+        if (intent.hasExtra(FROM_NOTIFICATION)) {
+            fromNotificationProcessed = true;
+            return true;
+        }
+        return false;
+    }
 }

@@ -66,7 +66,7 @@
     <string name="share_app_dialog_title">App teilen</string>
     <string name="share_tract_dialog_title">Flyer teilen</string>
 
-    <string name="scroll_page_dialog_message">Benutze deinen Lautstärkeregler um zu blättern.</string>
+    <string name="scroll_page_dialog_message">Benutze deinen Lautstärkeregler um im der Auswahl oder dem Flyer zu blättern.</string>
     <string name="scroll_page_dialog_volume_up">Seite zurück blättern.</string>
     <string name="scroll_page_dialog_volume_down">Seite vor blättern.</string>
     <string name="scroll_page_dialog_understood">Verstanden</string>*
@@ -95,11 +95,11 @@
     <string name="pref_general_bright_background">Heller Hintergrund</string>
 
 
-
     <!-- Example settings for Notifications -->
     <string name="pref_notifications">Erinnerungen</string>
 
-    <string name="pref_notifications_enable">Erinnerungen</string>
+    <string name="pref_notifications_enable">Erinnere mich</string>
+    <string name="pref_notifications_enable_summary">Zeige regemäßig Glow Erinnerungen.</string>
 
     <string name="pref_notifications_frequency">Häufigkeit</string>
     <string-array name="pref_notifications_frequency_titles">
@@ -141,5 +141,6 @@
     <string name="notification_deactivate">Deaktivieren</string>
     <string name="notification_open_app">App öffnen</string>
     <string name="notification_deactivate_toast">Erinnerungen wurden deaktiviert.</string>
+
 
 </resources>
