@@ -99,4 +99,5 @@ public class NotificationManager {
         }
 
         return day.getTimeInMillis();
-    }}
+    }
+}

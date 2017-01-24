@@ -2,58 +2,58 @@ package com.techlung.android.glow.model;
 
 public class Contact {
 
-	private String email = "";
-	private String phone = "";
-	private String www = "";
-	private String shop = "";
-	private String appUrl = "";
-	
-	public void clear() {
-		email = "";
-		phone = "";
-		www = "";
-		shop = "";
-		appUrl = "";
-	}
+    private String email = "";
+    private String phone = "";
+    private String www = "";
+    private String shop = "";
+    private String appUrl = "";
 
-	public String getEmail() {
-		return email;
-	}
+    public void clear() {
+        email = "";
+        phone = "";
+        www = "";
+        shop = "";
+        appUrl = "";
+    }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public String getEmail() {
+        return email;
+    }
 
-	public String getPhone() {
-		return phone;
-	}
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
+    public String getPhone() {
+        return phone;
+    }
 
-	public String getWww() {
-		return www;
-	}
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
-	public void setWww(String www) {
-		this.www = www;
-	}
+    public String getWww() {
+        return www;
+    }
 
-	public String getShop() {
-		return shop;
-	}
+    public void setWww(String www) {
+        this.www = www;
+    }
 
-	public void setShop(String shop) {
-		this.shop = shop;
-	}
+    public String getShop() {
+        return shop;
+    }
 
-	public String getAppUrl() {
-		return appUrl;
-	}
+    public void setShop(String shop) {
+        this.shop = shop;
+    }
 
-	public void setAppUrl(String appUrl) {
-		this.appUrl = appUrl;
-	}
+    public String getAppUrl() {
+        return appUrl;
+    }
+
+    public void setAppUrl(String appUrl) {
+        this.appUrl = appUrl;
+    }
 
 }

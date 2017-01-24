@@ -1,4 +1,5 @@
 <resources>
+
     <style name="TimePickerTheme" parent="Theme.AppCompat.Dialog">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/white</item>

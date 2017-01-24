@@ -2,111 +2,122 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:scrollbars="vertical"
-    android:scrollbarSize="5dp"
     android:scrollbarAlwaysDrawVerticalTrack="true"
-    android:scrollbarThumbVertical="@color/colorAccent">
+    android:scrollbarSize="5dp"
+    android:scrollbarThumbVertical="@color/colorAccent"
+    android:scrollbars="vertical">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <TextView
             style="@style/ShareGeneralTitle"
             android:paddingTop="24dp"
-            android:text="@string/share_menu_general_mindset"/>
+            android:text="@string/share_menu_general_mindset" />
 
         <TextView
             style="@style/ShareGeneralMindsetTitle"
             android:paddingTop="16dp"
-            android:text="@string/share_menu_general_mindset_read_title"/>
+            android:text="@string/share_menu_general_mindset_read_title" />
 
         <TextView
             style="@style/ShareGeneralMindsetTitle"
-            android:text="@string/share_menu_general_mindset_location_title"/>
+            android:text="@string/share_menu_general_mindset_location_title" />
 
         <TextView
             style="@style/ShareGeneralMindsetTitle"
-            android:text="@string/share_menu_general_mindset_pray_title"/>
+            android:text="@string/share_menu_general_mindset_pray_title" />
 
         <TextView
             style="@style/ShareGeneralMindsetTitle"
-            android:text="@string/share_menu_general_mindset_plan_title"/>
+            android:text="@string/share_menu_general_mindset_plan_title" />
 
         <TextView
             style="@style/ShareGeneralMindsetTitle"
-            android:text="@string/share_menu_general_mindset_handout_title"/>
+            android:text="@string/share_menu_general_mindset_handout_title" />
 
 
         <TextView
+            style="@style/ShareGeneralTitle"
             android:layout_marginTop="16dp"
             android:paddingTop="24dp"
-            style="@style/ShareGeneralTitle"
-            android:text="@string/share_menu_general_say"/>
+            android:text="@string/share_menu_general_say" />
 
         <TextView
             style="@style/ShareGeneralSayText"
             android:paddingTop="16dp"
-            android:text="@string/share_menu_general_say_one"/>
+            android:text="@string/share_menu_general_say_one" />
+
         <TextView
             style="@style/ShareGeneralSayText"
-            android:text="@string/share_menu_general_say_two"/>
+            android:text="@string/share_menu_general_say_two" />
+
         <TextView
             style="@style/ShareGeneralSayText"
-            android:text="@string/share_menu_general_say_three"
-            android:paddingBottom="8dp"/>
+            android:paddingBottom="8dp"
+            android:text="@string/share_menu_general_say_three" />
 
 
         <TextView
+            style="@style/ShareGeneralTitle"
             android:layout_marginTop="16dp"
             android:paddingTop="24dp"
-            style="@style/ShareGeneralTitle"
-            android:text="@string/share_menu_general_ways"/>
+            android:text="@string/share_menu_general_ways" />
 
         <TextView
             style="@style/ShareGeneralSayText"
             android:paddingTop="16dp"
-            android:text="@string/share_menu_general_ways_1"/>
+            android:text="@string/share_menu_general_ways_1" />
+
         <TextView
             style="@style/ShareGeneralSayText"
-            android:text="@string/share_menu_general_ways_2"/>
+            android:text="@string/share_menu_general_ways_2" />
+
         <TextView
             style="@style/ShareGeneralSayText"
-            android:text="@string/share_menu_general_ways_3"/>
+            android:text="@string/share_menu_general_ways_3" />
+
         <TextView
             style="@style/ShareGeneralSayText"
-            android:text="@string/share_menu_general_ways_4"/>
+            android:text="@string/share_menu_general_ways_4" />
+
         <TextView
             style="@style/ShareGeneralSayText"
-            android:text="@string/share_menu_general_ways_5"/>
+            android:text="@string/share_menu_general_ways_5" />
+
         <TextView
             style="@style/ShareGeneralSayText"
-            android:text="@string/share_menu_general_ways_5_1"/>
+            android:text="@string/share_menu_general_ways_5_1" />
+
         <TextView
             style="@style/ShareGeneralSayText"
-            android:text="@string/share_menu_general_ways_5_2"/>
+            android:text="@string/share_menu_general_ways_5_2" />
+
         <TextView
             style="@style/ShareGeneralSayText"
-            android:text="@string/share_menu_general_ways_6"/>
+            android:text="@string/share_menu_general_ways_6" />
+
         <TextView
             style="@style/ShareGeneralSayText"
-            android:text="@string/share_menu_general_ways_7"/>
+            android:text="@string/share_menu_general_ways_7" />
+
         <TextView
             style="@style/ShareGeneralSayText"
-            android:text="@string/share_menu_general_ways_8"/>
+            android:text="@string/share_menu_general_ways_8" />
 
 
         <TextView
+            style="@style/ShareGeneralTitle"
             android:layout_marginTop="16dp"
             android:paddingTop="24dp"
-            style="@style/ShareGeneralTitle"
-            android:text="@string/share_menu_general_sponsor"/>
+            android:text="@string/share_menu_general_sponsor" />
 
         <TextView
             style="@style/ShareGeneralTitleText"
             android:paddingBottom="16dp"
-            android:text="@string/share_menu_general_sponsor_text"/>
+            android:text="@string/share_menu_general_sponsor_text" />
 
 
     </LinearLayout>

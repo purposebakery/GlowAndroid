@@ -90,7 +90,7 @@ public class NotificationReceiver extends BroadcastReceiver {
 // mId allows you to update the notification later on.
 
 
-        mNotificationManager.notify(NOTIFICATION_ID,  mBuilder.build());
+        mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
     }
 
 }

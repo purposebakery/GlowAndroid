@@ -2,8 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:clipChildren="false"
-    android:background="@color/readingBackground_dark">
+    android:background="@color/readingBackground_dark"
+    android:clipChildren="false">
 
     <ScrollView
         android:id="@+id/activity_glow_pamphlet_table"
@@ -15,16 +15,16 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:clipChildren="false">
+            android:clipChildren="false"
+            android:orientation="vertical">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="122dp"
-                android:layout_marginRight="16dp"
+                android:layout_marginBottom="16dp"
                 android:layout_marginLeft="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp">
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="16dp">
 
                 <!--
                 <ImageView
@@ -60,41 +60,40 @@
                 android:id="@+id/activity_glow_pamphlet_list_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="16dp"
                 android:layout_marginLeft="16dp"
-                android:textSize="16sp"
+                android:layout_marginRight="16dp"
                 android:text="Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text"
-                android:textColor="@color/text_light" />
+                android:textColor="@color/text_light"
+                android:textSize="16sp" />
 
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="16dp"
                 android:layout_margin="16dp"
+                android:background="#33FFFFFF"
                 android:elevation="6dp"
-                android:background="#33FFFFFF">
+                android:orientation="vertical"
+                android:padding="16dp">
 
 
-            <TextView
+                <TextView
                     android:id="@+id/activity_glow_pamphlet_list_additional"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp"
                     android:text="Additional"
-                    android:textColor="@color/text_light"/>
+                    android:textColor="@color/text_light"
+                    android:textSize="16sp" />
 
                 <include
+                    layout="@layout/tract_contact"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    layout="@layout/tract_contact"/>
+                    android:layout_height="wrap_content" />
 
             </LinearLayout>
 
 
         </LinearLayout>
     </ScrollView>
-
 
 
 </RelativeLayout>

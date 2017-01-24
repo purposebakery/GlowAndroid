@@ -4,13 +4,13 @@
         android:defaultValue="true"
         android:key="NOTIFICATION_ENABLED"
         android:summary="@string/pref_notifications_enable_summary"
-        android:title="@string/pref_notifications_enable"/>
+        android:title="@string/pref_notifications_enable" />
 
     <ListPreference
         android:defaultValue="WEEKLY"
-        android:icon="@drawable/ic_cached"
         android:entries="@array/pref_notifications_frequency_titles"
         android:entryValues="@array/pref_notifications_frequency_values"
+        android:icon="@drawable/ic_cached"
         android:key="NOTIFICATION_FREQUENCY"
         android:negativeButtonText="@null"
         android:positiveButtonText="@null"
@@ -18,15 +18,15 @@
 
     <Preference
         android:defaultValue="6:00"
-        android:title="@string/pref_notifications_time"
         android:icon="@drawable/ic_schedule"
-        android:key="NOTIFICATION_TIME"/>
+        android:key="NOTIFICATION_TIME"
+        android:title="@string/pref_notifications_time" />
 
     <ListPreference
-        android:icon="@drawable/ic_event"
         android:defaultValue="SATURDAY"
         android:entries="@array/pref_notifications_weekday_titles"
         android:entryValues="@array/pref_notifications_weekday_values"
+        android:icon="@drawable/ic_event"
         android:key="NOTIFICATION_WEEKDAY"
         android:negativeButtonText="@null"
         android:positiveButtonText="@null"

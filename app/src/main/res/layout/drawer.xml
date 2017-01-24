@@ -3,9 +3,9 @@
     android:layout_width="240dp"
     android:layout_height="match_parent"
     android:layout_gravity="start"
+    android:background="@color/colorPrimaryLight"
     android:clickable="true"
-    android:elevation="12dp"
-    android:background="@color/colorPrimaryLight">
+    android:elevation="12dp">
 
     <include
         android:id="@+id/drawer_logo"
@@ -32,8 +32,8 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_below="@id/drawer_contact"
-            android:background="@color/colorPrimary"
-            android:alpha="0.25"/>
+            android:alpha="0.25"
+            android:background="@color/colorPrimary" />
 
         <include
             android:id="@+id/drawer_more"
@@ -56,8 +56,8 @@
                 android:layout_width="@dimen/button_default_tiny"
                 android:layout_height="@dimen/button_default_tiny"
                 android:layout_centerInParent="true"
-                android:src="@drawable/ic_help_black_18dp"
-                android:alpha="@dimen/button_alpha" />
+                android:alpha="@dimen/button_alpha"
+                android:src="@drawable/ic_help_black_18dp" />
 
         </RelativeLayout>
     </RelativeLayout>

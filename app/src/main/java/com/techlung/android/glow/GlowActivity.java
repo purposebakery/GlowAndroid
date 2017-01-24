@@ -2,7 +2,6 @@ package com.techlung.android.glow;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.app.Fragment;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
@@ -14,7 +13,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -26,7 +24,6 @@ import android.widget.TextView;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
-import com.pixplicity.easyprefs.library.Prefs;
 import com.techlung.android.glow.enums.UserType;
 import com.techlung.android.glow.io.ContentStorageLoader;
 import com.techlung.android.glow.model.GlowData;
@@ -43,30 +40,22 @@ import com.techlung.android.glow.utils.SharingUtil;
 import com.techlung.android.glow.utils.ThemeUtil;
 import com.techlung.android.glow.utils.ToolBox;
 
-import java.util.Map;
-
 public class GlowActivity extends BaseActivity {
     public static final boolean DEBUG = false;
-
-    public enum State {
-        SELECTION, TRACT
-    }
-
     public static final String FROM_NOTIFICATION = "FROM_NOTIFICATION";
-
     public static final int TRANSITION_SPEED = 300;
-
+    private static GlowActivity instance;
+    public State currentState = State.SELECTION;
+    // Animating variables
+    public int currentScrollPosition = 0;
+    public float currentPagerScrollPosition = 0;
+    float screenWidthPx = 0;
     private Settings settings;
-
     private DrawerLayout drawer;
     private View drawerToggle;
-
     private SelectionViewController selectionFlowFragment;
     private TractViewController tractFragment;
-
     private ViewPager pager;
-
-
     // Share button elements
     private FloatingActionButton shareButton;
     private FloatingActionButton shareButtonClose;
@@ -75,24 +64,13 @@ public class GlowActivity extends BaseActivity {
     private View shareButtonDistributorGeneral;
     private View shareButtonDistributorShare;
     private View shareHideMask;
-
-    public State currentState = State.SELECTION;
-
     // Animating title
     private TextView menuTractTitle;
     private ImageView menuTractImage;
     private View menuTractHeaderBox;
-
-    // Animating variables
-    public int currentScrollPosition = 0;
-    public float currentPagerScrollPosition = 0;
-    float screenWidthPx = 0;
-
     private boolean isRunning;
     private boolean consumedIntent;
     private boolean fromNotificationProcessed;
-
-    private static GlowActivity instance;
 
     public static GlowActivity getInstance() {
         return instance;
@@ -243,7 +221,7 @@ public class GlowActivity extends BaseActivity {
 
     // Animating Menu
     public int getMenuElementsTranslationX() {
-        return (int)(screenWidthPx - (currentPagerScrollPosition * screenWidthPx));
+        return (int) (screenWidthPx - (currentPagerScrollPosition * screenWidthPx));
     }
 
     private void initMenu() {
@@ -320,39 +298,6 @@ public class GlowActivity extends BaseActivity {
                 }
             }
         });
-    }
-
-    private class MyAdapter extends PagerAdapter {
-
-        @Override
-        public int getCount() {
-            return 2;
-        }
-
-        @Override
-        public boolean isViewFromObject(View view, Object object) {
-            return view == object;
-        }
-
-        @Override
-        public Object instantiateItem(ViewGroup container, int position) {
-            View view;
-
-            if (position == 0) {
-                selectionFlowFragment = new SelectionViewController(container);
-                view = selectionFlowFragment.getView();
-            } else {
-                tractFragment = new TractViewController(container, findViewById(R.id.header));
-                view = tractFragment.getViewRoot();
-            }
-            container.addView(view);
-            return view;
-        }
-
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-            container.removeView((View) object);
-        }
     }
 
     // Share Button controlling
@@ -443,7 +388,6 @@ public class GlowActivity extends BaseActivity {
             toggleShareClickDistributor();
         }
     }
-
 
     private void toggleShareClickDistributor() {
         if (shareButtonOpen) {
@@ -621,7 +565,7 @@ public class GlowActivity extends BaseActivity {
     private void pagerToTract() {
         changeState(State.TRACT);
 
-        pager.scrollTo(1,0);
+        pager.scrollTo(1, 0);
         pager.setCurrentItem(1, true);
     }
 
@@ -698,7 +642,7 @@ public class GlowActivity extends BaseActivity {
         }
 
         int amountPamphlets = GlowData.getInstance().getPamphlets().size();
-        int index = (int) Math.round(Math.random() * (double)(amountPamphlets - 1));
+        int index = (int) Math.round(Math.random() * (double) (amountPamphlets - 1));
         if (index < 0) {
             index = 0;
         } else if (index > amountPamphlets - 1) {
@@ -737,5 +681,42 @@ public class GlowActivity extends BaseActivity {
             return true;
         }
         return false;
+    }
+
+    public enum State {
+        SELECTION, TRACT
+    }
+
+    private class MyAdapter extends PagerAdapter {
+
+        @Override
+        public int getCount() {
+            return 2;
+        }
+
+        @Override
+        public boolean isViewFromObject(View view, Object object) {
+            return view == object;
+        }
+
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+            View view;
+
+            if (position == 0) {
+                selectionFlowFragment = new SelectionViewController(container);
+                view = selectionFlowFragment.getView();
+            } else {
+                tractFragment = new TractViewController(container, findViewById(R.id.header));
+                view = tractFragment.getViewRoot();
+            }
+            container.addView(view);
+            return view;
+        }
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            container.removeView((View) object);
+        }
     }
 }

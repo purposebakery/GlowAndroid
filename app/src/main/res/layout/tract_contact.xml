@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -8,7 +8,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:orientation="horizontal" >
+        android:orientation="horizontal">
 
         <RelativeLayout
             android:id="@+id/contact_phone_container"
@@ -17,12 +17,13 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:background="@drawable/contact_button_background">
+
             <ImageView
                 android:layout_width="@dimen/button_default"
                 android:layout_height="@dimen/button_default"
                 android:layout_centerInParent="true"
-                android:src="@drawable/ic_phone_white_24dp"
-                android:alpha="@dimen/button_alpha"/>
+                android:alpha="@dimen/button_alpha"
+                android:src="@drawable/ic_phone_white_24dp" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -32,12 +33,13 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:background="@drawable/contact_button_background">
+
             <ImageView
                 android:layout_width="@dimen/button_default"
                 android:layout_height="@dimen/button_default"
                 android:layout_centerInParent="true"
-                android:src="@drawable/ic_email_white_24dp"
-                android:alpha="@dimen/button_alpha"/>
+                android:alpha="@dimen/button_alpha"
+                android:src="@drawable/ic_email_white_24dp" />
         </RelativeLayout>
 
 
@@ -48,12 +50,13 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:background="@drawable/contact_button_background">
+
             <ImageView
                 android:layout_width="@dimen/button_default"
                 android:layout_height="@dimen/button_default"
                 android:layout_centerInParent="true"
-                android:src="@drawable/ic_home_white_24dp"
-                android:alpha="@dimen/button_alpha"/>
+                android:alpha="@dimen/button_alpha"
+                android:src="@drawable/ic_home_white_24dp" />
         </RelativeLayout>
 
     </LinearLayout>

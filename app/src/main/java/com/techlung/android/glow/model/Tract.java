@@ -1,195 +1,189 @@
 package com.techlung.android.glow.model;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashMap;
-
-import com.techlung.android.glow.utils.IOUtils;
-import com.techlung.android.glow.io.ParameterReader;
-import com.techlung.android.glow.Common;
-
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 
+import com.techlung.android.glow.Common;
+import com.techlung.android.glow.io.ParameterReader;
+import com.techlung.android.glow.utils.IOUtils;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+
 public class Tract {
-	private String id;
-	private String title;
-	private String htmlTitle;
-	private String url;
+    private String id;
+    private String title;
+    private String htmlTitle;
+    private String url;
 
-	//private Drawable cover;
-	private String coverPath;
-	private String htmlContent;
-	private String htmlAdditional;
-	private String htmlManual;
+    //private Drawable cover;
+    private String coverPath;
+    private String htmlContent;
+    private String htmlAdditional;
+    private String htmlManual;
 
-	private float scrollPosition = 0;
-	
-	private HashMap<String, String> imagePaths = new HashMap<String, String>();
+    private float scrollPosition = 0;
 
-	public Tract(String id) {
-		for (Tract p : GlowData.getInstance().getPamphlets()) {
-			if (p.getId().equals(id)) {
-				throw new IllegalStateException("Pamphlet already added to Content...");
-			}
-		}
-		this.id = id;
-	}
+    private HashMap<String, String> imagePaths = new HashMap<String, String>();
 
-	public void loadMeta(InputStream is) {
-		ParameterReader pr = new ParameterReader(is);
+    public Tract(String id) {
+        for (Tract p : GlowData.getInstance().getPamphlets()) {
+            if (p.getId().equals(id)) {
+                throw new IllegalStateException("Pamphlet already added to Content...");
+            }
+        }
+        this.id = id;
+    }
 
-		setTitle(pr.readParameterString(Common.META_TITLE));
-		setHtmlTitle(pr.readParameterString(Common.META_TITLE_HTML));
-		setUrl(pr.readParameterString(Common.META_URL));
-	}
+    public void loadMeta(InputStream is) {
+        ParameterReader pr = new ParameterReader(is);
+
+        setTitle(pr.readParameterString(Common.META_TITLE));
+        setHtmlTitle(pr.readParameterString(Common.META_TITLE_HTML));
+        setUrl(pr.readParameterString(Common.META_URL));
+    }
 
 
-	public void loadHtmlContent(InputStream is) {
-		
-		try {
-			String content = IOUtils.readStream(is);
-			
-			setHtmlContent(content);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}		
-	}
-	
-	public void loadHtmlAdditional(InputStream is) {
-		
-		try {
-			String additional = IOUtils.readStream(is);
-			
-			setHtmlAdditional(additional);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}		
-	}
+    public void loadHtmlContent(InputStream is) {
 
-	public void loadHtmlManual(InputStream is) {
+        try {
+            String content = IOUtils.readStream(is);
 
-		try {
-			String manual = IOUtils.readStream(is);
+            setHtmlContent(content);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-			setHtmlManual(manual);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+    public void loadHtmlAdditional(InputStream is) {
 
-	public boolean hasManual() {
-		if (getHtmlManual() != null && !getHtmlManual().trim().equals("")) {
-			return true;
-		} else {
-			return false;
-		}
-	}
+        try {
+            String additional = IOUtils.readStream(is);
+
+            setHtmlAdditional(additional);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void loadHtmlManual(InputStream is) {
+
+        try {
+            String manual = IOUtils.readStream(is);
+
+            setHtmlManual(manual);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean hasManual() {
+        if (getHtmlManual() != null && !getHtmlManual().trim().equals("")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
 	/*
-	 * GETTER SETTER
+     * GETTER SETTER
 	 */
-	
-	
-	public String getId() {
-		return id;
-	}
 
-	public void setId(String id) {
-		this.id = id;
-	}
 
-	public String getTitle() {
-		return title;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public String getHtmlContent() {
-		return htmlContent;
-	}
+    public String getTitle() {
+        return title;
+    }
 
-	public void setHtmlContent(String htmlContent) {
-		this.htmlContent = htmlContent;
-	}
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-	public String getHtmlAdditional() {
-		return htmlAdditional;
-	}
+    public String getHtmlContent() {
+        return htmlContent;
+    }
 
-	public void setHtmlAdditional(String htmlAdditional) {
-		this.htmlAdditional = htmlAdditional;
-	}
+    public void setHtmlContent(String htmlContent) {
+        this.htmlContent = htmlContent;
+    }
 
-	public String getHtmlManual() {
-		return htmlManual;
-	}
+    public String getHtmlAdditional() {
+        return htmlAdditional;
+    }
 
-	public void setHtmlManual(String htmlManual) {
-		this.htmlManual = htmlManual;
-	}
+    public void setHtmlAdditional(String htmlAdditional) {
+        this.htmlAdditional = htmlAdditional;
+    }
 
-	public String getUrl() {
-		return url;
-	}
+    public String getHtmlManual() {
+        return htmlManual;
+    }
 
-	public void setUrl(String url) {
-		this.url = url;
-	}
+    public void setHtmlManual(String htmlManual) {
+        this.htmlManual = htmlManual;
+    }
 
-	public String getCoverPath() {
-		return coverPath;
-	}
+    public String getUrl() {
+        return url;
+    }
 
-	public void setCoverPath(String coverPath) {
-		this.coverPath = coverPath;
-	}
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
-	public Drawable getCoverDrawable(Context context) {
-		try
-		{
-			InputStream ims = context.getAssets().open(getCoverPath());
-			Drawable d = Drawable.createFromStream(ims, null);
-			return d;
-		}
-		catch(IOException ex)
-		{
-			ex.printStackTrace();
-			return null;
-		}
-	}
+    public String getCoverPath() {
+        return coverPath;
+    }
 
-	public Drawable getImageDrawable(Context context, String imageName) {
-		try
-		{
-			InputStream ims = context.getAssets().open(getId() + "/" + imageName);
-			Drawable d = Drawable.createFromStream(ims, null);
-			return d;
-		}
-		catch(IOException ex)
-		{
-			ex.printStackTrace();
-			return null;
-		}
-	}
+    public void setCoverPath(String coverPath) {
+        this.coverPath = coverPath;
+    }
 
-	public String getHtmlTitle() {
-		return htmlTitle;
-	}
+    public Drawable getCoverDrawable(Context context) {
+        try {
+            InputStream ims = context.getAssets().open(getCoverPath());
+            Drawable d = Drawable.createFromStream(ims, null);
+            return d;
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
 
-	public void setHtmlTitle(String htmlTitle) {
-		this.htmlTitle = htmlTitle;
-	}
+    public Drawable getImageDrawable(Context context, String imageName) {
+        try {
+            InputStream ims = context.getAssets().open(getId() + "/" + imageName);
+            Drawable d = Drawable.createFromStream(ims, null);
+            return d;
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
 
-	public float getScrollPosition() {
-		return scrollPosition;
-	}
+    public String getHtmlTitle() {
+        return htmlTitle;
+    }
 
-	public void setScrollPosition(float scrollPosition) {
-		Log.d("TAG", "Save scrol at" + scrollPosition);
-		this.scrollPosition = scrollPosition;
-	}
+    public void setHtmlTitle(String htmlTitle) {
+        this.htmlTitle = htmlTitle;
+    }
+
+    public float getScrollPosition() {
+        return scrollPosition;
+    }
+
+    public void setScrollPosition(float scrollPosition) {
+        Log.d("TAG", "Save scrol at" + scrollPosition);
+        this.scrollPosition = scrollPosition;
+    }
 }

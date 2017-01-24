@@ -1,6 +1,5 @@
 package com.techlung.android.glow.ui;
 
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
@@ -17,11 +16,11 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.techlung.android.glow.Common;
 import com.techlung.android.glow.GlowActivity;
 import com.techlung.android.glow.R;
 import com.techlung.android.glow.model.GlowData;
 import com.techlung.android.glow.model.Tract;
-import com.techlung.android.glow.Common;
 import com.techlung.android.glow.settings.Settings;
 import com.techlung.android.glow.utils.ContactUtil;
 import com.techlung.android.glow.utils.ThemeUtil;
@@ -157,7 +156,7 @@ public class TractViewController {
         if (currentScrollY > menuFadeDistancePx) {
             return menuTractImageRightDistance;
         } else {
-            float progress = (currentScrollY / (float)menuFadeDistancePx);
+            float progress = (currentScrollY / (float) menuFadeDistancePx);
             return menuTractImageRightDistance * progress;
         }
     }
@@ -166,14 +165,14 @@ public class TractViewController {
         if (currentScrollY > menuFadeDistancePx) {
             return menuTractTitleRightDistance;
         } else {
-            float progress = (currentScrollY / (float)menuFadeDistancePx);
+            float progress = (currentScrollY / (float) menuFadeDistancePx);
             return menuTractTitleRightDistance * progress;
         }
     }
 
     public void scrollToTop() {
         tract.setScrollPosition(currentScrollY);
-        scrollView.smoothScrollTo(0,0);
+        scrollView.smoothScrollTo(0, 0);
     }
 
     public void scrollPageDown() {
@@ -209,7 +208,7 @@ public class TractViewController {
 
             menuTractTitle.setTextColor(0xff000000);
         } else {
-            float progress = (currentScrollY / (float)menuFadeDistancePx);
+            float progress = (currentScrollY / (float) menuFadeDistancePx);
             menuLogo.setAlpha(1.0f - progress);
             //menuLogo.setTranslationY(-1 * menuHeight * 0.5f * progress);
 
@@ -221,7 +220,7 @@ public class TractViewController {
             }
             menuTractHeaderBox.setAlpha(alpha);
             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) menuTractHeaderBox.getLayoutParams();
-            int margin = (int)(tractHeaderBoxMarginDistance - tractHeaderBoxMarginDistance * progress);
+            int margin = (int) (tractHeaderBoxMarginDistance - tractHeaderBoxMarginDistance * progress);
             params.setMargins(margin, params.topMargin, margin, params.bottomMargin);
             menuTractHeaderBox.setLayoutParams(params);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -247,13 +246,14 @@ public class TractViewController {
             menuTractTitle.setTextColor(Color.argb(255, grey, grey, grey));
         }
     }
-    public void setTract(Tract p) {
-        this.tract = p;
-        dataToUi();
-    }
 
     public Tract getTract() {
         return this.tract;
+    }
+
+    public void setTract(Tract p) {
+        this.tract = p;
+        dataToUi();
     }
 
     private void dataToUi() {
@@ -281,7 +281,7 @@ public class TractViewController {
     public void scrollToLastPosition() {
         currentScrollY = tract.getScrollPosition();
 
-        scrollView.smoothScrollTo(0,(int)currentScrollY);
+        scrollView.smoothScrollTo(0, (int) currentScrollY);
 
         updateMenuFade();
     }
@@ -338,7 +338,6 @@ public class TractViewController {
 
         }
     }
-
 
 
 }

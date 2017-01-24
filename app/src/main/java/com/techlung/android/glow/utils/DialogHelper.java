@@ -1,16 +1,13 @@
 package com.techlung.android.glow.utils;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v4.app.DialogFragment;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -22,8 +19,6 @@ import com.techlung.android.glow.model.GlowData;
 import com.techlung.android.glow.model.Tract;
 import com.techlung.android.glow.notification.NotificationManager;
 import com.techlung.android.glow.settings.Preferences;
-
-import org.w3c.dom.Text;
 
 public class DialogHelper {
     private static ProgressDialog progressDialog;
@@ -191,24 +186,24 @@ public class DialogHelper {
 
     public static void showTractManualDialog(final Context context, final Tract tract) {
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
-            builder.setTitle(R.string.share_menu_tract_help);
+        builder.setTitle(R.string.share_menu_tract_help);
 
-            View view = LayoutInflater.from(context).inflate(R.layout.dialog_share_specific, null, false);
-            TextView content = (TextView) view.findViewById(R.id.content);
-            content.setText(Html.fromHtml(tract.getHtmlManual()));
+        View view = LayoutInflater.from(context).inflate(R.layout.dialog_share_specific, null, false);
+        TextView content = (TextView) view.findViewById(R.id.content);
+        content.setText(Html.fromHtml(tract.getHtmlManual()));
 
-            builder.setView(view);
+        builder.setView(view);
 
-            builder.setPositiveButton(R.string.alert_thanks, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
+        builder.setPositiveButton(R.string.alert_thanks, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
 
-            builder.show();
+        builder.show();
     }
 
     /*

@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingRight="16dp"
+    android:orientation="vertical"
     android:paddingLeft="16dp"
+    android:paddingRight="16dp"
     android:paddingTop="16dp">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:text="@string/scroll_page_dialog_message"
-        android:textColor="@color/black"
-        android:layout_marginBottom="8dp"/>
+        android:textColor="@color/black" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,15 +22,15 @@
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@drawable/ic_volume_up"
-            android:layout_margin="8dp"/>
+            android:layout_margin="8dp"
+            android:src="@drawable/ic_volume_up" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:text="@string/scroll_page_dialog_volume_up"
-            android:textColor="@color/black"
-            android:layout_gravity="center_vertical"/>
+            android:textColor="@color/black" />
 
     </LinearLayout>
 
@@ -42,19 +42,17 @@
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@drawable/ic_volume_down"
-            android:layout_margin="8dp"/>
+            android:layout_margin="8dp"
+            android:src="@drawable/ic_volume_down" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:text="@string/scroll_page_dialog_volume_down"
-            android:textColor="@color/black"
-            android:layout_gravity="center_vertical"/>
+            android:textColor="@color/black" />
 
     </LinearLayout>
-
-
 
 
 </LinearLayout>

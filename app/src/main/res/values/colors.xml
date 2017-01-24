@@ -14,13 +14,12 @@
 
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
-    
+
     <color name="text_dark">#ffffff</color>
     <color name="text_light">#000000</color>
 
     <!--<color name="pallet_fg">#003462</color>8e1537-->
     <color name="pallet_acent_transparent">#88ff9800</color>
-
 
 
     <color name="white_transparent">#AAFFFFFF</color>

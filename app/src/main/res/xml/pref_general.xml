@@ -4,9 +4,9 @@
         android:defaultValue="READER"
         android:entries="@array/pref_general_user_type_titles"
         android:entryValues="@array/pref_general_user_type_values"
+        android:icon="@drawable/ic_person"
         android:key="GENERAL_USER_TYPE"
         android:negativeButtonText="@null"
-        android:icon="@drawable/ic_person"
         android:positiveButtonText="@null"
         android:title="@string/pref_general_user_type" />
 
@@ -14,9 +14,9 @@
         android:defaultValue="LIGHT"
         android:entries="@array/pref_general_color_theme_title"
         android:entryValues="@array/pref_general_color_theme_values"
+        android:icon="@drawable/ic_color_lens_black_24dp"
         android:key="GENERAL_COLOR_THEME"
         android:negativeButtonText="@null"
-        android:icon="@drawable/ic_color_lens_black_24dp"
         android:positiveButtonText="@null"
         android:title="@string/pref_general_color_theme" />
 

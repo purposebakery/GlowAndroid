@@ -12,7 +12,7 @@ public class IOUtils {
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
         String read;
 
-        while((read=br.readLine()) != null) {
+        while ((read = br.readLine()) != null) {
             sb.append(read);
             sb.append("\n");
         }

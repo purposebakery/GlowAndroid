@@ -4,29 +4,21 @@ package com.techlung.android.glow.settings;
 import android.annotation.TargetApi;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Configuration;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.preference.SwitchPreference;
-import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.preference.RingtonePreference;
-import android.text.TextUtils;
+import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 import android.widget.TimePicker;
 
 import com.techlung.android.glow.R;
 import com.techlung.android.glow.enums.NotificationFrequency;
-import com.techlung.android.glow.enums.NotificationWeekday;
 import com.techlung.android.glow.notification.NotificationManager;
 
 import java.text.DecimalFormat;
@@ -213,8 +205,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class NotificationPreferenceFragment extends PreferenceFragment {
 
-        public enum ViewEnabledStateChanger {NONE, ENABLED, FREQUENCY};
-
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -249,7 +239,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             preferenceTime.setSummary(Preferences.getNotificationTime());
 
 
-
             // WEEKDAY
             final Preference preferenceWeekday = findPreference(Preferences.NOTIFICATION_WEEKDAY);
             bindPreferenceSummaryToValue(preferenceWeekday);
@@ -278,6 +267,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             updateNewNotificationPreferenceVisibilityState(ViewEnabledStateChanger.NONE, null);
 
         }
+
+        ;
 
         private void updateFrequencyPreferenceSummary(Preference preferenceFrequency, NotificationFrequency frequency) {
             switch (frequency) {
@@ -341,6 +332,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             super.onDetach();
             NotificationManager.setNextNotification(getActivity(), true);
         }
+
+        public enum ViewEnabledStateChanger {NONE, ENABLED, FREQUENCY}
     }
 
 }

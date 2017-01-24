@@ -26,6 +26,7 @@ public class Preferences {
     public static boolean isNotificationEnabled() {
         return Prefs.getBoolean(NOTIFICATION_ENABLED, true);
     }
+
     public static void setNotificationEnabled(boolean notificationEnabled) {
         Prefs.putBoolean(NOTIFICATION_ENABLED, notificationEnabled);
     }
@@ -33,6 +34,7 @@ public class Preferences {
     public static String getNotificationTime() {
         return Prefs.getString(NOTIFICATION_TIME, "6:00");
     }
+
     public static void setNotificationTime(String notificationTime) {
         Prefs.putString(NOTIFICATION_TIME, notificationTime);
     }
@@ -40,6 +42,7 @@ public class Preferences {
     public static int getNotificationTimeHour() {
         return Prefs.getInt(NOTIFICATION_TIME_HOUR, 6);
     }
+
     public static void setNotificationTimeHour(int notificationTimeHour) {
         Prefs.putInt(NOTIFICATION_TIME_HOUR, notificationTimeHour);
     }
@@ -47,6 +50,7 @@ public class Preferences {
     public static int getNotificationTimeMinute() {
         return Prefs.getInt(NOTIFICATION_TIME_MINUTE, 0);
     }
+
     public static void setNotificationTimeMinute(int notificationTimeMinute) {
         Prefs.putInt(NOTIFICATION_TIME_MINUTE, notificationTimeMinute);
     }

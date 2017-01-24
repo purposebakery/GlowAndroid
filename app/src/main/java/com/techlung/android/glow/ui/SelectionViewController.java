@@ -18,7 +18,6 @@ import com.techlung.android.glow.GlowActivity;
 import com.techlung.android.glow.R;
 import com.techlung.android.glow.model.GlowData;
 import com.techlung.android.glow.model.Tract;
-import com.techlung.android.glow.settings.Preferences;
 import com.techlung.android.glow.utils.Gauss;
 import com.techlung.android.glow.utils.ThemeUtil;
 import com.techlung.android.glow.utils.ToolBox;
@@ -31,36 +30,28 @@ public class SelectionViewController {
     public static final String TAG = SelectionViewController.class.getName();
     public static final int TOUCH_MOVEMENT_THRESHOLD_DP = 10;
     public static final int TRACT_TOUCH_ANIMATION_LENGTH = 100;
-
-    private static final double GAUSS_SCALE = 0.6;
-    private static final double GAUSS_SCROLL_SCALE = 0.4f;
     public static final int TRACT_ELEVATION_DP = 15;
     public static final int SCROLL_ELEVATION_DP = 8;
     public static final int SCROLL_WIDTH_DP = 30;
     public static final int MENU_HEIGHT_DP = 56;
     public static final int STATUS_BAR_HEIGHT_DP = 28;
     public static final int START_POINT_Y_CHANGE = 20;
-    private Gauss gauss;
-    private Gauss gaussScroll;
-
+    private static final double GAUSS_SCALE = 0.6;
+    private static final double GAUSS_SCROLL_SCALE = 0.4f;
     ArrayList<SelectionItem> items = new ArrayList<SelectionItem>();
     ArrayList<SelectionItem> scrollItems = new ArrayList<SelectionItem>();
     ArrayList<SelectionItem> clickedItems = new ArrayList<SelectionItem>();
     Stack<Float> lastMovementSpeeds = new Stack<Float>();
-
+    int tractCount = 0;
+    private Gauss gauss;
+    private Gauss gaussScroll;
     private float scrollPosition = 0;
-
     private int tractWidthPx;
     private int tractHeightPx;
-
     private int scrollTractWidthPx;
     private int scrollTractHeightPx;
-
     private int screenWidthPx;
     private int screenHeightPx;
-
-    int tractCount = 0;
-
     private float tractStartingPoint;
     private float currentMovementDifferenceId = 0;
     private float currentMovementSpeed = 0;
@@ -124,7 +115,8 @@ public class SelectionViewController {
         scrollTractWidthPx = ToolBox.convertDpToPixel(SCROLL_WIDTH_DP, activity);
         scrollTractHeightPx = (int) (scrollTractWidthPx * 1.5f);
 
-        tractStartingPoint = screenHeightPx / 2 - tractHeightPx / 2 - ToolBox.convertDpToPixel(START_POINT_Y_CHANGE, activity);;
+        tractStartingPoint = screenHeightPx / 2 - tractHeightPx / 2 - ToolBox.convertDpToPixel(START_POINT_Y_CHANGE, activity);
+        ;
     }
 
     public int getStatusBarHeight() {
@@ -148,7 +140,7 @@ public class SelectionViewController {
 
         for (SelectionItem item : items) {
             item.view = inflater.inflate(R.layout.selection_flow_item, rootView, false);
-            if (android.os.Build.VERSION.SDK_INT >= 21){
+            if (android.os.Build.VERSION.SDK_INT >= 21) {
                 item.view.setElevation(0);
             }
             item.view.getLayoutParams().width = RelativeLayout.LayoutParams.WRAP_CONTENT;
@@ -240,84 +232,6 @@ public class SelectionViewController {
         scrollView.invalidate();
     }
 
-    public class ItemOnTouchListener implements View.OnTouchListener {
-        private float totalMovement = 0;
-        private float lastMovement = 0;
-
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            int action = MotionEventCompat.getActionMasked(event);
-            float difference;
-
-            switch (action) {
-                case (MotionEvent.ACTION_DOWN):
-                    onTouchDownPosition(event.getX(), event.getY());
-                    totalMovement = 0;
-                    Log.d(TAG, "Action was DOWN");
-                    return true;
-                case (MotionEvent.ACTION_MOVE):
-                    if (event.getHistorySize() == 0) {
-                        return true;
-                    }
-
-                    difference = getYDifference(event);
-                    lastMovement = difference;
-                    totalMovement += Math.abs(difference);
-
-                    addMovementDifferenceToScrollPositionContiuousDecrease(difference, false);
-
-                    repositionItems();
-                    return true;
-                case (MotionEvent.ACTION_UP):
-                    hideTouchOverlays();
-
-                    if (totalMovement < ToolBox.convertDpToPixel(TOUCH_MOVEMENT_THRESHOLD_DP, activity)) {
-                        onTouchUpPosition(event.getX(), event.getY());
-                    }
-
-                    addMovementDifferenceToScrollPositionContiuousDecrease(lastMovement, true);
-
-                    Log.d(TAG, "Action was UP");
-                    return true;
-                case (MotionEvent.ACTION_CANCEL):
-                    Log.d(TAG, "Action was CANCEL");
-                    return true;
-                case (MotionEvent.ACTION_OUTSIDE):
-                    Log.d(TAG, "Movement occurred outside bounds " +
-                            "of current screen element");
-                    return true;
-                default:
-                    return true;
-            }
-        }
-    }
-
-    public class ScrollItemOnTouchListener implements View.OnTouchListener {
-
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            int action = MotionEventCompat.getActionMasked(event);
-
-            switch (action) {
-                case (MotionEvent.ACTION_DOWN):
-                case (MotionEvent.ACTION_MOVE):
-                    float y = event.getY();
-
-                    float newScrollPosition = ((y) / screenHeightPx) * tractCount - 0.5f;
-                    if (newScrollPosition < 0) {
-                        newScrollPosition = 0;
-                    } else if (newScrollPosition > tractCount -1) {
-                        newScrollPosition = tractCount - 1;
-                    }
-                    moveScrollPosition(newScrollPosition, ++currentMovementDifferenceId);
-
-                    return true;
-                default:
-                    return true;
-            }
-        }
-    }
-
     public void scrollToPosition(int position) {
         moveScrollPosition(position, ++currentMovementDifferenceId);
     }
@@ -378,7 +292,6 @@ public class SelectionViewController {
             }
         }
     }
-
 
     private boolean inViewInBounds(SelectionItem item, int x, int y) {
         float tractWidth = (tractWidthPx * item.scale);
@@ -489,8 +402,6 @@ public class SelectionViewController {
         }
     }
 
-
-
     private boolean isScrollOutideBounds() {
         return scrollPosition < 0 || scrollPosition > tractCount - 1;
     }
@@ -526,5 +437,83 @@ public class SelectionViewController {
 
     public float getScrollPosition() {
         return scrollPosition;
+    }
+
+    public class ItemOnTouchListener implements View.OnTouchListener {
+        private float totalMovement = 0;
+        private float lastMovement = 0;
+
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            int action = MotionEventCompat.getActionMasked(event);
+            float difference;
+
+            switch (action) {
+                case (MotionEvent.ACTION_DOWN):
+                    onTouchDownPosition(event.getX(), event.getY());
+                    totalMovement = 0;
+                    Log.d(TAG, "Action was DOWN");
+                    return true;
+                case (MotionEvent.ACTION_MOVE):
+                    if (event.getHistorySize() == 0) {
+                        return true;
+                    }
+
+                    difference = getYDifference(event);
+                    lastMovement = difference;
+                    totalMovement += Math.abs(difference);
+
+                    addMovementDifferenceToScrollPositionContiuousDecrease(difference, false);
+
+                    repositionItems();
+                    return true;
+                case (MotionEvent.ACTION_UP):
+                    hideTouchOverlays();
+
+                    if (totalMovement < ToolBox.convertDpToPixel(TOUCH_MOVEMENT_THRESHOLD_DP, activity)) {
+                        onTouchUpPosition(event.getX(), event.getY());
+                    }
+
+                    addMovementDifferenceToScrollPositionContiuousDecrease(lastMovement, true);
+
+                    Log.d(TAG, "Action was UP");
+                    return true;
+                case (MotionEvent.ACTION_CANCEL):
+                    Log.d(TAG, "Action was CANCEL");
+                    return true;
+                case (MotionEvent.ACTION_OUTSIDE):
+                    Log.d(TAG, "Movement occurred outside bounds " +
+                            "of current screen element");
+                    return true;
+                default:
+                    return true;
+            }
+        }
+    }
+
+    public class ScrollItemOnTouchListener implements View.OnTouchListener {
+
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            int action = MotionEventCompat.getActionMasked(event);
+
+            switch (action) {
+                case (MotionEvent.ACTION_DOWN):
+                case (MotionEvent.ACTION_MOVE):
+                    float y = event.getY();
+
+                    float newScrollPosition = ((y) / screenHeightPx) * tractCount - 0.5f;
+                    if (newScrollPosition < 0) {
+                        newScrollPosition = 0;
+                    } else if (newScrollPosition > tractCount - 1) {
+                        newScrollPosition = tractCount - 1;
+                    }
+                    moveScrollPosition(newScrollPosition, ++currentMovementDifferenceId);
+
+                    return true;
+                default:
+                    return true;
+            }
+        }
     }
 }
