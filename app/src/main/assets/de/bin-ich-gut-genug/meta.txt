@@ -1,0 +1,3 @@
+title=Bin ich gut genug?<
+title_html=Bin ich gut genug?
+url=http://glowonline.org/bin-ich-gut-genug

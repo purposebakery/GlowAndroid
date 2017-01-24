@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.ContextWrapper;
 
 import com.pixplicity.easyprefs.library.Prefs;
+import com.techlung.android.glow.enums.ColorTheme;
 import com.techlung.android.glow.enums.NotificationFrequency;
 import com.techlung.android.glow.enums.NotificationWeekday;
 import com.techlung.android.glow.enums.UserType;
@@ -11,6 +12,7 @@ import com.techlung.android.glow.enums.UserType;
 public class Preferences {
 
     public static final String GENERAL_USER_TYPE = "GENERAL_USER_TYPE";
+    public static final String GENERAL_COLOR_THEME = "GENERAL_COLOR_THEME";
 
     public static final String NOTIFICATION_ENABLED = "NOTIFICATION_ENABLED";
     public static final String NOTIFICATION_FREQUENCY = "NOTIFICATION_FREQUENCY";
@@ -55,6 +57,14 @@ public class Preferences {
 
     public static void setUserType(UserType userType) {
         Prefs.putString(GENERAL_USER_TYPE, userType.name());
+    }
+
+    public static ColorTheme getColorTheme() {
+        return ColorTheme.valueOf(Prefs.getString(GENERAL_COLOR_THEME, ColorTheme.LIGHT.name()));
+    }
+
+    public static void setColorTheme(ColorTheme theme) {
+        Prefs.putString(GENERAL_COLOR_THEME, theme.name());
     }
 
     public static NotificationFrequency getNotificationFrequency() {

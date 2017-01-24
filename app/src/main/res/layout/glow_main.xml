@@ -17,7 +17,7 @@
             android:layout_marginTop="@dimen/menu_height"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/readingBackgroundDark">
+            android:background="@color/readingBackground_dark">
 
             <TextView
                 android:id="@+id/main_hide_mask_text"

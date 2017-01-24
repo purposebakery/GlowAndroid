@@ -92,8 +92,15 @@
         <item>READER</item>
     </string-array>
 
-    <string name="pref_general_bright_background">Heller Hintergrund</string>
-
+    <string name="pref_general_color_theme">Farben</string>
+    <string-array name="pref_general_color_theme_title">
+        <item>Hell</item>
+        <item>Dunkel</item>
+    </string-array>
+    <string-array name="pref_general_color_theme_values">
+        <item>LIGHT</item>
+        <item>DARK</item>
+    </string-array>
 
     <!-- Example settings for Notifications -->
     <string name="pref_notifications">Erinnerungen</string>
@@ -135,8 +142,8 @@
 
     <string name="pref_notification_toast">Nächste Benachrichtigung: </string>
 
-    <string name="notification_title">GLOW - leuchte heute</string>
-    <string name="notification_message">… und gibt anderen davon ab!</string>
+    <string name="notification_title">Denk dran…</string>
+    <string name="notification_message">…heute Glow Fyler zu verteilen :)</string>
 
     <string name="notification_deactivate">Deaktivieren</string>
     <string name="notification_open_app">App öffnen</string>

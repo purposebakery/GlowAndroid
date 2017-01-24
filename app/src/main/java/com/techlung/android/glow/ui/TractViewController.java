@@ -1,5 +1,6 @@
 package com.techlung.android.glow.ui;
 
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
@@ -23,6 +24,7 @@ import com.techlung.android.glow.model.Tract;
 import com.techlung.android.glow.Common;
 import com.techlung.android.glow.settings.Settings;
 import com.techlung.android.glow.utils.ContactUtil;
+import com.techlung.android.glow.utils.ThemeUtil;
 import com.techlung.android.glow.utils.ToolBox;
 
 public class TractViewController {
@@ -109,6 +111,8 @@ public class TractViewController {
     private View createView(LayoutInflater inflater, final ViewGroup container) {
 
         viewRoot = inflater.inflate(R.layout.tract_fragment, container, false);
+
+        viewRoot.setBackgroundResource(ThemeUtil.getBackgroundColorId());
 
         scrollView = (ScrollView) viewRoot.findViewById(R.id.activity_glow_pamphlet_table);
         scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {

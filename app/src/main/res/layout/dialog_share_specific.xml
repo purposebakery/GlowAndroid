@@ -19,7 +19,7 @@ android:scrollbarThumbVertical="@color/colorAccent">
         android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/text_inverted"/>
+        android:textColor="@color/black"/>
 
 
 </LinearLayout>

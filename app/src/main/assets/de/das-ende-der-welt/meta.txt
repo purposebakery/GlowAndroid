@@ -1,0 +1,3 @@
+title=Das Ende der Welt?
+title_html=Das <b>Ende</b> der <b>Welt</b>
+url=http://glowonline.org/das-ende-der-welt

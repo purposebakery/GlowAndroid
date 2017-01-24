@@ -1,3 +1,0 @@
-﻿title=Ein Geschenk für dich
-title_html=Ein <b>Geschenk</b> für <b>Dich</b>
-url=http://de.glowonline.org/literature/ein-geschenk-fur-dich

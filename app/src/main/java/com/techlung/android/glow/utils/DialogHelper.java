@@ -71,7 +71,7 @@ public class DialogHelper {
         final EditText editText = new EditText(context);
         editText.setText(context.getString(R.string.share_app_text) + "\n" +
                 "\n" + GlowData.getInstance().getContact().getAppUrl() + "\n\n" + context.getString(R.string.share_regards));
-        int paddingPx = ToolBox.convertDpToPixel(16, context);
+        int paddingPx = ToolBox.convertDpToPixel(24, context);
         editText.setPadding(paddingPx, paddingPx, paddingPx, paddingPx);
         builder.setView(editText);
         builder.setTitle(context.getString(R.string.share_app_dialog_title));
@@ -96,7 +96,7 @@ public class DialogHelper {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         final EditText editText = new EditText(context);
         editText.setText(context.getString(R.string.share_tract_text) + "\n\n" + tract.getUrl() + "\n\n" + context.getString(R.string.share_regards));
-        int paddingPx = ToolBox.convertDpToPixel(16, context);
+        int paddingPx = ToolBox.convertDpToPixel(24, context);
         editText.setPadding(paddingPx, paddingPx, paddingPx, paddingPx);
         builder.setView(editText);
         builder.setTitle(context.getString(R.string.share_tract_dialog_title));
@@ -211,6 +211,7 @@ public class DialogHelper {
             builder.show();
     }
 
+    /*
     public static void showRandomNotificationDialog(final Context context, Tract tract) {
 
         double random = Math.random();
@@ -260,5 +261,5 @@ public class DialogHelper {
         authorView.setText(author);
 
         dialog.show();
-    }
+    }*/
 }

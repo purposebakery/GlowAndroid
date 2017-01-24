@@ -1,3 +1,0 @@
-﻿title=Frieden für Dich
-title_html=<b>Frieden</b> für <b>Dich</b>
-url=http://de.glowonline.org/literature/frieden-fur-dich

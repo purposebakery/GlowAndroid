@@ -1,3 +1,0 @@
-title=Was die Welt jetzt braucht
-title_html=Was die <b>Welt Jetzt</b> braucht
-url=http://de.glowonline.org/literature/was-die-welt-jetzt-braucht

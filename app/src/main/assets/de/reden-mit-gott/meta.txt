@@ -1,0 +1,3 @@
+﻿title=Reden mit Gott
+title_html=<b>Reden</b> mit <b>Gott</b>
+url=http://glowonline.org/reden-mit-gott/

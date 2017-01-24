@@ -1,3 +1,0 @@
-title=Ein intelligenter Glaube<
-title_html=Ein <b>intelligenter Glaube</b>
-url=http://de.glowonline.org/literature/ein-intelligenter-glaube

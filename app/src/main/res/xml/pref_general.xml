@@ -10,4 +10,14 @@
         android:positiveButtonText="@null"
         android:title="@string/pref_general_user_type" />
 
+    <ListPreference
+        android:defaultValue="LIGHT"
+        android:entries="@array/pref_general_color_theme_title"
+        android:entryValues="@array/pref_general_color_theme_values"
+        android:key="GENERAL_COLOR_THEME"
+        android:negativeButtonText="@null"
+        android:icon="@drawable/ic_color_lens_black_24dp"
+        android:positiveButtonText="@null"
+        android:title="@string/pref_general_color_theme" />
+
 </PreferenceScreen>

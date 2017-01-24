@@ -2,6 +2,7 @@ package com.techlung.android.glow;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.app.Fragment;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
@@ -12,6 +13,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -23,6 +25,7 @@ import android.widget.TextView;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.pixplicity.easyprefs.library.Prefs;
 import com.techlung.android.glow.enums.UserType;
 import com.techlung.android.glow.io.ContentStorageLoader;
 import com.techlung.android.glow.model.GlowData;
@@ -35,7 +38,11 @@ import com.techlung.android.glow.ui.TractViewController;
 import com.techlung.android.glow.utils.ContactUtil;
 import com.techlung.android.glow.utils.DialogHelper;
 import com.techlung.android.glow.utils.Mailer;
+import com.techlung.android.glow.utils.SharingUtil;
+import com.techlung.android.glow.utils.ThemeUtil;
 import com.techlung.android.glow.utils.ToolBox;
+
+import java.util.Map;
 
 public class GlowActivity extends BaseActivity {
     public static final boolean DEBUG = false;
@@ -81,7 +88,7 @@ public class GlowActivity extends BaseActivity {
     float screenWidthPx = 0;
 
     private boolean isRunning;
-
+    private boolean consumedIntent;
     private boolean fromNotificationProcessed;
 
     private static GlowActivity instance;
@@ -104,6 +111,8 @@ public class GlowActivity extends BaseActivity {
 
         checkFirstStart();
 
+        findViewById(R.id.main_hide_mask).setBackgroundResource(ThemeUtil.getBackgroundColorId());
+
         loadContent();
     }
 
@@ -115,6 +124,7 @@ public class GlowActivity extends BaseActivity {
         initDrawer();
 
         checkAndDoFromNotification(true);
+        checkShareIntent();
     }
 
     protected void onPause() {
@@ -657,9 +667,30 @@ public class GlowActivity extends BaseActivity {
         return isRunning;
     }
 
+    private void checkShareIntent() {
+        Intent intent = getIntent();
+
+        if (!consumedIntent && Intent.ACTION_VIEW.equals(intent.getAction())) {
+            consumedIntent = true;
+
+            Uri uri = intent.getData();
+
+            final int tractPosition = SharingUtil.getTractPositionForSharingUrl(uri.toString());
+            if (tractPosition != SharingUtil.NO_POSITION) {
+                selectionFlowFragment.scrollToPosition(tractPosition);
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        final Tract tract = GlowData.getInstance().getPamphlets().get(tractPosition);
+                        showTract(tract);
+                    }
+                }, 1400);
+            }
+        }
+    }
 
     public void checkAndDoFromNotification(boolean doCheck) {
-
         if (doCheck && !checkFromNotification()) {
             return;
         }
@@ -681,13 +712,14 @@ public class GlowActivity extends BaseActivity {
                 final Tract tract = GlowData.getInstance().getPamphlets().get(finalIndex);
                 showTract(tract);
 
+                /*
                 Handler dialogHandler = new Handler();
                 dialogHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         DialogHelper.showRandomNotificationDialog(GlowActivity.this, tract);
                     };
-                }, 750);
+                }, 750);*/
             }
         }, 1400);
     }

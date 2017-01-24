@@ -20,6 +20,7 @@ import com.techlung.android.glow.model.GlowData;
 import com.techlung.android.glow.model.Tract;
 import com.techlung.android.glow.settings.Preferences;
 import com.techlung.android.glow.utils.Gauss;
+import com.techlung.android.glow.utils.ThemeUtil;
 import com.techlung.android.glow.utils.ToolBox;
 
 import java.util.ArrayList;
@@ -137,6 +138,8 @@ public class SelectionViewController {
 
     private View createView(LayoutInflater inflater, ViewGroup container) {
         View view = inflater.inflate(R.layout.selection_flow_fragment, container, false);
+
+        view.setBackgroundResource(ThemeUtil.getBackgroundColorId());
 
         rootView = (RelativeLayout) view.findViewById(R.id.flow_root);
         rootView.setOnTouchListener(new ItemOnTouchListener());

@@ -22,7 +22,7 @@
         android:id="@+id/menu_main_bar"
         android:layout_width="match_parent"
         android:elevation="8dp"
-        android:background="@color/colorPrimaryLight"
+        android:background="@color/white"
         android:layout_height="@dimen/menu_height">
 
         <ImageButton

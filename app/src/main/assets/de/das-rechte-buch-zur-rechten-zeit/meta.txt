@@ -1,0 +1,3 @@
+title=Das rechte Buch zur rechten Zeit
+title_html=Das rechte Buch zur rechten Zeit
+url=http://glowonline.org/das-rechte-buch-zur-rechten-zeit

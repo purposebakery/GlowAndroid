@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clipChildren="false"
-    android:background="@color/readingBackgroundDark">
+    android:background="@color/readingBackground_dark">
 
     <ScrollView
         android:id="@+id/activity_glow_pamphlet_table"
@@ -64,7 +64,7 @@
                 android:layout_marginLeft="16dp"
                 android:textSize="16sp"
                 android:text="Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text"
-                android:textColor="@color/text" />
+                android:textColor="@color/text_light" />
 
             <LinearLayout
                 android:orientation="vertical"
@@ -82,7 +82,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
                     android:text="Additional"
-                    android:textColor="@color/text"/>
+                    android:textColor="@color/text_light"/>
 
                 <include
                     android:layout_width="match_parent"

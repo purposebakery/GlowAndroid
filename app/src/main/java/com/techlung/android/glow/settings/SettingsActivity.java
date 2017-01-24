@@ -191,6 +191,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             // updated to reflect the new value, per the Android Design
             // guidelines.
             bindPreferenceSummaryToValue(findPreference(Preferences.GENERAL_USER_TYPE));
+
+            bindPreferenceSummaryToValue(findPreference(Preferences.GENERAL_COLOR_THEME));
         }
 
         @Override

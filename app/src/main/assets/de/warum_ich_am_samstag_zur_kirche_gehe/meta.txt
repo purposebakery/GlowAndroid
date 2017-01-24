@@ -1,3 +1,0 @@
-﻿title=Warum ich am Samstag zur Kirche gehe
-title_html=<b>Warum</b> ich am <b>Samstag</b> zur <b>Kirche</b> gehe
-url=http://de.glowonline.org/literature/warum-ich-am-samstag-zur-kirche-gehe
