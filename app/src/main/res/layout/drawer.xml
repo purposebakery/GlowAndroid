@@ -44,19 +44,19 @@
 
         <RelativeLayout
             android:id="@+id/glow_info"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
             android:layout_margin="8dp"
-            android:background="@drawable/info_button_background"
+            android:background="@drawable/contact_button_background"
             android:elevation="4dp">
 
             <ImageView
                 android:layout_width="@dimen/button_default_tiny"
                 android:layout_height="@dimen/button_default_tiny"
                 android:layout_centerInParent="true"
-                android:src="@drawable/ic_action_help"
+                android:src="@drawable/ic_help_black_18dp"
                 android:alpha="@dimen/button_alpha" />
 
         </RelativeLayout>

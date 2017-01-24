@@ -17,7 +17,7 @@
             android:layout_marginTop="@dimen/menu_height"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/readingBackground_dark">
+            android:background="@color/readingBackground_light">
 
             <TextView
                 android:id="@+id/main_hide_mask_text"
@@ -25,7 +25,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/alert_loading"
                 android:layout_centerInParent="true"
-                android:textColor="@color/colorPrimaryLight"/>
+                android:textColor="@color/text_light"/>
         </RelativeLayout>
 
         <android.support.v4.view.ViewPager

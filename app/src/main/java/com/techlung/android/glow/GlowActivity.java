@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -112,6 +113,7 @@ public class GlowActivity extends BaseActivity {
         checkFirstStart();
 
         findViewById(R.id.main_hide_mask).setBackgroundResource(ThemeUtil.getBackgroundColorId());
+        ((TextView) findViewById(R.id.main_hide_mask_text)).setTextColor(ContextCompat.getColor(this, ThemeUtil.getTextColorId()));
 
         loadContent();
     }

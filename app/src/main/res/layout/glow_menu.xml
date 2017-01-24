@@ -15,7 +15,6 @@
         android:background="@color/colorPrimaryLight"
         android:layout_margin="16dp"
         android:clipChildren="false">
-
     </RelativeLayout>
 
     <RelativeLayout

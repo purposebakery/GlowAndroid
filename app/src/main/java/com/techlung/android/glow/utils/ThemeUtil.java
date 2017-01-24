@@ -14,4 +14,12 @@ public class ThemeUtil {
             return R.color.readingBackground_dark;
         }
     }
+
+    public static @ColorRes int getTextColorId() {
+        if (Preferences.getColorTheme() == ColorTheme.LIGHT) {
+            return R.color.text_light;
+        } else {
+            return R.color.text_dark;
+        }
+    }
 }

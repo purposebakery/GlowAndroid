@@ -3,6 +3,6 @@
     android:shape="oval">
 
     <solid
-        android:color="@color/pallet_acent_light"/>
+        android:color="@color/colorAccentLight"/>
 
 </shape>
