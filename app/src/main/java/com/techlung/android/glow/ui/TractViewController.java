@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.DisplayMetrics;
@@ -21,12 +22,16 @@ import com.techlung.android.glow.GlowActivity;
 import com.techlung.android.glow.R;
 import com.techlung.android.glow.model.GlowData;
 import com.techlung.android.glow.model.Tract;
+import com.techlung.android.glow.settings.Preferences;
 import com.techlung.android.glow.settings.Settings;
 import com.techlung.android.glow.utils.ContactUtil;
 import com.techlung.android.glow.utils.ThemeUtil;
 import com.techlung.android.glow.utils.ToolBox;
 
+import java.io.InputStream;
+
 public class TractViewController {
+    public enum ImageGetterLoadSource {TRACT, ROOT}
 
     private static final int MENU_FADE_DISTANCE_DP = 130;
 
@@ -128,6 +133,10 @@ public class TractViewController {
         contentView = (TextView) viewRoot.findViewById(R.id.activity_glow_pamphlet_list_content);
         additionalView = (TextView) viewRoot.findViewById(R.id.activity_glow_pamphlet_list_additional);
 
+        contentView.setTextColor(ContextCompat.getColor(activity, ThemeUtil.getTextColorId()));
+        additionalView.setTextColor(ContextCompat.getColor(activity, ThemeUtil.getTextColorId()));
+
+        ((ImageView) viewRoot.findViewById(R.id.mailImage)).setImageResource(ThemeUtil.getImageMail());
         viewRoot.findViewById(R.id.contact_mail_container).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -135,6 +144,7 @@ public class TractViewController {
             }
         });
 
+        ((ImageView) viewRoot.findViewById(R.id.phoneImage)).setImageResource(ThemeUtil.getImagePhone());
         viewRoot.findViewById(R.id.contact_phone_container).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -142,6 +152,7 @@ public class TractViewController {
             }
         });
 
+        ((ImageView) viewRoot.findViewById(R.id.wwwImage)).setImageResource(ThemeUtil.getImageWww());
         viewRoot.findViewById(R.id.contact_www_container).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -267,10 +278,10 @@ public class TractViewController {
         menuTractImage.setImageDrawable(tract.getCoverDrawable(activity));
         menuTractTitle.setText(Html.fromHtml(tract.getHtmlTitle()));
 
-        contentView.setText(Html.fromHtml(tract.getHtmlContent(), new ImageGetter(), null));
+        contentView.setText(Html.fromHtml(tract.getHtmlContent(), new ImageGetter(ImageGetterLoadSource.TRACT), null));
         contentView.setMovementMethod(LinkMovementMethod.getInstance());
 
-        additionalView.setText(Html.fromHtml(tract.getHtmlAdditional(), new ImageGetter(), null));
+        additionalView.setText(Html.fromHtml(GlowData.getInstance().getAdditionalHtml(), new ImageGetter(ImageGetterLoadSource.ROOT), null));
         additionalView.setMovementMethod(LinkMovementMethod.getInstance());
 
         scrollToLastPosition();
@@ -286,7 +297,8 @@ public class TractViewController {
         updateMenuFade();
     }
 
-    public class ImageGetter implements Html.ImageGetter {
+
+    private class ImageGetter implements Html.ImageGetter {
 
         float height = 0.0f;
         float width = 0.0f;
@@ -296,11 +308,26 @@ public class TractViewController {
 
         float factor = 0.0f;
 
+        ImageGetterLoadSource source;
+
+        ImageGetter(ImageGetterLoadSource source) {
+            this.source = source;
+        }
+
         @Override
-        public Drawable getDrawable(String source) {
+        public Drawable getDrawable(String imageName) {
 
             try {
-                Drawable d = tract.getImageDrawable(activity, source);
+                Drawable d;
+
+                if (this.source == ImageGetterLoadSource.TRACT) {
+                    d = tract.getImageDrawable(activity, imageName);
+                } else {
+                    String lang = Preferences.getLang();
+                    InputStream ims = activity.getAssets().open(lang + "/" + imageName);
+                    d = Drawable.createFromStream(ims, null);
+                }
+
                 if (d == null) {
                     return null;
                 }

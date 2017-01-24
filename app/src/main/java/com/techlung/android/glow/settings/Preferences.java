@@ -87,6 +87,10 @@ public class Preferences {
         Prefs.putString(NOTIFICATION_WEEKDAY, notificationWeekday.name());
     }
 
+    public static String getLang() {
+        return "de";
+    }
+
     public static void initPreferences(Context context) {
         if (isInited) {
             return;

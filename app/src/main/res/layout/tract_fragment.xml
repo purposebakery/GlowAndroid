@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/readingBackground_dark"
+    android:background="@color/background_dark"
     android:clipChildren="false">
 
     <ScrollView
@@ -67,10 +67,11 @@
                 android:textSize="16sp" />
 
             <LinearLayout
+                android:id="@+id/additionalContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
-                android:background="#33FFFFFF"
+                android:background="@color/overlay_light"
                 android:elevation="6dp"
                 android:orientation="vertical"
                 android:padding="16dp">

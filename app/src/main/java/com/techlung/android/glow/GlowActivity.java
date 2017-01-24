@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.techlung.android.glow.enums.ColorTheme;
 import com.techlung.android.glow.enums.UserType;
 import com.techlung.android.glow.io.ContentStorageLoader;
 import com.techlung.android.glow.model.GlowData;
@@ -76,11 +77,15 @@ public class GlowActivity extends BaseActivity {
         return instance;
     }
 
+    ColorTheme currentTheme;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         instance = this;
+
+        currentTheme = Preferences.getColorTheme();
 
         settings = Settings.getInstance(this);
         screenWidthPx = ToolBox.getScreenWidthPx(GlowActivity.this);
@@ -115,9 +120,14 @@ public class GlowActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        isRunning = true;
 
-        updateShareButtonIcon();
+        if (currentTheme != Preferences.getColorTheme()) {
+            recreate();
+        } else {
+            isRunning = true;
+            updateShareButtonIcon();
+        }
+
     }
 
     private void initDrawer() {

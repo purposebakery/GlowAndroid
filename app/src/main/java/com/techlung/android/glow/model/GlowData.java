@@ -15,9 +15,11 @@ import java.util.ArrayList;
 public class GlowData {
 
     private static GlowData instance;
+
     private ArrayList<Tract> pamphlets = new ArrayList<Tract>();
     private Contact contact = new Contact();
     private String info = "";
+    private String additionalHtml = "";
 
     private GlowData() {
 
@@ -68,6 +70,14 @@ public class GlowData {
         }
     }
 
+    public void loadAdditional(InputStream is) {
+        try {
+            additionalHtml = IOUtils.readStream(is);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     // Getter / Setter
     public ArrayList<Tract> getPamphlets() {
@@ -103,5 +113,11 @@ public class GlowData {
         this.info = info;
     }
 
+    public String getAdditionalHtml() {
+        return additionalHtml;
+    }
 
+    public void setAdditionalHtml(String additionalHtml) {
+        this.additionalHtml = additionalHtml;
+    }
 }

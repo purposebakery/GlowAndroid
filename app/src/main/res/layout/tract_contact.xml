@@ -19,6 +19,7 @@
             android:background="@drawable/contact_button_background">
 
             <ImageView
+                android:id="@+id/phoneImage"
                 android:layout_width="@dimen/button_default"
                 android:layout_height="@dimen/button_default"
                 android:layout_centerInParent="true"
@@ -35,6 +36,7 @@
             android:background="@drawable/contact_button_background">
 
             <ImageView
+                android:id="@+id/mailImage"
                 android:layout_width="@dimen/button_default"
                 android:layout_height="@dimen/button_default"
                 android:layout_centerInParent="true"
@@ -52,6 +54,7 @@
             android:background="@drawable/contact_button_background">
 
             <ImageView
+                android:id="@+id/wwwImage"
                 android:layout_width="@dimen/button_default"
                 android:layout_height="@dimen/button_default"
                 android:layout_centerInParent="true"

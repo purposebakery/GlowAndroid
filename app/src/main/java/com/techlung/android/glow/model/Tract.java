@@ -21,7 +21,6 @@ public class Tract {
     //private Drawable cover;
     private String coverPath;
     private String htmlContent;
-    private String htmlAdditional;
     private String htmlManual;
 
     private float scrollPosition = 0;
@@ -52,17 +51,6 @@ public class Tract {
             String content = IOUtils.readStream(is);
 
             setHtmlContent(content);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void loadHtmlAdditional(InputStream is) {
-
-        try {
-            String additional = IOUtils.readStream(is);
-
-            setHtmlAdditional(additional);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -116,14 +104,6 @@ public class Tract {
         this.htmlContent = htmlContent;
     }
 
-    public String getHtmlAdditional() {
-        return htmlAdditional;
-    }
-
-    public void setHtmlAdditional(String htmlAdditional) {
-        this.htmlAdditional = htmlAdditional;
-    }
-
     public String getHtmlManual() {
         return htmlManual;
     }
@@ -159,15 +139,11 @@ public class Tract {
         }
     }
 
-    public Drawable getImageDrawable(Context context, String imageName) {
-        try {
-            InputStream ims = context.getAssets().open(getId() + "/" + imageName);
-            Drawable d = Drawable.createFromStream(ims, null);
-            return d;
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            return null;
-        }
+    public Drawable getImageDrawable(Context context, String imageName) throws IOException {
+        InputStream ims = context.getAssets().open(getId() + "/" + imageName);
+        Drawable d = Drawable.createFromStream(ims, null);
+        return d;
+
     }
 
     public String getHtmlTitle() {
