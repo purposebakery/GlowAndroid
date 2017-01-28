@@ -14,7 +14,7 @@
         android:alpha="0.25"
         android:background="@color/colorPrimaryLight"
         android:clipChildren="false"
-        android:visibility="gone"></RelativeLayout>
+        android:visibility="gone"/>
 
     <RelativeLayout
         android:id="@+id/menu_main_bar"
@@ -86,6 +86,7 @@
 
 
     <RelativeLayout
+        android:id="@+id/list_header_overlay_container"
         android:layout_width="match_parent"
         android:layout_height="122dp"
         android:layout_below="@+id/menu_main_bar"

@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.squareup.picasso.Picasso;
 import com.techlung.android.glow.GlowActivity;
 import com.techlung.android.glow.R;
 import com.techlung.android.glow.model.GlowData;
@@ -151,7 +152,9 @@ public class SelectionViewController {
             item.image.getLayoutParams().height = tractHeightPx;
             item.image.getLayoutParams().width = tractWidthPx;
 
-            item.image.setImageDrawable(item.tract.getCoverDrawable(activity));
+            Picasso.with(activity).load(item.tract.getCoverUri()).into(item.image);
+
+//            item.image.setImageDrawable(item.tract.getCoverDrawable(activity));
 
             rootView.addView(item.view);
         }
@@ -165,7 +168,9 @@ public class SelectionViewController {
             scrollItem.overlay = scrollItem.view.findViewById(R.id.overlay);
             scrollItem.image.getLayoutParams().height = scrollTractHeightPx;
             scrollItem.image.getLayoutParams().width = scrollTractWidthPx;
-            scrollItem.image.setImageDrawable(scrollItem.tract.getCoverDrawable(activity));
+
+            Picasso.with(activity).load(scrollItem.tract.getCoverUri()).into(scrollItem.image);
+//            scrollItem.image.setImageDrawable(scrollItem.tract.getCoverDrawable(activity));
 
             scrollView.addView(scrollItem.view);
         }

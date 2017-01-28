@@ -17,9 +17,11 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.techlung.android.glow.Common;
 import com.techlung.android.glow.GlowActivity;
 import com.techlung.android.glow.R;
+import com.techlung.android.glow.enums.ColorTheme;
 import com.techlung.android.glow.model.GlowData;
 import com.techlung.android.glow.model.Tract;
 import com.techlung.android.glow.settings.Preferences;
@@ -136,6 +138,8 @@ public class TractViewController {
         contentView.setTextColor(ContextCompat.getColor(activity, ThemeUtil.getTextColorId()));
         additionalView.setTextColor(ContextCompat.getColor(activity, ThemeUtil.getTextColorId()));
 
+        viewRoot.findViewById(R.id.additionalContainer).setBackgroundResource(ThemeUtil.getBackgroundOverlayColorId());
+
         ((ImageView) viewRoot.findViewById(R.id.mailImage)).setImageResource(ThemeUtil.getImageMail());
         viewRoot.findViewById(R.id.contact_mail_container).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -223,13 +227,16 @@ public class TractViewController {
             menuLogo.setAlpha(1.0f - progress);
             //menuLogo.setTranslationY(-1 * menuHeight * 0.5f * progress);
 
+            /*
             float alpha = 0.25f + (0.75f * progress * 1.5f);
             if (alpha > 1) {
                 alpha = 1;
             } else if (alpha < 0) {
                 alpha = 0;
             }
-            menuTractHeaderBox.setAlpha(alpha);
+            menuTractHeaderBox.setAlpha(alpha);*/
+
+            menuTractHeaderBox.setAlpha(1.0f - progress);
             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) menuTractHeaderBox.getLayoutParams();
             int margin = (int) (tractHeaderBoxMarginDistance - tractHeaderBoxMarginDistance * progress);
             params.setMargins(margin, params.topMargin, margin, params.bottomMargin);
@@ -248,13 +255,18 @@ public class TractViewController {
 
             menuTractTitle.setTranslationY(-1 * menuTractTitleTopDistance * progress);
 
-            int grey = (int) (255 - 255 * progress);
-            if (grey > 255) {
-                grey = 255;
-            } else if (grey < 0) {
-                grey = 0;
+            if (Preferences.getColorTheme() == ColorTheme.DARK) {
+                int grey = (int) (255 - 255 * progress);
+                if (grey > 255) {
+                    grey = 255;
+                } else if (grey < 0) {
+                    grey = 0;
+                }
+                menuTractTitle.setTextColor(Color.argb(255, grey, grey, grey));
+            } else {
+                menuTractTitle.setTextColor(ContextCompat.getColor(activity, ThemeUtil.getTextColorId()));
             }
-            menuTractTitle.setTextColor(Color.argb(255, grey, grey, grey));
+
         }
     }
 
@@ -275,7 +287,7 @@ public class TractViewController {
 
         System.gc();
 
-        menuTractImage.setImageDrawable(tract.getCoverDrawable(activity));
+        Picasso.with(activity).load(tract.getCoverUri()).into(menuTractImage);
         menuTractTitle.setText(Html.fromHtml(tract.getHtmlTitle()));
 
         contentView.setText(Html.fromHtml(tract.getHtmlContent(), new ImageGetter(ImageGetterLoadSource.TRACT), null));

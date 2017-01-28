@@ -20,6 +20,16 @@ public class ThemeUtil {
 
     public static
     @ColorRes
+    int getBackgroundOverlayColorId() {
+        if (Preferences.getColorTheme() == ColorTheme.LIGHT) {
+            return R.color.overlay_light;
+        } else {
+            return R.color.overlay_dark;
+        }
+    }
+
+    public static
+    @ColorRes
     int getTextColorId() {
         if (Preferences.getColorTheme() == ColorTheme.LIGHT) {
             return R.color.text_light;

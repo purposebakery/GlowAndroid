@@ -2,6 +2,7 @@ package com.techlung.android.glow.model;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.util.Log;
 
 import com.techlung.android.glow.Common;
@@ -128,22 +129,14 @@ public class Tract {
         this.coverPath = coverPath;
     }
 
-    public Drawable getCoverDrawable(Context context) {
-        try {
-            InputStream ims = context.getAssets().open(getCoverPath());
-            Drawable d = Drawable.createFromStream(ims, null);
-            return d;
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            return null;
-        }
+    public Uri getCoverUri() {
+        return Uri.parse("file:///android_asset/" + getCoverPath());
     }
 
     public Drawable getImageDrawable(Context context, String imageName) throws IOException {
         InputStream ims = context.getAssets().open(getId() + "/" + imageName);
         Drawable d = Drawable.createFromStream(ims, null);
         return d;
-
     }
 
     public String getHtmlTitle() {

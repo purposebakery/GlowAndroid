@@ -239,6 +239,8 @@ public class GlowActivity extends BaseActivity {
         menuTractTitle = (TextView) findViewById(R.id.activity_glow_pamphlet_list_title);
         menuTractHeaderBox = findViewById(R.id.tract_header_box);
 
+        menuTractHeaderBox.setBackgroundResource(ThemeUtil.getBackgroundOverlayColorId());
+
         float screenWidthPx = ToolBox.getScreenWidthPx(GlowActivity.this);
         menuTractImage.setTranslationX(screenWidthPx);
         menuTractTitle.setTranslationX(screenWidthPx);
