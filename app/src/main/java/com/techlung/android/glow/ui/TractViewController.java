@@ -287,7 +287,7 @@ public class TractViewController {
 
         System.gc();
 
-        Picasso.with(activity).load(tract.getCoverUri()).into(menuTractImage);
+        Picasso.get().load(tract.getCoverUri()).into(menuTractImage);
         menuTractTitle.setText(Html.fromHtml(tract.getHtmlTitle()));
 
         contentView.setText(Html.fromHtml(tract.getHtmlContent(), new ImageGetter(ImageGetterLoadSource.TRACT), null));

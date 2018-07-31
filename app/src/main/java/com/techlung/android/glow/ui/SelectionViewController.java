@@ -152,7 +152,7 @@ public class SelectionViewController {
             item.image.getLayoutParams().height = tractHeightPx;
             item.image.getLayoutParams().width = tractWidthPx;
 
-            Picasso.with(activity).load(item.tract.getCoverUri()).into(item.image);
+            Picasso.get().load(item.tract.getCoverUri()).into(item.image);
 
 //            item.image.setImageDrawable(item.tract.getCoverDrawable(activity));
 
@@ -169,7 +169,7 @@ public class SelectionViewController {
             scrollItem.image.getLayoutParams().height = scrollTractHeightPx;
             scrollItem.image.getLayoutParams().width = scrollTractWidthPx;
 
-            Picasso.with(activity).load(scrollItem.tract.getCoverUri()).into(scrollItem.image);
+            Picasso.get().load(scrollItem.tract.getCoverUri()).into(scrollItem.image);
 //            scrollItem.image.setImageDrawable(scrollItem.tract.getCoverDrawable(activity));
 
             scrollView.addView(scrollItem.view);
