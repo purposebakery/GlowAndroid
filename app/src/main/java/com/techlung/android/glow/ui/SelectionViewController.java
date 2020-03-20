@@ -2,7 +2,7 @@ package com.techlung.android.glow.ui;
 
 import android.app.Activity;
 import android.os.Handler;
-import android.support.v4.view.MotionEventCompat;
+import androidx.core.view.MotionEventCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;

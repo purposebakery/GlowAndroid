@@ -1,7 +1,7 @@
 package com.techlung.android.glow.utils;
 
-import android.support.annotation.ColorRes;
-import android.support.annotation.DrawableRes;
+import androidx.annotation.ColorRes;
+import androidx.annotation.DrawableRes;
 
 import com.techlung.android.glow.R;
 import com.techlung.android.glow.enums.ColorTheme;
