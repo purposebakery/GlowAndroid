@@ -1,3 +1,4 @@
 title=Bin ich gut genug?<
 title_html=Bin ich gut genug?
-url=http://glowonline.org/bin-ich-gut-genug
+url=https://glowonline.org/internation_tracts/bin-ich-gut-genug/
+
