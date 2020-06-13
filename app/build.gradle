@@ -19,9 +19,9 @@ android {
     signingConfigs {
         release {
             storeFile file("cert/Glow")
-            storePassword ${System.env.PASSWORD_STORE}
+            storePassword "${System.env.PASSWORD_STORE}"
             keyAlias 'glow'
-            keyPassword ${System.env.PASSWORD_GLOW_ALIAS}
+            keyPassword "${System.env.PASSWORD_GLOW_ALIAS}"
         }
     }
 
