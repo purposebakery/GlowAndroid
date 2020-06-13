@@ -16,9 +16,19 @@ android {
         applicationId "com.techlung.android.glow"
     }
 
+    signingConfigs {
+        release {
+            storeFile file("cert/Glow")
+            storePassword ${System.env.PASSWORD_STORE}
+            keyAlias 'glow'
+            keyPassword ${System.env.PASSWORD_GLOW_ALIAS}
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
