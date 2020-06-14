@@ -12,5 +12,5 @@ jobs:
       - run:
           command: ./gradlew assembleRelease
       - store_artifacts:
-          path: /build/outputs/apk/app-release.apk
+          path: app/build/outputs/apk/release/app-release.apk
           destination: app-release.apk
