@@ -10,8 +10,8 @@ android {
         minSdkVersion 16
         targetSdkVersion 27
 
-        versionCode 24
-        versionName '4.0.0'
+        versionCode 25
+        versionName '4.0.1'
 
         applicationId "com.techlung.android.glow"
     }
